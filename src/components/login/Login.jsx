@@ -21,52 +21,33 @@ import { css } from 'glamor'
 const Login = () => {
   const [validotp, setOtp] = useState(["", "", "", ""]);
   const phoneNumber = useState(Cookies.get("phoneNumber"));
-  const [initialTime, setInitialTime] = useState(10);
-  const [ResendDisabled, setResendDisabled] = useState(false);
   const [selected, setSelected] = useState("");
-  const [expiryTime, setExpiryTime] = useState(null);
   const [open, setOpen] = useState(false);
   const countries = ["French", "Spanish", "German", "Italian"];
+  const [initialTimer, setInitialTimer] = useState(60);
+  const [disableResend, setDisableResend] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [toastShown, setToastShown] = useState(false);
+  
   const user = useSelector(({ verifyOTP }) => verifyOTP, shallowEqual);
 
-  const startExpiryTimer = () => {
-    const now = new Date();
-    const expiry = new Date(now.getTime() + 2 * 60 * 1000); // Add 2 minutes to current time
-    setExpiryTime(expiry);
-  };
-  useEffect(() => {
-    if (expiryTime) {
-      const timer = setInterval(() => {
-        const now = new Date();
-        if (now >= expiryTime) {
-          clearInterval(timer);
-          setExpiryTime(null);
-          setResendDisabled(false); // Enable resend button after expiry
-        }
-      }, 1000);
-
-      return () => clearInterval(timer);
+  const startInitialTimer = () => {
+    if (initialTimer > 0) {
+      setTimeout(() => {
+        setInitialTimer(prevTime => prevTime - 1);
+      }, 1000); // Update the timer after 1 second
     }
-  }, [expiryTime]);
+  }
+  useEffect(() => {
+    startInitialTimer()
+  }, [initialTimer])
 
   useEffect(() => {
-    if (initialTime > 0 && ResendDisabled) {
-      const timer = setTimeout(() => {
-        setInitialTime((prevTime) => prevTime - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
+    if (initialTimer === 0) {
+      setDisableResend(false);
     }
-  }, [initialTime, ResendDisabled]);
-
-  const startResendTimer = () => {
-    setInitialTime(10);
-    setResendDisabled(true);
-  };
-
-
+  }, [initialTimer]);
   const handleChange = (e, index) => {
     const value = e.target.value;
     // Check if the input is a digit
@@ -84,34 +65,17 @@ const Login = () => {
     }
   };
 
-  const handleKeyDown = (e, index) => {
-    if (e.key === "Backspace") {
-      // Handle backspace functionality
-      e.preventDefault();
-      setOtp((prevOtp) => {
-        const newOtp = [...prevOtp];
-        newOtp[index] = "";
-
-        // Move focus to the previous input box on backspace
-        if (index > 0) {
-          document.getElementById(`otp-input-${index - 1}`).focus();
-        } else {
-          // If it's the first input box, set focus to the current input
-          document.getElementById(`otp-input-${index}`).focus();
-        }
-        return newOtp;
-      });
-    }
-  };
-
-  console.log('user', user)
-
+  
+  useEffect(() => {
+    console.log('user', user);
+  }, [user]);
+ 
   const handleVerifyOTP = useMemo(() => {
     return async (e) => {
-      e.preventDefault()
+      // e?.preventDefault()
       const otp = validotp.join("")
       if (otp.length !== 4) {
-        toast.error("enter 4 digit otp");
+        // toast.error("enter 4 digit otp");
         toast.error('enter otp', {
           className: css({
             background: "#00FF00",
@@ -119,58 +83,69 @@ const Login = () => {
             fontWeight: "bold"
           }),
         })
+        setToastShown(true)
       }
       else {
         await dispatch(verifyOtp(phoneNumber[0], otp))
       }
     }
   }, [dispatch, validotp, phoneNumber])
+  
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace") {
+      // Handle backspace functionality
+      // e?.preventDefault();
+      setOtp((prevOtp) => {
+        const newOtp = [...prevOtp];
+        newOtp[index] = "";
+        // Move focus to the previous input box on backspace
+        if (index > 0) {
+          document.getElementById(`otp-input-${index - 1}`).focus();
+        }
+         else {
+          // If it's the first input box, set focus to the current input
+          document.getElementById(`otp-input-${index}`).focus();
+        }
+        return newOtp;
+      });
+    }
+    if(index === 3 && e.key === "Enter"){
+      handleVerifyOTP()
+    }
+  };
 
+  
+useEffect(() => {
   if (user?.message === "verifiedExitingEmployer" && user?.data?.existEmployer?.role === 'employer') {
     toast.success(user?.data?.existEmployer?.role, {
       style: { backgroundColor: "#4CAF90", color: "#ffffff" },
     });
     Cookies.set("token", user?.data?.token);
-    localStorage.setItem('role', user?.data?.existEmployer?.role)
-    navigate("/dashboard");
-  };
-
+    localStorage.setItem('role', user?.data?.existEmployer?.role);
+    navigate("/dashboard"); // Navigate to the next page
+  }
+  if (user?.message === 'Invalid OTP') {
+    // Handle invalid OTP case if needed
+    toast.error(user?.message);
+  }
   if (user?.message === 'verifiedExitingTrainer' && user?.data?.existTrainer?.role === 'trainer') {
     toast.success(user?.data?.existTrainer?.role, {
       style: { backgroundColor: "#4CAF90", color: "#ffffff" },
     })
     Cookies.set("token", user?.data?.token)
     localStorage.setItem('role', user?.data?.existTrainer?.role)
-    navigate('/trainerDashboard/dashboard')
+    navigate('/trainerDashboard/dashboard'); // Navigate to the next page
   };
-
-
   if (user?.message === "newUser") {
     toast.success(user?.message, {
       style: { backgroundColor: "#4CAF90", color: "#ffffff" },
     });
     setTimeout(() => {
-      navigate("/selectrole");
+      navigate("/selectrole"); // Navigate to the next page
     }, 1000)
   };
-  const handleResendOTP = () => {
-    dispatch(generateOtp(phoneNumber[0]));
-    startResendTimer();
-    startExpiryTimer(); // Start expiry timer when OTP is resent
-    setResendDisabled(true); // Disable the resend button
-    // Disable resend button for the timer duration
-    setTimeout(() => {
-      setResendDisabled(false); // Enable resend button after timer duration
-    }, initialTime * 1000); // Convert seconds to milliseconds
-  };
-  
-  const formatTimeUntilExpiry = () => {
-    const now = new Date();
-    const remainingTime = Math.max(0, Math.ceil((expiryTime - now) / 1000)); // Remaining time in seconds
-    const minutes = Math.floor(remainingTime / 60);
-    const seconds = remainingTime % 60;
-    return `${minutes} min ${seconds} sec`;
-  };
+}, [user, navigate]);
+
 
 
 
@@ -291,8 +266,14 @@ const Login = () => {
             <p style={{ color: "gray" }}>
               Enter the 4-digit OTP to verify your Sissoo Training <br />
               App account, Resend if needed{" "}
+              <span>
+                {initialTimer > 0 ? <span style={{ color: 'gray' }}>OTP Expires In: <span style={{ color: '#2676C2', fontWeight: 'bold' }}>{initialTimer}sec</span></span> : <span style={{ color: 'red', fontWeight: 'bold' }}>OTP Expired</span>}
+              </span>
             </p>
-          
+            <p>
+              
+            </p>
+
             <div className="otp-input-container">
               {validotp.map((digit, index) => (
                 <input
@@ -312,21 +293,32 @@ const Login = () => {
                 />
               ))}
             </div>
-            {/* <button onClick={()=>{RoleSelection('/selectrole')}}>Verify</button> */}
             <button onClick={handleVerifyOTP}>Verify</button>
             <p>
               <span style={{ color: "gray" }}>If you haven't received the OTP?</span>{" "}
-
               <Link
                 href="#"
-                style={{ color: "blue", cursor: "pointer", fontWeight: "bold" }}
-                onClick={handleResendOTP}
+                style={{
+                  color: initialTimer > 0 ? 'gray' : '#2676C2',
+                  cursor: initialTimer > 0 ? 'not-allowed' : 'pointer',
+                  fontWeight: 'bold',
+                  textDecoration: 'none',
+                  fontSize: '16px',
+                  marginLeft: '10px'
+
+                }}
+                onClick={() => {
+                  if (initialTimer === 0 && !disableResend) {
+                    dispatch(generateOtp(phoneNumber[0]));
+                    setInitialTimer(10);
+                    setDisableResend(true);
+                    setOtp(["", "", "", ""])
+                  }
+                }}
+                disabled={initialTimer > 0 || disableResend}
               >
-                <u>Resend</u>
+                Resend
               </Link>
-              {initialTime > 0 && ResendDisabled && (
-                <span style={{ color: "gray" }}> Resend in <span style={{ color: "blue" }} >{initialTime}</span> seconds</span>
-              )}
             </p>
             {" "}
           </div>
@@ -370,7 +362,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

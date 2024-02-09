@@ -1,16 +1,18 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import '../../styles/TrainerProfileEdit.css'
 import Banner from '../../assets/banner.png'
+import profileTrainer from '../../assets/profileTrainer.png'
 import ReactImg from '../../assets/react.png'
 import AdobImg from '../../assets/adobe.png'
 import FigmaImg from '../../assets/figma.png'
 import vector from '../../assets/Vector.svg'
-import profileTrainer from '../../assets/profileTrainer.png'
 import PythonImg from '../../assets/python.png'
 import CropImage from "./trainerprofileedit/CropingImage";
 import SquareCropImg from "./trainerprofileedit/SquareCrop";
 import Header from '../../header&footer/Header'
 import { useNavigate } from "react-router-dom";
+import {trainerProfileUpdate,trainerDetails} from '../../../redux/action/trainer.action'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 
@@ -19,10 +21,10 @@ const UpdateProfile = () => {
 
     const [selectedOption, setSelectedOption] = useState(0);
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const handleOptionClick = (index) => {
         setSelectedOption(index);
-    };
-
+    }
     //croping and popup in basicinfo
 
     const [profileImage, setProfileImage] = useState(profileTrainer);
@@ -30,7 +32,21 @@ const UpdateProfile = () => {
     const [showProfileCropPopup, setShowProfileCropPopup] = useState(false);
     const [showBannerCropPopup, setShowBannerCropPopup] = useState(false);
 
+    useEffect(()=>{
+        dispatch(trainerDetails())
+    },[dispatch])
 
+
+    const trainer = useSelector(({ trainerSignUp }) => {
+        return trainerSignUp?.trainerDetails?.trainerDetails;
+    })
+
+
+    console.log('trainer', trainer)
+
+
+    const profileBanner = useRef(null)
+    const profileImg = useRef(null);
 
     const handleFileInputChange = (e, imageType) => {
         e.preventDefault();
@@ -41,25 +57,48 @@ const UpdateProfile = () => {
 
             reader.onload = (event) => {
                 const newImage = event.target.result;
-
                 if (imageType === 'profile') {
-                    setProfileImage(newImage);
-
+                    setProfileImage({ file: newImage, name: file.name });
                 } else if (imageType === 'banner') {
-                    setBanerImage(newImage);
+                    setBanerImage({ file: newImage, name: file.name });
                 }
             };
 
             reader.readAsDataURL(file);
         }
+
+    };
+
+
+    const handleUpdateProfileImage2 = (newImage) => {
+        const fileName = banermage.name || 'Squrecropped.jpg';
+
+        const croppedFile = new File([newImage], fileName, { type: 'image/jpeg' });
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(croppedFile);
+
+
+        const inputElement = profileBanner.current;
+        inputElement.files = dataTransfer.files;
+
+        setBanerImage({ file: newImage, name: fileName });
+        setShowBannerCropPopup(false);
     };
     const handleUpdateProfileImage = (newImage) => {
-        setProfileImage(newImage);
+        const fileName = profileImage.name || 'cropped.jpg';
+
+        const croppedFile = new File([newImage], fileName, { type: 'image/jpeg' });
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(croppedFile);
+
+
+        const inputElement = profileImg.current;
+        inputElement.files = dataTransfer.files;
+
+        setProfileImage({ file: newImage, name: fileName });
         setShowProfileCropPopup(false);
-    };
-    const handleUpdateProfileImage2 = (croppedImage) => {
-        setBanerImage(croppedImage);
-        setShowBannerCropPopup(false);
     };
 
 
@@ -80,10 +119,19 @@ const UpdateProfile = () => {
     const handleItemClick = (itemName) => {
         if (!clickedTitles.includes(itemName)) {
             setClickedTitles((prevTitles) => [...prevTitles, itemName]);
-
+        } else if (searchQuery && !filteredItems.some(item => item.title.toLowerCase() === searchQuery.toLowerCase())) {
+            setClickedTitles((prevTitles) => [...prevTitles, searchQuery]);
         }
-
+        setSearchQuery(''); // Clear search query after selecting the item
     };
+
+    const handleEnterKeyPressed = () => {
+        if (searchQuery.trim() !== '' && !filteredItems.some(item => item.title.toLowerCase() === searchQuery.toLowerCase())) {
+            setClickedTitles(prevTitles => [...prevTitles, searchQuery]);
+            setSearchQuery('');
+        }
+    };
+
     const handleItemClose = (index) => {
         const newTitles = [...clickedTitles];
         newTitles.splice(index, 1);
@@ -92,14 +140,15 @@ const UpdateProfile = () => {
 
     //image file drop and drag
 
-    const imageRef = useRef(null);
+    let certificateImg = useRef(null);
     const [labelText, setLabelText] = useState();
     const [labelTextName, setLabelTextName] = useState(false);
 
     const [certificateData, setCertificateData] = useState({
         heading: '',
+        institution: '',
         description: '',
-        image: null,
+        certificateImg: null,
     });
 
     const handleFileChange = (e) => {
@@ -154,12 +203,15 @@ const UpdateProfile = () => {
     const handleSubmit = () => {
         setStoredData((prevStoredData) => [...prevStoredData, certificateData]);
         setCertificateData({
-            heading: '',
-            description: '',
-            image: '',
+            certificateHead: '',
+            institution: '',
+            certificationDescription: '',
+            certificateImg: '',
         });
         setLabelTextName(false)
+        handleSubmitReset()
     };
+
     const handleDelete = (index) => {
         const newData = [...storedData];
         newData.splice(index, 1);
@@ -167,77 +219,245 @@ const UpdateProfile = () => {
         setLabelTextName(false)
 
     };
+
     const handlePreviewData = () => {
         setCertificateData({
-            heading: '',
-            description: '',
-            image: '',
+            certificateHead: '',
+            institution: '',
+            certificationDescription: '',
+            certificateImg: '',
         });
         setLabelTextName(false)
 
     }
 
     //input click next
-    const firstNameRef = useRef()
-    const lastNameRef = useRef()
-    const occupationRef = useRef()
-    const companyRef = useRef()
-    const primaryContRef = useRef()
-    const secondaryContRef = useRef()
-    const addressRef = useRef()
-    const emailRef = useRef()
-    const websiteRef = useRef()
-    const updateRef = useRef()
+    const firstName = useRef()
+    const lastName = useRef()
+    const designation = useRef()
+    const company = useRef()
+    const age = useRef()
+    const location = useRef()
+    const objective = useRef()
+    const aboutYou = useRef()
 
-    const headingRef = useRef();
-    const descriptionRef = useRef();
+    const skillRef = useRef()
+
+    const certificateHead = useRef();
+    const institution = useRef()
+    const certificationDescription = useRef();
+
+    const primaryNumber = useRef()
+    const secondaryNumber = useRef()
+    const address = useRef()
+    const email = useRef()
+    const website = useRef()
+
+    const expertIn = useRef()
+    const experinence = useRef()
+    const sinceInTheFiled = useRef()
+    const recentCompnyRef = useRef()
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault()
 
 
-            if (event.target === firstNameRef.current) {
-                lastNameRef.current.focus();
+            if (event.target === firstName.current) {
+                lastName.current.focus();
 
             }
-            else if (event.target === lastNameRef.current) {
-                occupationRef.current.focus();
+            else if (event.target === lastName.current) {
+                designation.current.focus();
 
             }
-            else if (event.target === occupationRef.current) {
-                companyRef.current.focus();
+            else if (event.target === designation.current) {
+                company.current.focus();
 
             }
-            else if (event.target === headingRef.current) {
-                descriptionRef.current.focus();
+            else if (event.target === company.current) {
+                age.current.focus();
 
             }
-            else if (event.target === primaryContRef.current) {
-                secondaryContRef.current.focus();
+            else if (event.target === objective.current) {
+                aboutYou.current.focus();
 
             }
-            else if (event.target === secondaryContRef.current) {
-                addressRef.current.focus();
+            else if (event.target === certificateHead.current) {
+                institution.current.focus();
 
             }
-            else if (event.target === addressRef.current) {
-                emailRef.current.focus();
+            else if (event.target === institution.current) {
+                certificationDescription.current.focus();
 
             }
-            else if (event.target === emailRef.current) {
-                websiteRef.current.focus();
+
+            else if (event.target === primaryNumber.current) {
+                secondaryNumber.current.focus();
 
             }
-            else if (event.target === websiteRef.current) {
-                updateRef.current.focus();
+            else if (event.target === secondaryNumber.current) {
+                address.current.focus();
+
+            }
+            else if (event.target === address.current) {
+                email.current.focus();
+
+            }
+            else if (event.target === email.current) {
+                website.current.focus();
+
+            }
+            else if (event.target === expertIn.current) {
+                experinence.current.focus();
+
+            }
+            else if (event.target === experinence.current) {
+                sinceInTheFiled.current.focus();
+
+            }
+            else if (event.target === sinceInTheFiled.current) {
+                recentCompnyRef.current.focus();
 
             }
         }
     };
+    useEffect(() => {
+        console.log(formData);
+    })
 
-    //selected options
+    const [formData, setFormData] = useState({
+        profileImg: null,
+        profileBanner: null,
+        firstName: '',
+        lastName: '',
+        designation: '',
+        company: '',
+        age: '',
+        location: '',
+        objective: '',
+        aboutYou: '',
+        skills: [],
+        certificateDetails: [],
+        primaryNumber: '',
+        secondaryNumber: '',
+        address: '',
+        email: '',
+        website: '',
+        expertIn: '',
+        experinence: '',
+        sinceInTheFiled: '',
+        recentCompnyRef: ''
+    });
+
+    const handleCase0Data = (e) => {
+        e.preventDefault()
+        const fileInput = profileImg.current;
+        const fileInput2 = profileBanner.current;
+        if (fileInput && fileInput2 && fileInput.files.length > 0 && fileInput2.files.length > 0) {
+
+            const file = fileInput.files[0];
+            const file2 = fileInput2.files[0];
+            setFormData(prevData => ({
+                ...prevData,
+                profileImg: file,
+                profileBanner: file2,
+                firstName: firstName.current.value,
+                lastName: lastName.current.value,
+                designation: designation.current.value,
+                company: company.current.value,
+                age: age.current.value,
+                location: location.current.value,
+                objective: objective.current.value,
+                aboutYou: aboutYou.current.value,
+            }));
+            handleOptionClick(1)
+        }
+        else {
+            alert("No file selected");
+
+        }
+
+    }
+
+    const handleCase1Data = () => {
+
+        setFormData(prevData => ({
+            ...prevData,
+            skills: [...clickedTitles]
+        }));
+        handleOptionClick(2)
+
+    }
+
+    const handleCase2Data = () => {
+        const file = certificateImg.current.files[0];
+
+        if (file) {
+            const newCertificate = {
+                certificateHead: certificateHead.current.value,
+                institution: institution.current.value,
+                certificationDescription: certificationDescription.current.value,
+                certificateImg: file,
+            };
+
+            setFormData(prevData => ({
+                ...prevData,
+                certificateDetails: [...prevData.certificateDetails, newCertificate], // Add new certificate to the array
+            }));
+
+            handleSubmit(); // You can call your submit function here if needed
+        } else {
+            alert("No file selected");
+        }
+    }
+    const handleSubmitReset = () => {
+        certificateHead.current.value = ''
+        institution.current.value = ''
+        certificationDescription.current.value = ''
+        certificateImg = ''
+    }
+
+    const handleCase3Data = (e) => {
+        e.preventDefault()
+        setFormData(prevData => ({
+            ...prevData,
+            primaryNumber: primaryNumber.current.value,
+            secondaryNumber: secondaryNumber.current.value,
+            address: address.current.value,
+            email: email.current.value,
+            website: website.current.value,
+        }));
+        handleOptionClick(4)
+
+    }
+    const handleCase4Data = () => {
+        
+        setFormData(prevData => ({
+            ...prevData,
+            expertIn: expertIn.current.value,
+            experinence: experinence.current.value,
+            sinceInTheFiled: sinceInTheFiled.current.value,
+            recentCompnyRef: recentCompnyRef.current.value,
+
+        }));
+    }
+    const handleItemChange = (index, value) => {
+        const updatedTitles = [...clickedTitles];
+        updatedTitles[index] = value;
+        setClickedTitles(updatedTitles);
+    }
+
+    const handleSubmitData = async (e) => {
+        e.preventDefault()
+        await handleCase4Data()
+        console.log(formData);
+        dispatch(trainerProfileUpdate(trainer?._id, formData))
+    }
+
     const getContentBasedOnOption = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" })
+
         switch (selectedOption) {
             case 0:
                 return (
@@ -247,9 +467,21 @@ const UpdateProfile = () => {
                         <div className="flex">
                             <div className="updateval" >
 
-                                <img src={profileImage} alt="" style={{ borderRadius: "50%", width: '86px', height: '90px' }} />
-                                <div onClick={() => setShowProfileCropPopup(true)} className="hoverItems  flex items-center mt-2">
+                                <img
+                                    src={profileImage.file}
+                                    style={{ borderRadius: "50%", width: '100px', height: '100px', border: '0.5px solid rgba(227, 227, 227)', backgroundColor: 'rgba(227, 227, 227, 0.5)' }}
+                                    alt=" "
+                                />
+                                <input
+                                    type="file"
+                                    onChange={(e) => handleFileInputChange(e, 'prfile')}
+                                    ref={profileImg}
+                                    style={{ display: 'none' }}
+                                    accept="image/*"
+                                    required
+                                />
 
+                                <div onClick={() => setShowProfileCropPopup(true)} className="hoverItems  flex items-center mt-2">
                                     <h6 style={{ fontWeight: '400', fontSize: '14px', color: "#2676C2", marginRight: '5px' }}
                                     >Replace</h6>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="13" viewBox="0 0 12 13" fill="none">
@@ -257,7 +489,23 @@ const UpdateProfile = () => {
                                     </svg>
                                 </div>
                                 <hr style={{ marginTop: "12px", marginBottom: '12px' }} />
-                                <img src={banermage} alt="" style={{ width: '150px', height: '42px' }} />
+                                <img
+                                    src={banermage.file}
+                                    alt=" "
+                                    style={{
+                                        width: '150px',
+                                        height: '42px',
+                                        backgroundColor: 'rgba(227, 227, 227)',
+                                    }}
+                                />
+                                <input
+                                    type="file"
+                                    onChange={(e) => handleFileInputChange(e, 'banner')}
+                                    ref={profileBanner}
+                                    style={{ display: 'none' }}
+                                    accept="image/*"
+                                    required
+                                />
                                 <div onClick={() => setShowBannerCropPopup(true)} className="hoverItems flex items-center mt-2">
 
                                     <h6 style={{ fontWeight: '400', fontSize: '14px', color: "#2676C2", marginRight: '5px' }}
@@ -269,64 +517,84 @@ const UpdateProfile = () => {
                                 <h6 className="mt-2" style={{ color: "#979797", fontWeight: "400", fontSize: "12px" }}>size (837*197 Px)</h6>
 
                             </div>
-                            <div className="updateLabel">
-                                <div className="flex">
-                                    <div style={{ marginRight: "30px" }}>
-                                        <label htmlFor="">First Name</label>
-                                        <br />
-                                        <input type="text" ref={firstNameRef} onKeyDown={handleKeyDown} placeholder="Type your First Name" />
+                            <form onSubmit={handleCase0Data}>
+                                <div className="updateLabel">
+                                    <div className="flex">
+                                        <div style={{ marginRight: "30px" }}>
+                                            <label htmlFor="">First Name</label>
+                                            <br />
+                                            <input type="text" ref={firstName} name="firstName" onKeyDown={handleKeyDown} placeholder="Type your First Name" required />
+                                        </div>
+                                        <div>
+                                            <label htmlFor="">Last Name</label>
+                                            <br />
+                                            <input type="text" ref={lastName} name="lastName" onKeyDown={handleKeyDown} placeholder="Type your Last Name" required />
+                                        </div>
                                     </div>
-                                    <div>
-                                        <label htmlFor="">Last Name</label>
+                                    <div className="mt-2">
+                                        <label htmlFor="">Designation</label>
                                         <br />
-                                        <input type="text" ref={lastNameRef} onKeyDown={handleKeyDown} placeholder="Type your Last Name" />
+                                        <input style={{ width: '508px' }} type="text" ref={designation} name="designation" onKeyDown={handleKeyDown} placeholder="Type your Occupation" required />
                                     </div>
-                                </div>
-                                <div className="mt-2">
-                                    <label htmlFor="">Occupation</label>
-                                    <br />
-                                    <input style={{ width: '508px' }} type="text" ref={occupationRef} onKeyDown={handleKeyDown} placeholder="Type your Occupation" />
-                                </div>
-                                <div className="mt-2">
-                                    <label htmlFor="">Company</label>
-                                    <br />
-                                    <input style={{ width: '508px' }} type="text" ref={companyRef} onKeyDown={handleKeyDown} placeholder="Type your Company Name" />
-                                </div>
-                                <div className="mt-2">
-                                    <label htmlFor="">Location</label>
-                                    <br />
-                                    <select name="" id="">
-                                        <option value="" selected>Banglore</option>
-                                        <option value="">Banglore</option>
-                                        <option value="">Banglore</option>
+                                    <div className="mt-2" >
+                                        <label htmlFor="">Company</label>
+                                        <br />
+                                        <input style={{ width: '508px' }} type="text" ref={company} name="company" onKeyDown={handleKeyDown} placeholder="Type your Company Name" required />
+                                    </div>
+                                    <div className="mt-2" >
+                                        <label htmlFor="">Age</label>
+                                        <br />
+                                        <input style={{ width: '508px' }} type="number" ref={age} name="age" onKeyDown={handleKeyDown} placeholder="Type your age" required />
+                                    </div>
+                                    <div className="mt-2">
+                                        <label htmlFor="">Location</label>
+                                        <br />
+                                        <select name="" id="" ref={location}>
+                                            <option value="Banglore" selected>Banglore</option>
+                                            <option value="Manglore">Manglore</option>
+                                            <option value="Mysore">Mysore</option>
 
-                                    </select>
-                                </div>
-                                <div className="mt-2">
-                                    <label htmlFor="">About you</label>
-                                    <br />
-                                    <textarea name="" id="" cols="67" rows="5" placeholder="Type here"></textarea>
-                                </div>
-                                <button style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '20px', marginLeft: "315px", marginBottom: '20px' }}>Update</button>
+                                        </select>
+                                    </div>
+                                    <div className="mt-2" >
+                                        <label htmlFor="">Objective</label>
+                                        <br />
+                                        <input style={{ width: '508px' }} type="text" ref={objective} name="objective" onKeyDown={handleKeyDown} placeholder="Profile title" required />
+                                    </div>
+                                    <div className="mt-2" >
+                                        <label htmlFor="">About you</label>
+                                        <textarea ref={aboutYou} name="aboutYou" id="" cols="67" rows="5" placeholder="Type here" required></textarea>
+                                    </div>
+                                    <button type="submit" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '20px', marginLeft: "315px", marginBottom: '20px' }} >Update</button>
 
-                            </div>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
                 );
             case 1:
                 return (
-                    <div className="updatedatas">
+                    <div className="updatedatas2">
                         <div className="flex justify-between items-center">
                             <h6 style={{ color: "#535353", fontWeight: '400', fontSize: "18px", marginTop: '14px' }}>Skills</h6>
 
-                            <button style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '20px', marginRight: "50px", marginBottom: '20px' }}>Update</button>
+                            <button style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '20px', marginRight: "70px", marginBottom: '20px' }} onClick={handleCase1Data}>Update</button>
 
                         </div>
                         <div className="flex ">
                             <div className="skillScroll pe-4 border-r-2">
                                 {clickedTitles.map((itemName, index) => (
-                                    <div key={index} className="flex items-center justify-between mt-2 p-3" style={{ width: '180px', height: '25px', backgroundColor: 'rgba(38, 118, 194, 0.2)', color: '#2676C2', borderRadius: '20px', cursor: 'pointer' }}>
+                                    <div key={index} className="flex items-center justify-between mt-2 pt-1 pb-1 ps-2 pe-2 " style={{ width: '180px', backgroundColor: 'rgba(38, 118, 194, 0.2)', color: '#2676C2', borderRadius: '20px', cursor: 'pointer' }}>
                                         <h6 style={{ marginRight: "10%" }}>{itemName}</h6>
+                                        <input
+                                            ref={skillRef}
+                                            value={itemName}
+                                            type="text"
+                                            placeholder="Type your skills"
+                                            onChange={(e) => handleItemChange(index, e.target.value)}
+                                            style={{ display: "none" }}
+                                        />
                                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none" className="ms-3" onClick={() => handleItemClose(index)} style={{ cursor: 'pointer' }}>
                                             <path d="M1.36373 1.94975L6.31348 6.89949M6.31348 6.89949L11.2632 11.8492M6.31348 6.89949L1.36373 11.8492M6.31348 6.89949L11.2632 1.94975" stroke="#2676C2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
@@ -335,27 +603,36 @@ const UpdateProfile = () => {
 
                             </div>
                             <div className="m-5 mt-0" >
-                                <div className='flex items-center' style={{ border: '2px solid #D1D1D1', borderRadius: '5px', width: "620px" }} >
-                                    <input style={{ width: '560px', height: '40px', color: '#888888', borderLeft: 'none', cursor: 'pointer', border: '0', fontSize: '14px' }} className='ps-3 outline-none mt-0' type="text" placeholder='Type your skills'
+                                <div className='flex items-center' style={{ border: '2px solid #D1D1D1', borderRadius: '5px', width: "500px" }} >
+                                    <input style={{ width: '500px', height: '40px', color: '#888888', borderLeft: 'none', cursor: 'pointer', border: '0', fontSize: '14px' }} className='ps-3 outline-none mt-0' type="text" placeholder='Type your skills'
                                         value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)} />
-                                    <svg className='' xmlns="http://www.w3.org/2000/svg" width="45" height="26" viewBox="0 0 26 26" fill="none">
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                handleEnterKeyPressed();
+                                            }
+                                        }}
+                                    />
+                                    <svg className='' style={{ marginRight: '20px' }} xmlns="http://www.w3.org/2000/svg" width="45" height="26" viewBox="0 0 26 26" fill="none">
                                         <path d="M17 17L25 25M10.3333 19.6667C5.17868 19.6667 1 15.488 1 10.3333C1 5.17868 5.17868 1 10.3333 1C15.488 1 19.6667 5.17868 19.6667 10.3333C19.6667 15.488 15.488 19.6667 10.3333 19.6667Z" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </div>
-                                <h6 style={{ fontSize: '18px', fontWeight: '400', color: "#535353", marginTop: '20px', marginBottom: "12px" }}>Most Demanded Skills </h6>
-
+                                {filteredItems.length > 0 && (
+                                    <h6 style={{ fontSize: '18px', fontWeight: '400', color: "#535353", marginTop: '20px', marginBottom: "12px" }}>
+                                        Most Demanded Skills
+                                    </h6>
+                                )}
                                 <div className="skillData flex flex-wrap cursor-pointer justify-evenly">
                                     {filteredItems.length > 0 ? (
                                         filteredItems.map((item, index) => (
-                                            <div className="mt-5 me-6" style={{ width: '162px' }} key={index} onClick={() => handleItemClick(item.title)}>
-                                                <img style={{ height: "167px", padding: '20px', borderRadius: '8px', boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }} src={item.image} alt="" />
+                                            <div className="mt-5 me-6" style={{ width: '142px' }} key={index} onClick={() => handleItemClick(item.title)}>
+                                                <img style={{ height: "147px", padding: '20px', borderRadius: '8px', boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }} src={item.image} alt="" />
                                                 <h6 style={{ fontSize: '14px', color: "#535353", marginTop: '10px', fontWeight: '400', display: 'flex' }}>{item.title} <img style={{ marginLeft: '10px' }} src={vector} alt="" /></h6>
                                                 <p style={{ color: '#000', fontSize: '12px', fontWeight: "400" }}>{item.description}</p>
                                             </div>
                                         ))
                                     ) : (
-                                        <div>No data found</div>
+                                        <div style={{ marginTop: '100px' }}>No data found</div>
                                     )}
                                 </div>
                             </div>
@@ -366,15 +643,31 @@ const UpdateProfile = () => {
                 return (
                     <div className="certificateData">
                         <h6 style={{ color: "#535353", fontWeight: '400', fontSize: "18px", marginTop: '14px', marginBottom: "30px" }} >Certifications</h6>
-                        <div>
-                            <label htmlFor=""> Heading for your Certificate</label> <br />
-                            <input type="text"
-                                name="heading"
-                                placeholder="Type Headline"
-                                value={certificateData.heading}
-                                onChange={handleInputChange}
-                                onKeyDown={handleKeyDown}
-                                ref={headingRef} />
+                        <div className="flex justify-between">
+                            <div>
+                                <label htmlFor=""> Heading for your Certificate</label> <br />
+                                <input type="text"
+                                    name="heading"
+                                    placeholder="Type Headline"
+                                    value={certificateData.heading}
+                                    onChange={handleInputChange}
+                                    onKeyDown={handleKeyDown}
+                                    ref={certificateHead}
+                                    style={{ width: '370px' }}
+                                    required />
+                            </div>
+                            <div>
+                                <label htmlFor=""> Institution </label> <br />
+                                <input type="text"
+                                    name="institution"
+                                    placeholder="Type your Institution"
+                                    value={certificateData.institution}
+                                    onChange={handleInputChange}
+                                    onKeyDown={handleKeyDown}
+                                    ref={institution}
+                                    style={{ width: '370px' }}
+                                    required />
+                            </div>
                         </div>
                         <div>
                             <label htmlFor=""> Description</label> <br />
@@ -384,8 +677,9 @@ const UpdateProfile = () => {
                                 placeholder="Type what you want"
                                 value={certificateData.description}
                                 onChange={handleInputChange}
-                                ref={descriptionRef}
+                                ref={certificationDescription}
                                 style={{ whiteSpace: "pre-line" }}
+                                required
                             > </textarea>
                         </div>
                         <div  >
@@ -399,7 +693,7 @@ const UpdateProfile = () => {
                                 <input
                                     type="file"
                                     style={{ display: 'none' }}
-                                    ref={imageRef}
+                                    ref={certificateImg}
                                     onChange={handleFileChange}
                                 />
                             </div>
@@ -423,7 +717,7 @@ const UpdateProfile = () => {
 
 
                                 {!labelTextName ? (
-                                    <div className=" flex items-center cursor-pointer" style={{ height: "60px" }} onClick={() => imageRef.current.click()}>
+                                    <div className=" flex items-center cursor-pointer" style={{ height: "60px" }} onClick={() => certificateImg.current.click()}>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
                                             <circle cx="30" cy="30" r="30" fill="#E8E8E8" />
                                         </svg>
@@ -445,7 +739,7 @@ const UpdateProfile = () => {
                                             </svg>
                                         </span>
                                         <div style={{ color: '#BABABA', fontWeight: '400', fontSize: '14px', marginLeft: '10px' }} >{labelText}</div>
-                                        <div style={{ color: '#2676C2', fontWeight: '400', fontSize: '14px', marginLeft: '10px' }} className="hoverItems" onClick={() => imageRef.current.click()}>Replace</div>
+                                        <div style={{ color: '#2676C2', fontWeight: '400', fontSize: '14px', marginLeft: '10px' }} className="hoverItems" onClick={() => certificateImg.current.click()}>Replace</div>
 
                                     </div>
                                 )}
@@ -459,7 +753,7 @@ const UpdateProfile = () => {
                                     <div>
                                         <h6 style={{ fontSize: '18px', color: '#535353', fontWeight: "500", marginTop: '10px' }}>Certifications</h6>
                                         <div className="flex items-center justify-between">
-                                            <h6 style={{ fontSize: '16px', color: '#535353', fontWeight: "500", marginTop: '10px' }}>{certificateData.heading}</h6>
+                                            <h6 style={{ fontSize: '16px', color: '#535353', fontWeight: "500", marginTop: '10px' }}>{certificateData.heading}:<span style={{ color: '#2676C2' }}>{certificateData.institution}</span> </h6>
                                             <span className="delete" onClick={handlePreviewData}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" viewBox="0 0 20 22" fill="none">
                                                     <path d="M12.1111 8.77778V16.5556M7.66667 8.77778V16.5556M3.22222 4.33333V17.4444C3.22222 18.689 3.22222 19.3109 3.46443 19.7862C3.67748 20.2044 4.01719 20.545 4.43533 20.758C4.91022 21 5.53222 21 6.77434 21H13.0034C14.2456 21 14.8667 21 15.3416 20.758C15.7597 20.545 16.1005 20.2044 16.3136 19.7862C16.5556 19.3113 16.5556 18.69 16.5556 17.4479V4.33333M3.22222 4.33333H5.44444M3.22222 4.33333H1M5.44444 4.33333H14.3333M5.44444 4.33333C5.44444 3.29791 5.44444 2.78045 5.6136 2.37207C5.83914 1.82756 6.27147 1.3947 6.81597 1.16916C7.22435 1 7.74235 1 8.77778 1H11C12.0354 1 12.5531 1 12.9615 1.16916C13.506 1.3947 13.9385 1.82756 14.1641 2.37207C14.3332 2.78045 14.3333 3.29791 14.3333 4.33333M14.3333 4.33333H16.5556M16.5556 4.33333H18.7778" stroke="#2676C2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -467,12 +761,14 @@ const UpdateProfile = () => {
                                             </span>
                                         </div>
                                         <pre style={{ fontSize: '16px', color: '#535353', fontWeight: "400", marginTop: '10px' }}>{certificateData.description}</pre>
-                                        {certificateData.image && <img className="mt-5" height='221px' width='284px' src={certificateData.image} alt="Preview" />}
+                                        {certificateData.image &&
+                                                <iframe src={certificateData.image} type="application/pdf" title="PDF Viewer" style={{ width: '100%', height: '600px', overflow: 'hidden' }}></iframe>
+                                          }
                                     </div>
                                 )}
                             </div>
                             {certificateData.heading && certificateData.description && certificateData.image && (
-                                <button className="" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '10px', marginLeft: "620px", marginBottom: '20px' }} onClick={handleSubmit}>Submit</button>
+                                <button className="" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '10px', marginLeft: "620px", marginBottom: '20px' }} onClick={handleCase2Data}>Submit</button>
                             )}
                         </div>
                         <div>
@@ -482,7 +778,7 @@ const UpdateProfile = () => {
                                     <div>
                                         <h6 style={{ fontSize: '18px', color: '#535353', fontWeight: "500", marginTop: '10px' }}>Certifications</h6>
                                         <div className="flex items-center justify-between">
-                                            <h6 style={{ fontSize: '16px', color: '#535353', fontWeight: "500", marginTop: '10px' }}>{data.heading}</h6>
+                                            <h6 style={{ fontSize: '16px', color: '#535353', fontWeight: "500", marginTop: '10px' }}>{data.heading}: <span style={{ color: '#2676C2' }}>{data.institution}</span></h6>
                                             <span className="delete" onClick={() => handleDelete(index)}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="22" viewBox="0 0 20 22" fill="none">
                                                     <path d="M12.1111 8.77778V16.5556M7.66667 8.77778V16.5556M3.22222 4.33333V17.4444C3.22222 18.689 3.22222 19.3109 3.46443 19.7862C3.67748 20.2044 4.01719 20.545 4.43533 20.758C4.91022 21 5.53222 21 6.77434 21H13.0034C14.2456 21 14.8667 21 15.3416 20.758C15.7597 20.545 16.1005 20.2044 16.3136 19.7862C16.5556 19.3113 16.5556 18.69 16.5556 17.4479V4.33333M3.22222 4.33333H5.44444M3.22222 4.33333H1M5.44444 4.33333H14.3333M5.44444 4.33333C5.44444 3.29791 5.44444 2.78045 5.6136 2.37207C5.83914 1.82756 6.27147 1.3947 6.81597 1.16916C7.22435 1 7.74235 1 8.77778 1H11C12.0354 1 12.5531 1 12.9615 1.16916C13.506 1.3947 13.9385 1.82756 14.1641 2.37207C14.3332 2.78045 14.3333 3.29791 14.3333 4.33333M14.3333 4.33333H16.5556M16.5556 4.33333H18.7778" stroke="#2676C2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -490,7 +786,9 @@ const UpdateProfile = () => {
                                             </span>
                                         </div>
                                         <pre style={{ fontSize: '16px', color: '#535353', fontWeight: "400", marginTop: '10px' }}>{data.description}</pre>
-                                        {data.image && <img className="mt-5" height='221px' width='284px' src={data.image} alt="Preview" />}
+                                        {data.image &&
+                                            <iframe src={data.image} title="PDF Viewer" type="application/pdf" frameborder="0" style={{width: '400px', height: '400px', overflow: 'hidden' }}></iframe>
+                                        }
 
                                     </div>
                                     <hr className="m-5" />
@@ -504,46 +802,82 @@ const UpdateProfile = () => {
                 );
             case 3:
                 return (
-
                     <div className="contactInfo">
                         <h6 style={{ color: "#535353", fontWeight: '400', fontSize: "18px", marginTop: '14px', marginBottom: "30px" }} >Contact Information</h6>
 
-                        <div className="flex">
-                            <div style={{ marginRight: "50px" }}>
-                                <label htmlFor="">Primary Contact*</label>
-                                <br />
-                                <input type="text" ref={primaryContRef} onKeyDown={handleKeyDown} required placeholder="Type your mobile number" />
+                        <form onSubmit={handleCase3Data}>
+                            <div className="flex">
+                                <div style={{ marginRight: "50px" }}>
+                                    <label htmlFor="">Primary Contact*</label>
+                                    <br />
+                                    <input type="text" ref={primaryNumber} name="primaryNumber" onKeyDown={handleKeyDown} required placeholder="Type your mobile number" />
+                                </div>
+                                <div>
+                                    <label htmlFor="">Secondary Contact</label>
+                                    <br />
+                                    <input type="text" ref={secondaryNumber} name="secondaryNumber" onKeyDown={handleKeyDown} required placeholder="Type your mobile number" />
+                                </div>
                             </div>
-                            <div>
-                                <label htmlFor="">Secondary Contact</label>
+                            <div className="mt-2">
+                                <label htmlFor="">Address</label>
                                 <br />
-                                <input type="text" ref={secondaryContRef} onKeyDown={handleKeyDown} required placeholder="Type your mobile number" />
+                                <input style={{ width: '690px' }} type="text" ref={address} name="address" onKeyDown={handleKeyDown} required placeholder="Type your address" />
                             </div>
-                        </div>
-                        <div className="mt-2">
-                            <label htmlFor="">Address</label>
-                            <br />
-                            <input style={{ width: '690px' }} type="text" ref={addressRef} onKeyDown={handleKeyDown} placeholder="Type your address" />
-                        </div>
-                        <div className="mt-2">
-                            <label htmlFor="">Email</label>
-                            <br />
-                            <input style={{ width: '690px' }} type="text" ref={emailRef} onKeyDown={handleKeyDown} placeholder="Type your mail address" />
-                        </div>
-                        <div className="mt-2">
-                            <label htmlFor="">Website</label>
-                            <br />
-                            <input style={{ width: '690px' }} type="text" ref={websiteRef} onKeyDown={handleKeyDown} placeholder="Type website link here" />
-                        </div>
+                            <div className="mt-2">
+                                <label htmlFor="">Email</label>
+                                <br />
+                                <input style={{ width: '690px' }} type="email" ref={email} name="email" onKeyDown={handleKeyDown} required placeholder="Type your mail address" />
+                            </div>
+                            <div className="mt-2">
+                                <label htmlFor="">Website</label>
+                                <br />
+                                <input style={{ width: '690px' }} type="url" ref={website} name="website" onKeyDown={handleKeyDown} required placeholder="Type website link here" />
+                            </div>
 
-                        <button ref={updateRef} onKeyDown={handleKeyDown} style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '30px', marginLeft: "500px" }}>Update</button>
+                            <button type="submit" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '30px', marginLeft: "490px" }}>Update</button>
+                        </form>
+                    </div>
+                );
+            case 4:
+                return (
+                    <div className="contactInfo2">
+                        <h6 style={{ color: "#535353", fontWeight: '400', fontSize: "18px", marginTop: '14px', marginBottom: "30px" }} >Experience</h6>
+
+                        <form onSubmit={handleSubmitData}>
+                            <span>
+                                <label htmlFor="">Expert In</label>
+                                <br />
+                                <input style={{ width: '690px' }} type="text" ref={expertIn} name="expertIn" onKeyDown={handleKeyDown} placeholder="Enter your skill name" required />
+                            </span>
+                            <br />
+                            <span >
+                                <label htmlFor="">Experience</label>
+                                <br />
+                                <input style={{ width: '690px' }} type="text" ref={experinence} name="experinence" onKeyDown={handleKeyDown} placeholder="Select your experience" required />
+                            </span>
+                            <br />
+                            <span >
+                                <label htmlFor="">Since in this field</label>
+                                <br />
+                                <input style={{ width: '690px' }} type="text" ref={sinceInTheFiled} name="sinceInTheFiled" onKeyDown={handleKeyDown} placeholder="yyyy" required />
+                            </span>
+                            <br />
+                            <span>
+                                <label htmlFor="">Last Organization</label>
+                                <br />
+                                <input style={{ width: '690px' }} type="text" ref={recentCompnyRef} name="recentCompnyRef" onKeyDown={handleKeyDown} placeholder="Enter your Last Organization" required />
+                            </span>
+                            <button type="submit" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '30px', marginLeft: "490px" }}>Submit</button>
+                        </form>
                     </div>
                 );
 
             default:
                 return null;
         }
+
     };
+
     return (
         <div>
             <Header />
@@ -589,6 +923,11 @@ const UpdateProfile = () => {
                     <div className={`updateOptions ${selectedOption === 3 ? 'selected' : ''}`} onClick={() => handleOptionClick(3)}>
                         <div className='updateDiv' style={{ height: "67px", width: "7px" }}></div>
                         <h3 className='textHelp'>Contact Information</h3>
+                    </div>
+                    <hr />
+                    <div className={`updateOptions ${selectedOption === 4 ? 'selected' : ''}`} onClick={() => handleOptionClick(4)}>
+                        <div className='updateDiv' style={{ height: "67px", width: "7px" }}></div>
+                        <h3 className='textHelp'>Experience</h3>
                     </div>
                 </div>
                 <div className='updateContent'>

@@ -26,10 +26,11 @@ const RoleSelection = () => {
 
   if (selected === 'employer') {
     dispatch(employerAction())
+    localStorage.setItem('role', 'employer');
     navigate('/employersignup');
-
   }
   else if (selected === 'trainer') {
+    localStorage.setItem('role', 'tmployer');
     dispatch(trainerAction())
     navigate('/trainersignup')
   }
@@ -144,8 +145,6 @@ const RoleSelection = () => {
             <br />
             Select Your Role!
           </h2>
-
-
           <div className="Unlock SvgHover"
             onClick={() => { setSelected('employer') }}
           >
@@ -237,6 +236,7 @@ const RoleSelection = () => {
             autoplaySpeed={2500}
             dots={false}
             arrows={false}
+            fade={true}
             infinite
           >
             {Data.map((item) => (

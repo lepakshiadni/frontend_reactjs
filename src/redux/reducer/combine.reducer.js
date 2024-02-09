@@ -6,7 +6,8 @@ import {frienduserReducer} from './friend.reducer'
 import {roleSelection} from './roleselection.reducer'
 import {employerReducer} from './employer.reducer'
 import {trainerReducer} from './trainer.reducer'
- 
+import {postRequirementReducer} from './postRequirement.reducer'
+
 const rootReducer = combineReducers({
   generateOTP: siginupreducer,
   verifyOTP: loginreducer,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   frienduser:frienduserReducer,
   roleSelection:roleSelection,
   employerSignUp : employerReducer,
-  trainerSignUp:trainerReducer
+  trainerSignUp:trainerReducer,
+  postRequirement:postRequirementReducer
 });
 export default (rootReducer)

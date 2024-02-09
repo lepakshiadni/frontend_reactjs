@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BiChevronDown } from "react-icons/bi";
 import "../styles/Employee.css";
 import LOGO from "../assets/Header_Logo_RS.png";
@@ -36,7 +36,7 @@ const Employee = () => {
     companyName:'',
     designation:'',
     primaryNumber:phoneNumber,
-    role:roleSelection?.role
+    role:localStorage.getItem('role')
   }
   const handleEnter = (e) => {
     if (e.key === 'Enter') {
@@ -50,27 +50,34 @@ const Employee = () => {
       }
     }
   };
-
-  const handleSignIn = async() => {
+  
+  const handleSignIn = async(e) => {
+    e.preventDefault()
     employerDetails.fullName=fullName;
     employerDetails.companyName=companyName;
     employerDetails.designation=designation; 
-    setFullName("");
-    setCompanyName("");
-    setDesignation(""); 
-    if(employerDetails){
+    
+    if(employerDetails?.fullName.length > 1 && employerDetails?.companyName.length > 1){
       dispatch(employerSignUpAction(employerDetails))
     }
+    else{
+      toast.info('please fill the details')
+    }
+    setFullName("");
+    setCompanyName("");
+    setDesignation("");
   };
+  useEffect(()=>{
+    if(employerSignUp?.success){
+      Cookies.set('token',employerSignUp?.token)
+      toast.success(employerSignUp?.message)
+      navigate('/dashboard')
+    }
 
-  if(employerSignUp?.success){
-    Cookies.set('token',employerSignUp?.token)
-    toast.success(employerSignUp?.message)
-    navigate('/dashboard')
-  }
-  else{
-    toast.error(employerSignUp?.message)
-  }
+    else{
+      toast.error(employerSignUp?.message)
+    }
+  },[navigate,employerSignUp])
 
 
   return (
@@ -179,63 +186,6 @@ const Employee = () => {
           </div>
         </div>
       </div>
-
-      {/* <div className="Emp_Details">
-        <div className="Details">
-          <ArrowBackRoundedIcon
-            sx={{
-              color: " #2676C2;",
-              fontSize: "2.3rem",
-              paddingRight: "36rem",
-            }}
-            onClick={() => {
-              selectrole("/selectrole");
-            }}
-          />
-          <h1>
-            Welcome Employers ! <br />
-            Elevate Team Excellence <br />
-            With Sissoo Training
-          </h1>
-        </div>
-        <div className="Fill_Details">
-          <form>
-            <label>
-              Full Name
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Enter Full name"
-              />
-            </label>
-
-            <label>
-              Company Name
-              <input
-                type="text"
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-                placeholder="Enter Your Company Name"
-              />
-            </label>
-
-            <label>
-              Designation
-              <input
-                type="text"
-                value={designation}
-                onChange={(e) => setDesignation(e.target.value)}
-                placeholder="Enter Your Role"
-              />
-            </label>
-
-            <button type="button" onClick={handleSignIn}>
-              Sign Up
-            </button>
-          </form>
-        </div>
-      </div> */}
       <div className='Emp_Details'>
         <div className='Details' >
           {/* <ArrowBackRoundedIcon sx={{ color: ' #2676C2;', fontSize: '2.3rem', paddingRight: '36rem' }}  onClick={()=>{ ('/selectrole')}}  /> */}
@@ -251,23 +201,23 @@ const Employee = () => {
           </h1>
         </div>
         <div className='Fill_Details'>
-          <form>
+          <form onSubmit={handleSignIn}>
             <label>
               Full Name
-              <input type='text' value={fullName} onChange={(e) => (setFullName(e.target.value))} placeholder='Enter Full name' onKeyDown={(e)=>handleEnter(e)} />
+              <input type='text' required value={fullName} onChange={(e) => (setFullName(e.target.value))} placeholder='Enter Full name' onKeyDown={(e)=>handleEnter(e)} />
             </label>
 
             <label>
               Company Name
-              <input type='text' value={companyName} onChange={(e) => (setCompanyName(e.target.value))} placeholder='Enter Your Company Name'  onKeyDown={(e)=>handleEnter(e)}  />
+              <input type='text' required value={companyName} onChange={(e) => (setCompanyName(e.target.value))} placeholder='Enter Your Company Name'  onKeyDown={(e)=>handleEnter(e)}  />
             </label>
 
             <label>
               Designation
-              <input type='text' value={designation} onChange={(e) => (setDesignation(e.target.value))} placeholder='Enter Your Role'  onKeyDown={(e)=>handleEnter(e)} />
+              <input type='text' required value={designation} onChange={(e) => (setDesignation(e.target.value))} placeholder='Enter Your Role'  onKeyDown={(e)=>handleEnter(e)} />
             </label>
 
-            <button type='button' onClick={handleSignIn}>
+            <button type='submit' >
               Sign Up
             </button>
           </form>

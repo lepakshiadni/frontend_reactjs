@@ -8,8 +8,9 @@ import FileUploadOutlinedIcon from "@mui/icons-material/FileUploadOutlined";
 import '../../styles/Requirements.css'
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Axios from 'axios'
-
+// import { ToastContainer, toast } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux'
+import { postTrainingRequirementAction, getPostTrainingRequirementAction, postJobRequirementAction } from "../../../redux/action/postRequirement.action";
 const Requirements = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -31,6 +32,18 @@ const Requirements = () => {
     const [experience2, setExperience2] = React.useState(0);
     const [isDragging, setIsDragging] = React.useState(false);
     const [isDraggingg, setIsDraggingg] = React.useState(false);
+    const employer = useSelector(({ employerSignUp }) => {
+        return employerSignUp?.employerDetails?.employerDetails
+    })
+    const postRequiement = useSelector(({ postRequirement }) => {
+        return postRequirement;
+    })
+    console.log("postRequiement", postRequiement)
+
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getPostTrainingRequirementAction())
+    }, [dispatch])
 
     const handleExperienceChange = (event) => {
         setExperience(event.target.value);
@@ -204,58 +217,17 @@ const Requirements = () => {
     const location = useRef()
     const tocFile = useRef()
 
-    console.log('toc',tocFile)
-    
-    const [tocFileName,setTocFileName]=useState(null)
-    const [tocContent,setTocContent]=useState(null)
+    console.log('toc', tocFile)
+    const [tocContent, setTocContent] = useState(null)
     // console.log("tocFileName",tocFileName)
-    console.log('tocContent',tocContent)
+    console.log('tocContent', tocContent)
 
-
-    // const handlePostTrainingSubmit = async () => {
-    //     try {
-            
-    //         const formData = {
-    //             company: company.current.value,
-    //             description: description.current.value,
-    //             topics: selectedTopics.map(topic => topic.value),
-    //             typrOfTraining: trainingType,
-    //             participantCount: participantCount,
-    //             modOfTraining: trainingMode,
-    //             location: location.current ? location.current.value : null,
-    //             minBudget: minBudget,
-    //             maxBudget: maxBudget,
-    //             experience: experience,
-    //             durationType: durationType,
-    //             durationCount: durationCount,
-    //             selectedCountry: selectedCountry,
-    //             availability: availability,
-    //             // tocFile: '',
-    //             tocFileName: tocFileName,
-    //             tocContent: tocContent,
-    //             startDate: startDate,
-    //             endDate: endDate,
-    //             urgentlyNeedTrainer: urgentlyNeedTrainer
-    //         };
-    
-    //         console.log(formData);
-           
-    
-    //         await Axios.post('http://192.168.1.15:4000/employerpost/postRequirement', formData)
-    //             .then((res) => {
-    //                 console.log(res.data);
-    //             });
-    
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
 
 
     const handlePostTrainingSubmit = async () => {
         try {
             let formData = new FormData();
-    
+
             // Append fields to FormData
             formData.append("company", company.current.value);
             formData.append("description", description.current.value);
@@ -274,25 +246,22 @@ const Requirements = () => {
             formData.append("startDate", startDate);
             formData.append("endDate", endDate);
             formData.append("urgentlyNeedTrainer", urgentlyNeedTrainer);
-    
+            formData.append('postedByName', employer?.fullName)
+            formData.append('postedByCompanyName', employer?.companyName)
+            formData.append('postedByImg', employer?.profileImg)
+            formData.append('postedByDesignation', employer?.designation)
+            console.log('emplooyer', employer?.fullName)
             // Append file to FormData
             if (tocFile.current && tocFile.current.files.length > 0) {
                 formData.append("tocFile", tocFile.current.files[0]);
             }
-
-            // Send FormData using Axios
-            await Axios.post('http://192.168.1.15:4000/employerpost/postRequirement', formData)
-            .then((res) => {
-                console.log(res.data);
-            });
-            
-            console.log(formData)
+            await dispatch(postTrainingRequirementAction(formData));
         } catch (error) {
             console.log(error);
         }
     }
-    
-    
+
+
     const handleResetPostTraining = () => {
         company.current.value = ''
         description.current.value = ''
@@ -331,41 +300,44 @@ const Requirements = () => {
     const salary = useRef()
     const benifit = useRef()
 
-    const [formData2, setFormData2] = useState({
-
-        jobTitle: '',
-        description2: '',
-        topics2: [],
-        qualificationRef: '',
-        location2: '',
-        salary: '',
-        benifit: '',
-        description3: '',
-        experience2: ''
-    });
-
     const handlePostJobReset = () => {
 
-    }
-    const handlePostJobSubmit = () => {
-        setFormData2(prevData => ({
-            ...prevData,
-
-            jobTitle: jobTitle.current.value,
-            description2: description2.current.value,
-            description3: description3.current.value,
-            topics2: skilval.map(topic => topic.value),
-            qualificationRef: qulificationVal.value,
-            salary: salary.current.value,
-            benifit: benifit.current.value,
-            location2: location2.current.value,
-            experience2: experience2,
-
-        }));
-        console.log(formData2)
+        jobTitle.current.value = '';
+        setContentt('')
+        setContenttt('')
+        salary.current.value = '';
+        benifit.current.value = '';
+        location2.current.value = '';
+        setQulificationVal([]);
+        setSkillVal([]);
+        setExperience2(0);
     }
 
-    const handleKeyDown=(event)=>{
+    const handlePostJobSubmit = async () => {
+
+        try {
+            const formdata2 = {
+                jobTitle: jobTitle.current.value,
+                description2: description2.current.value,
+                description3: description3.current.value,
+                salary: salary.current.value,
+                benifit: benifit.current.value,
+                location2: location2.current.value,
+                experience2: experience2,
+                qualificationRef: qulificationVal.label,
+                topics2: skilval.map((topic) => topic.value)
+            }
+
+            await dispatch(postJobRequirementAction(formdata2));
+            handlePostJobReset()
+
+        } catch (error) {
+            console.log('Error:', error);
+        }
+    };
+
+
+    const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault()
 
@@ -840,8 +812,8 @@ const Requirements = () => {
                                                 sx={{ color: "#2676C2", fontSize: "1.3rem" }}
                                             />
                                         </span>
-                                        <input type="file" ref={tocFile} onChange={(e)=>{
-                                            if (e.target.files[0] !== undefined){
+                                        <input type="file" ref={tocFile} onChange={(e) => {
+                                            if (e.target.files[0] !== undefined) {
                                                 let file = e.target.files[0];
                                                 // setTocFileName(file.name);
                                                 // const reader = new FileReader();
@@ -850,7 +822,7 @@ const Requirements = () => {
                                                 // }
                                                 // reader.readAsDataURL(file);
                                                 setTocContent(file)
-                                            
+
                                             }
                                         }} />
                                     </div>

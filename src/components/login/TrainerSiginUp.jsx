@@ -32,7 +32,7 @@ const SkillsSet = () => {
     experience:0,
     skills : [],
     primaryNumber:phoneNumber,
-    role:roleSelection?.role
+    role:localStorage.getItem('role')
   }
   const navigate = useNavigate();
   const dispatch=useDispatch()
@@ -66,7 +66,8 @@ const SkillsSet = () => {
       }
     }
   };
-  const handleSignIn = async() => {
+  const handleSignIn = async(e) => {
+    e.preventDefault()
     // Handle sign-in logic here
     trainerDetails.fullName=fullName;
     trainerDetails.experience=experience;
@@ -75,23 +76,27 @@ const SkillsSet = () => {
     setFullName("")
     setExperience("")
     setSelectedSkills([])
-    if(trainerDetails){
+    if(trainerDetails.fullName.length>0 && trainerDetails.experience.length > 0){
       dispatch(trainerSignUpAction(trainerDetails))
     }
+    else{
+      toast.info('please fill the details')
+    }
   };
+  React.useEffect(()=>{
+    if(trainerSignUp?.success){
+       toast.success(trainerSignUp?.message,{
   
-  if(trainerSignUp?.success){
-     toast.success(trainerSignUp?.message,{
-
-    })
-    Cookies.set('token',trainerSignUp?.token)
-    navigate('/trainerDashboard')
-  }
-  else{
-    toast.error(trainerSignUp?.message,{
-
-    });
-  }
+      })
+      Cookies.set('token',trainerSignUp?.token)
+      navigate('/trainerDashboard')
+    }
+    else{
+      toast.error(trainerSignUp?.message,{
+  
+      });
+    }
+  },[navigate,trainerSignUp])
   return (
     <div className="Trainer">
       <div className="Emp_Head">
@@ -209,16 +214,16 @@ const SkillsSet = () => {
           </h1>
         </div>
         <div className='Fill_Details'>
-          <form>
+          <form onSubmit={handleSignIn}>
             <div className='trainer-form-details'>
             <label className='trainer-form-label'>
               Full Name
-              <input type='text' value={fullName} onChange={(e) => (setFullName(e.target.value))} placeholder='Enter Full name' onKeyDown={(e) => handleEnter(e)} />
+              <input type='text' required value={fullName} onChange={(e) => (setFullName(e.target.value))} placeholder='Enter Full name' onKeyDown={(e) => handleEnter(e)} />
             </label>
 
             <label  className='trainer-form-label'>
               Experience
-              <input type='number' value={experience} onChange={(e) => (setExperience(e.target.value))} placeholder='Select Your Experience Level' onKeyDown={(e) => handleEnter(e)} />
+              <input type='number' required value={experience} onChange={(e) => (setExperience(e.target.value))} placeholder='Select Your Experience Level' onKeyDown={(e) => handleEnter(e)} />
             </label>
 
             <label>
@@ -227,6 +232,7 @@ const SkillsSet = () => {
                 <Select
                   // type='text'
                   value={selectedSkills}
+                  required
                   onChange={(selectedOptions) => setSelectedSkills(selectedOptions)}
 
                   // onChange={(e) => (setSkillSet(e.target.value))}
@@ -337,7 +343,7 @@ const SkillsSet = () => {
             </label>
             </div>
 
-            <button onClick={handleSignIn} type='button' style={{cursor:'pointer'}}>
+            <button  type='submit' style={{cursor:'pointer'}}>
               Sign Up
             </button>
           </form>

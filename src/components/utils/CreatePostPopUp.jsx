@@ -278,11 +278,11 @@ function CreatePostPopup(props) {
                                 </div>
                                 <hr className="bg-[#eee] w-[570px] ml-[30px]" />
                                 <div className="flex flex-col space-y-3 m-[25px] ">
-                                    <div className=" flex items-center gap-2">
+                                    <div className="createpopuLabel flex items-center gap-2">
                                         <input onChange={() => { setRadio1(!radio1); setRadio2(false); }} checked={radio1} className="w-5 h-5" type="radio" id="123" name="abc" value="123" />
                                         <label className={`${radio1 ? " text-[#2676c2] text-base font-normal font-['Poppins']" : " text-zinc-500 text-base font-normal font-['Poppins']"}`} htmlFor="123">Post this for all sissoo member’s</label>
                                     </div>
-                                    <div className=" flex items-center gap-2">
+                                    <div className="createpopuLabel flex items-center gap-2">
                                         <input onChange={() => { setRadio2(!radio2); setRadio1(false); }} checked={radio2} className="w-5 h-5" type="radio" id="321" name="abc" value="321" />
                                         <label className={`${radio2 ? " text-[#2676c2] text-base font-normal font-['Poppins']" : " text-zinc-500 text-base font-normal font-['Poppins']"}`} htmlFor="321">Only post for my connections</label>
                                     </div>

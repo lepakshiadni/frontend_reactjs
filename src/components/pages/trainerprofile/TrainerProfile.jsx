@@ -95,8 +95,8 @@ const TrainerProfile = () => {
   return (
     <>
       <Header />
-      <div className="w-full fixed z-50 top-[100px] left-[60px]  p-[20px]  h-[60px] flex justify-start items-center bg-white ">
-        <div onClick={() => { navigate("/trainerDashboard") }} style={{ fontSize: '16px', fontWeight: '400', color: '#888888', display: 'flex', alignItems: 'center', cursor: 'pointer', }} >
+      <div className=" relative w-[80px]  h-[60px] flex justify-start items-center bg-white ">
+        <div className=" absolute left-20" onClick={() => { navigate("/trainerDashboard") }} style={{ fontSize: '16px', fontWeight: '400', color: '#888888', display: 'flex', alignItems: 'center', cursor: 'pointer',  }} >
           <svg xmlns="http://www.w3.org/2000/svg" width="17" height="15" viewBox="0 0 17 15" fill="none">
             <path d="M16 7.57143L0.999999 7.57143M0.999999 7.57143L7.42857 14M0.999999 7.57143L7.42857 1.14286" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
@@ -104,7 +104,7 @@ const TrainerProfile = () => {
         </div>
       </div>
 
-      <div className="w-full relative top-[160px]">
+      <div className="w-full ">
         <div className="w-100% relative ml-[80px] mr-[80px] h-auto flex">
           <div className="leftsideTrainerProfile w-8/12 mr-[23.67px]">
             <div className="min-h-[1086px] h-[auto] flex flex-col border">

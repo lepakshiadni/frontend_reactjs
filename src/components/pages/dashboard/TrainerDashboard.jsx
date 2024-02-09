@@ -4,7 +4,7 @@ import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutl
 import Done from '../../assets/Done.png'
 import DoneBackground from '../../assets/DoneBackground.png'
 import Header from "../../header&footer/Header";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { trainerDetails } from '../../../redux/action/trainer.action'
 import { Route, Routes, NavLink, useNavigate, useLocation } from "react-router-dom";
 import Chat from "../messages/Chat";
@@ -12,8 +12,9 @@ import TrainerProposalMangement from "../proposalMangement/TrainerProposalMangem
 import TrainerSettings from "../settings/TrainerSettings";
 import TrainerMyTrainers from "../mytrainings/TrainerMyTrainngs.jsx";
 import TrainerHelpSupport from "../help&support/TrainerHelpSupport";
-import Feed from '../feed/Feed.jsx';
+import TrainerFeed from '../feed/trainerFeed/TrainerFeed.jsx'
 import TrainersList from "../trainerlist/TrainersList.js";
+import TrainerProfile from '../trainerprofile/TrainerProfile.jsx'
 import CreatePostPopup from "../../utils/CreatePostPopUp.jsx";
 
 
@@ -31,6 +32,9 @@ function TrainerDashboard() {
     useEffect(() => {
         dispatch(trainerDetails())
     }, [dispatch])
+    const trainer = useSelector(({ trainerSignUp }) => {
+        return trainerSignUp?.trainerDetails;
+    })
     useEffect(() => {
         // Update the selectedOption based on the current location
         const currentOption = option.find(opt => location.pathname.includes(opt.name.toLowerCase()));
@@ -135,16 +139,19 @@ function TrainerDashboard() {
 
                                         <div className="content mt-[20px] pr-[20px]">
                                             <Routes>
-                                                <Route path="dashboard" element={''}/>
-                                                <Route path="feed" element={<Feed />} />
-                                                <Route path="myTrainings" element={<TrainerMyTrainers />} />
+                                                {/* Add more routes for other options */}
+                                                <Route path="dashboard" element={''} />
+                                                <Route path="feed" element={<TrainerFeed />} />
+                                                <Route path="myTrainings" element={<TrainerMyTrainers />} >
+
+                                                </Route>
                                                 <Route path="messages" element={<Chat />} />
                                                 <Route path="BillingPayments" element={<TrainersList />} />
                                                 <Route path="settings" element={<TrainerSettings />} />
                                                 <Route path="proposalmanagement" element={<TrainerProposalMangement />} />
                                                 <Route path="HelpSupport" element={<TrainerHelpSupport />} />
-                                                {/* Add more routes for other options */}
                                                 <Route path="dashboard">
+
                                                     {/* Render content for dashboard */}
                                                 </Route>
                                                 <Route path="settings">
@@ -155,10 +162,14 @@ function TrainerDashboard() {
                                     </div>
                                     {
                                         model && selectedOption === "Feed" ? <>
-                                            <CreatePostPopup trigger={model} setTrigger={setModel}/>
+                                            <CreatePostPopup trigger={model} setTrigger={setModel} />
                                         </> : ""
                                     }
+                                    {/* <Routes>
+                                        <Route path="/trainerDashboard/trainerProfile" element={<TrainerProfile />}></Route>
+                                    </Routes> */}
                                 </div>
+
                             </div>
                         )}
             </div>

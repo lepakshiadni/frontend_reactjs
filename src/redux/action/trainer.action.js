@@ -53,7 +53,7 @@ const trainerDetails = () => {
 const trainerProfileUpdate = (userId,details) => {
     const token=Cookies.get('token')
     // console.log(token)
-    console.log('trainer details action ')
+    console.log('trainer details action ',userId)
     return async(dispatch)=>{
         try{
             Axios.put(`${baseUrl}/trainer/trainerProfileUpdate/${userId}`,details,{

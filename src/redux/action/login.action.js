@@ -3,13 +3,20 @@ const baseUrl=localStorage.getItem('baseUrl')
 
 export const verifyOtp = (phoneNumber, otp) => {
   return async (dispatch) => {
-    try {
-      const response = await Axios.post(`${baseUrl}/user/verifyotp`, { phoneNumber, otp });
-      // console.log(response)
-      dispatch(verifyOtpSuccess(response.data));
-    } catch (error) {
-      dispatch(verifyOtpFailure('Error verifying OTP'));
-    }
+    // try {
+    //   const response = await Axios.post(`${baseUrl}/user/verifyotp`, { phoneNumber, otp });
+    //   // console.log(response)
+    //   dispatch(verifyOtpSuccess(response.data));
+    // } catch (error) {
+    //   dispatch(verifyOtpFailure());
+    // }
+    await Axios.post(`${baseUrl}/user/verifyotp`, { phoneNumber, otp })
+    .then((resp)=>{
+        dispatch(verifyOtpSuccess(resp.data));
+    })
+    .catch((error)=>{
+      dispatch(verifyOtpFailure('Invalid OTP'));
+    })
   };
 };
 
