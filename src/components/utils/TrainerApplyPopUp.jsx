@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import "../styles/TrainerApplyPopup.css";
  
 function TrainerApplyPopup(props) {
-  const { trigger, setTrigger } = props;
-  console.log(trigger)
+  const { trigger, setTrigger,selectedPost } = props;
+  // console.log(trigger)
+  console.log('selected', selectedPost);
   const [isActiveOnline, setActiveOnline] = useState(false);
   const [isActiveOffline, setActiveOffline] = useState(false);
   const [isActiveButton1, setIsActiveButton1] = useState(false);
@@ -77,7 +78,7 @@ function TrainerApplyPopup(props) {
                 <div>
                   <p>Comapny Name</p>
                   <p style={{ color: "#2676c2" }} className="same">
-                    Mindstay Technologies
+                    {selectedPost?.company}
                   </p>
                 </div>
                 <div>

@@ -25,56 +25,117 @@ const trainerSignUpAction = (details) => {
 }
 
 const trainerDetails = () => {
-    const token=Cookies.get('token')
+    const token = Cookies.get('token')
     // console.log(token)
     console.log('trainer details action ')
-    return async(dispatch)=>{
-        try{
-            Axios.get(`${baseUrl}/trainer/gettrainerProfile`,{
-        headers:{
-            Authorization:`Bearer ${token}`}
-        })
-        .then((resp)=>{
-            // console.log(resp)
-            dispatch({
-                type:'GET_TRAINERDETAILS_FETCHED',
-                payload:resp.data
+    return async (dispatch) => {
+        try {
+            Axios.get(`${baseUrl}/trainer/gettrainerProfile`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             })
-        })            
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'GET_TRAINERDETAILS_FETCHED',
+                        payload: resp.data
+                    })
+                })
         }
-        catch(err){
+        catch (err) {
             dispatch({
-                type:"UNAUTHORIZED",
-                payload:err
+                type: "UNAUTHORIZED",
+                payload: err
             })
         }
     }
 }
-const trainerProfileUpdate = (userId,details) => {
-    const token=Cookies.get('token')
+const trainerProfileUpdate = (userId, details) => {
+    const token = Cookies.get('token')
     // console.log(token)
-    console.log('trainer details action ',userId)
-    return async(dispatch)=>{
-        try{
-            Axios.put(`${baseUrl}/trainer/trainerProfileUpdate/${userId}`,details,{
-        headers:{
-            Authorization:`Bearer ${token}`}
-        })
-        .then((resp)=>{
-            // console.log(resp)
-            dispatch({
-                type:'TRAINERDETAILS_UPDATED_SUCCESS',
-                payload:resp.data
+    console.log('trainer details action ', userId)
+    return async (dispatch) => {
+        try {
+            Axios.put(`${baseUrl}/trainer/trainerProfileUpdate/${userId}`, details, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             })
-        })            
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'TRAINERDETAILS_UPDATED_SUCCESS',
+                        payload: resp.data
+                    })
+                })
         }
-        catch(err){
+        catch (err) {
             dispatch({
-                type:"TRAINERDETAILS_UPDATE_FAILURE",
-                payload:err
+                type: "TRAINERDETAILS_UPDATE_FAILURE",
+                payload: err
             })
         }
     }
 }
 
-export { trainerSignUpAction, trainerDetails,trainerProfileUpdate }
+const addBookMarkePost = (postId) => {
+    const token = Cookies.get('token')
+    console.log(token)
+    console.log(postId, 'add bookmark post ')
+    return async (dispatch) => {
+        try {
+            Axios.put(`${baseUrl}/trainer/addBookMarkePost/${postId}`,'tesing the body',{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'ADD_BOOKMARKEDPOST_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (resp) {
+            dispatch({
+                type: "ADD_BOOKMARKEDPOSTFAILURE",
+                payload: resp.data
+            })
+        }
+    }
+
+}
+
+const getBookMarkedPost = () => {
+    const token = Cookies.get('token')
+    console.log('get bookMarkepost Action')
+    return async (dispatch) => {
+        try {
+            Axios.get(`${baseUrl}/trainer/getBookMarkedPostsByUserId `, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'GET_BOOKMARKEDPOST_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "GET_BOOKMARKEDPOSTFAILURE",
+                payload: err
+            })
+        }
+    }
+
+}
+
+
+
+export { trainerSignUpAction, trainerDetails, trainerProfileUpdate, addBookMarkePost, getBookMarkedPost }

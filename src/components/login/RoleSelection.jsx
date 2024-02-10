@@ -30,7 +30,7 @@ const RoleSelection = () => {
     navigate('/employersignup');
   }
   else if (selected === 'trainer') {
-    localStorage.setItem('role', 'tmployer');
+    localStorage.setItem('role', 'trainer');
     dispatch(trainerAction())
     navigate('/trainersignup')
   }

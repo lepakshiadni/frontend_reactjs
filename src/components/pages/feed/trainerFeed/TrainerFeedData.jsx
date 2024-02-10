@@ -1,9 +1,10 @@
-// import '../../styles/Feed.css';
 import '../../../styles/Feed.css'
-import { useEffect, useState, useRef,useMemo } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import PopUp from './PopUp';
 import { useDispatch, useSelector } from 'react-redux'
-import { getPostTrainingRequirementAction,addPostTrainingComments,getPostTrainingComments } from '../../../../redux/action/postRequirement.action'
+import {addBookMarkePost,getBookMarkedPost} from '../../../../redux/action/trainer.action'
+import { getPostTrainingRequirementAction, addPostTrainingComments, getPostTrainingComments } from '../../../../redux/action/postRequirement.action'
+import TrainerApplyPopup from './../../../utils/TrainerApplyPopUp';
 
 
 // const Data = Array.from({ length: 20 }, (_, index) => ({
@@ -21,25 +22,25 @@ const TrainerFeeData = ({ PostTrainingData }) => {
     const comments = useSelector(({ postRequirement }) => {
         return postRequirement?.getTrainingComments?.comments;
     })
-    const [commentsDetails,setCommentDetails]=useState([])
+    const currentUserId = trainer?._id
+    console.log('currentUser', currentUserId)
+    // const [commentsDetails,setCommentDetails]=useState([])
 
-    
-    console.log('comments',comments)
-    useEffect(()=>{
-        setCommentDetails(comments)
-    },[comments])
+
+    console.log('comments', comments)
+
     const [selectedItems, setSelectedItems] = useState(Array(PostTrainingData?.length).fill(false));
     const [selectedPost, setSelectedPost] = useState(null)
     const [addNewComment, setAddNewComment] = useState('')
-    // const [Data,setData]=useState([])
-    // const [comments,setcomments]=useState()
 
     console.log('selecetedpost', selectedPost)
     const dispatch = useDispatch()
-    const handleIconClick = (index) => {
+    const handleIconClick = async(index,post) => {
+        await setSelectedPost(post)
         const updatedSelectedItems = [...selectedItems];
         updatedSelectedItems[index] = !updatedSelectedItems[index];
         setSelectedItems(updatedSelectedItems);
+        await dispatch(addBookMarkePost(post?._id))
     };
     const [selectedItems2, setSelectedItems2] = useState(Array(PostTrainingData?.length).fill(false));
 
@@ -60,10 +61,11 @@ const TrainerFeeData = ({ PostTrainingData }) => {
 
     const [showMoreArray, setShowMoreArray] = useState(new Array(PostTrainingData.length).fill(false));
 
-    const handleShowMoreClick = (index) => {
+    const handleShowMoreClick = (index, post) => {
         const newShowMoreArray = [...showMoreArray];
         newShowMoreArray[index] = !newShowMoreArray[index];
         setShowMoreArray(newShowMoreArray);
+        setSelectedPost(post)
     };
 
     const [messageShowMoreBasedOnProfile, setMessageShowMoreBasedOnProfile] = useState([]);
@@ -100,6 +102,7 @@ const TrainerFeeData = ({ PostTrainingData }) => {
         }
     };
     const [PopUpButton, setPopUpButton] = useState(false)
+    const [applyPopUp, setApplyPopUp] = useState(false)
     let menuRef2 = useRef()
     let menuRef3 = useRef()
     let commentRef = useRef()
@@ -137,7 +140,6 @@ const TrainerFeeData = ({ PostTrainingData }) => {
 
     const [data, setData] = useState(comments);
     const [open3Array, setOpen3Array] = useState(Array(comments?.length).fill(false));
-    console.log('data',data)
     // Function to toggle the dropdown menu for a specific comment
     const toggleDropdown = (index) => {
         const newOpen3Array = [...open3Array];
@@ -151,31 +153,61 @@ const TrainerFeeData = ({ PostTrainingData }) => {
         setData(newData); // Update the state with the new data array
     };
 
-    const handleAddComment = async(e) => {
+    const handleAddComment = async (e) => {
         e.preventDefault()
         const comment = {
+            commentedByUserId: trainer?._id,
             commentedByProfile: trainer?.postedByImg,
             commentedByName: trainer?.fullName,
             commentedByCompany: trainer?.company,
             comment: addNewComment
         }
-        const postId=selectedPost?._id
-        console.log(comment,postId)
-        await dispatch(addPostTrainingComments(postId,comment) )
+        const postId = selectedPost?._id
+        console.log(comment, postId)
+        await dispatch(addPostTrainingComments(postId, comment))
         setAddNewComment('')
     }
-
 
     useEffect(() => {
         dispatch(getPostTrainingRequirementAction())
     }, [dispatch])
-    useEffect(()=>{
-        if(selectedPost){
+    useEffect(() => {
+        if (selectedPost) {
             dispatch(getPostTrainingComments(selectedPost?._id))
         }
-        
-    },[selectedPost,dispatch])
-    // console.log("PostTrainingData",PostTrainingData)
+
+    }, [selectedPost, dispatch])
+
+
+    //for dowload the file 
+    const downloadFileHandler = async () => {
+        const fileData = selectedPost?.tocFile?.fileData?.data;
+        const buffer = new Uint8Array(fileData).buffer;
+        const bufferBlob = new Blob([buffer], { type: "application/octet-stream" });
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+            const arrayBuffer = fileReader.result;
+            const blob = new Blob([arrayBuffer], { type: "application/octet-stream" });
+            try {
+                const url = window.URL.createObjectURL(blob);
+                const link = createDownloadLink(url, selectedPost?.tocFile?.tocFileName);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+            } catch (error) {
+                alert("An error occurred while downloading the file. Please try again later.");
+            }
+        };
+        fileReader.readAsArrayBuffer(bufferBlob);
+    }
+    const createDownloadLink = (href, downloadName) => {
+        const a = document.createElement("a");
+        a.href = href;
+        a.download = downloadName;
+        return a;
+    }
+
 
 
     return (
@@ -183,12 +215,13 @@ const TrainerFeeData = ({ PostTrainingData }) => {
 
             <PopUp trigger={PopUpButton} setTrigger={setPopUpButton}>
             </PopUp>
+            <TrainerApplyPopup trigger={applyPopUp} setTrigger={setApplyPopUp} selectedPost={selectedPost} ></TrainerApplyPopup>
 
             {/* <h3 style={{ color: '#888888', fontSize: '16px', marginTop: '10px' }}>Based on Your Profile</h3> */}
 
-            <section ref={showmoreRef2} style={{ height: '650px', overflowY: 'scroll' }} >
+            <section className='' ref={showmoreRef2} style={{ height: '650px', overflowY: 'scroll' }} >
                 {PostTrainingData?.map((post, index) => (
-                    <div key={index}>
+                    <div className='' key={index}>
                         <div className='centered-section2'>
                             <div style={{ display: 'flex', alignItems: 'center', textAlign: 'center', justifyContent: 'space-between' }}>
                                 <div style={{ display: 'flex' }}>
@@ -200,7 +233,7 @@ const TrainerFeeData = ({ PostTrainingData }) => {
                                         <p style={{ fontSize: '14px', margin: '0px', color: "#535353" }}>Wipro</p>
                                     </div>
                                 </div>
-                                <div className='inst' onClick={() => handleIconClick(index)}>
+                                <div className='inst' onClick={() => handleIconClick(index,post)}>
 
                                     {selectedItems[index] ? (
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18" fill="none" >
@@ -250,7 +283,11 @@ const TrainerFeeData = ({ PostTrainingData }) => {
 
                                     <div style={{ display: 'flex', marginTop: '10px', height: '25px' }}>
                                         <h5 style={{ color: '#888888' }}>Wanted skills</h5>
-                                        <button style={{
+                                        <button onClick={() => {
+                                            setApplyPopUp(true);
+                                            setSelectedPost(post)
+                                        }} style={{
+
                                             backgroundColor: '#2676C2',
                                             border: '0px',
                                             color: 'white',
@@ -275,7 +312,7 @@ const TrainerFeeData = ({ PostTrainingData }) => {
                                     <h5><span className='skillchild' >Duration of training -</span> <span className='skillchild2'>{post.durationCount} {post.durationType}</span></h5>
                                     <h5><span className='skillchild' >Budget -</span> <span className='skillchild2'>₹ {post.minBudget} - ₹ {post.maxBudget}</span> </h5>
                                     <h5 style={{ display: 'flex', alignItems: 'center', marginTop: '0px' }}><span className='skillchild' >Table of content - <span style={{ color: 'rgb(180, 161, 161)' }}> For Developer.pdf</span></span>
-                                        <span className='downlod'>
+                                        <span className='downlod' onClick={downloadFileHandler}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16" fill="none">
                                                 <path d="M1.33301 14.6673H10.2219M5.77745 1.33398V11.7044M5.77745 11.7044L9.48116 8.00065M5.77745 11.7044L2.07375 8.00065" stroke="#2676C2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                             </svg>
@@ -316,7 +353,7 @@ const TrainerFeeData = ({ PostTrainingData }) => {
                                     </div>
                                 </div>
                             </p>
-                            <button onClick={() => handleShowMoreClick(index)} style={{ background: 'none', border: 'none', color: '#2676C2', cursor: 'pointer', padding: "0px", margin: '0px' }}>
+                            <button onClick={() => handleShowMoreClick(index, post)} style={{ background: 'none', border: 'none', color: '#2676C2', cursor: 'pointer', padding: "0px", margin: '0px' }}>
                                 {showMoreArray[index] ? 'Show Less' : 'more'}
                             </button>
 
@@ -369,40 +406,17 @@ const TrainerFeeData = ({ PostTrainingData }) => {
 
                                             <div className='messageChild'>
                                                 <form onSubmit={handleAddComment} className='flex'>
-                                                <div>
-                                                    <input value={addNewComment} onChange={(e) => { setAddNewComment(e.target.value) }} type="text" style={{ border: '2px solid whitesmoke', width: '350px', outline: "none", height: '50px', borderTopLeftRadius: '8px', borderEndStartRadius: '8px', borderRight: 'none', paddingLeft: '10px' }} placeholder="Write a comment..." />
-                                                </div>
-                                                {/* <div onClick={handleButtonClick}>
-                                                    <button
-                                                        style={{
-                                                            padding: '11px 30px',
-                                                            border: '2px solid whitesmoke',
-                                                            backgroundColor: 'white',
-                                                            borderLeft: 'none',
-                                                            borderRight: 'none',
-                                                            height: '50px',
-                                                            width: '90px'
-                                                        }}
-                                                    >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="20" viewBox="0 0 19 20" fill="none">
-                                                            <path d="M16.7655 1.36747C14.9422 -0.455823 11.9451 -0.455823 10.1218 1.36747L0.131127 11.3331C-0.043709 11.508 -0.043709 11.7827 0.131127 11.9575C0.305963 12.1324 0.580706 12.1324 0.755542 11.9575L10.7462 1.99188C12.2448 0.493288 14.6675 0.493288 16.1411 1.99188C16.8654 2.7162 17.2651 3.66531 17.2651 4.68935C17.2651 5.71339 16.8654 6.6625 16.1411 7.38683L12.8192 10.7087L5.12644 18.4015C4.20231 19.3256 2.72869 19.3256 1.80456 18.4015C1.77958 18.3765 1.75461 18.3515 1.70465 18.2766C0.880425 17.3525 0.930378 15.9538 1.80456 15.0796L9.49735 7.38683L12.7943 4.08992C12.9691 3.91508 13.1689 3.84015 13.3937 3.84015C13.6185 3.84015 13.8433 3.94006 13.9931 4.08992C14.3178 4.41461 14.3178 4.9641 13.9931 5.31377L7.1995 12.1574C7.02466 12.3322 7.02466 12.6069 7.1995 12.7818C7.37434 12.9566 7.64908 12.9566 7.82391 12.7818L14.6425 5.96316C15.3169 5.28879 15.3169 4.16485 14.6425 3.49048C14.3178 3.16578 13.8682 2.99095 13.4187 2.99095C12.9441 2.99095 12.5195 3.16578 12.1948 3.49048L1.20512 14.4802C0.00624418 15.6791 -0.0686857 17.6022 1.03028 18.8511C1.08024 18.926 1.13019 18.976 1.20512 19.0509C1.80456 19.6503 2.62879 20 3.47799 20C4.35217 20 5.15142 19.6753 5.75086 19.0509L6.79988 18.0019L16.7655 8.03622C17.6397 7.16204 18.1392 5.96316 18.1392 4.71433C18.1392 3.44052 17.6397 2.24165 16.7655 1.36747Z" fill="#888888" />
-                                                        </svg>
-                                                    </button>
-                                                    <input
-                                                        type="file"
-                                                        style={{ display: 'none' }}
-                                                        ref={fileInputRef}
-                                                        onChange={handleFileChange}
-                                                    />
-                                                </div> */}
-                                                <div>
-                                                    <button type='submit' onClick={handleAddComment} style={{ padding: '10px 30px', border: '2px solid #2676C2', backgroundColor: '#2676C2', borderStartEndRadius: '8px', borderEndEndRadius: '8px', height: '50px', width: '90px' }}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="21" viewBox="0 0 19 21" fill="none">
-                                                            <path d="M3.7877 10.5782L10.6412 10.5782M16.2379 11.9923L3.94466 18.5004C2.84298 19.0837 2.29183 19.3754 1.92856 19.2915C1.61346 19.2188 1.3531 18.9989 1.22953 18.7001C1.08705 18.3555 1.28403 17.7632 1.67834 16.5802L3.51042 11.084C3.573 10.8963 3.60399 10.8026 3.61642 10.7066C3.62745 10.6214 3.62799 10.5353 3.61697 10.45C3.60482 10.3562 3.57418 10.2643 3.51439 10.085L1.67809 4.57606C1.28377 3.3931 1.08676 2.8014 1.22924 2.45681C1.35281 2.15797 1.61313 1.93763 1.92822 1.86487C2.29155 1.78097 2.84286 2.07247 3.9449 2.6559L16.2381 9.16407C17.1045 9.62275 17.5377 9.8523 17.6794 10.1582C17.8027 10.4247 17.8029 10.7319 17.6795 10.9984C17.538 11.3042 17.1048 11.5335 16.2393 11.9917L16.2379 11.9923Z"
-                                                                stroke='white' stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
+                                                    <div>
+                                                        <input value={addNewComment} onChange={(e) => { setAddNewComment(e.target.value) }} type="text" style={{ border: '2px solid whitesmoke', width: '350px', outline: "none", height: '50px', borderTopLeftRadius: '8px', borderEndStartRadius: '8px', borderRight: 'none', paddingLeft: '10px' }} placeholder="Write a comment..." />
+                                                    </div>
+                                                    <div>
+                                                        <button type='submit' onClick={handleAddComment} style={{ padding: '10px 30px', border: '2px solid #2676C2', backgroundColor: '#2676C2', borderStartEndRadius: '8px', borderEndEndRadius: '8px', height: '50px', width: '90px' }}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="21" viewBox="0 0 19 21" fill="none">
+                                                                <path d="M3.7877 10.5782L10.6412 10.5782M16.2379 11.9923L3.94466 18.5004C2.84298 19.0837 2.29183 19.3754 1.92856 19.2915C1.61346 19.2188 1.3531 18.9989 1.22953 18.7001C1.08705 18.3555 1.28403 17.7632 1.67834 16.5802L3.51042 11.084C3.573 10.8963 3.60399 10.8026 3.61642 10.7066C3.62745 10.6214 3.62799 10.5353 3.61697 10.45C3.60482 10.3562 3.57418 10.2643 3.51439 10.085L1.67809 4.57606C1.28377 3.3931 1.08676 2.8014 1.22924 2.45681C1.35281 2.15797 1.61313 1.93763 1.92822 1.86487C2.29155 1.78097 2.84286 2.07247 3.9449 2.6559L16.2381 9.16407C17.1045 9.62275 17.5377 9.8523 17.6794 10.1582C17.8027 10.4247 17.8029 10.7319 17.6795 10.9984C17.538 11.3042 17.1048 11.5335 16.2393 11.9917L16.2379 11.9923Z"
+                                                                    stroke='white' stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                 </form>
                                             </div>
 
@@ -413,7 +427,7 @@ const TrainerFeeData = ({ PostTrainingData }) => {
 
                                             <div>
                                                 {comments?.map((item, index) => (
-                                                    <div key={index} style={{ display: 'flex', margin: '5px', marginTop: '10px' }}>
+                                                    <div className='' key={index} style={{ display: 'flex', margin: '5px', marginTop: '10px' }}>
                                                         <img className='img2' height='40px' width='40px' src={item.imageUrl} alt="" />
                                                         <div style={{ width: "436px", height: '96px', backgroundColor: '#f0f0f0', padding: '10px', marginLeft: '10px', borderStartEndRadius: '15px', borderEndStartRadius: '15px', borderEndEndRadius: '15px', border: '2px solid #E9E9E9' }}>
                                                             <div style={{ display: 'flex' }}>
@@ -480,7 +494,6 @@ const TrainerFeeData = ({ PostTrainingData }) => {
                                                                         </div>
                                                                     )}
                                                                 </div>
-
                                                             </div>
                                                             <div>
                                                                 <p style={{ margin: '0px', color: '#888888', fontSize: '14px' }}>{item?.comment}</p>

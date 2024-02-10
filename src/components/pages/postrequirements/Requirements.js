@@ -220,7 +220,7 @@ const Requirements = () => {
     console.log('toc', tocFile)
     const [tocContent, setTocContent] = useState(null)
     // console.log("tocFileName",tocFileName)
-    console.log('tocContent', tocContent)
+    // console.log('tocContent', tocContent)
 
 
 
@@ -253,7 +253,10 @@ const Requirements = () => {
             console.log('emplooyer', employer?.fullName)
             // Append file to FormData
             if (tocFile.current && tocFile.current.files.length > 0) {
-                formData.append("tocFile", tocFile.current.files[0]);
+                console.log("tocFile",tocFile.current.files[0])
+                
+                // formData.append("tocFile", tocFile.current.files[0],tocFile.current?.files[0]?.name);
+                formData.append("tocFile", tocFile.current.files[0], tocFile.current?.files[0]?.name);
             }
             await dispatch(postTrainingRequirementAction(formData));
         } catch (error) {

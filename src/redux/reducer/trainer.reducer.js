@@ -4,6 +4,10 @@
 const initialState = {
     trainerDetails:{
     },
+
+    addBookMarkedPost:{
+
+    },
     message:'',
     success:null
 
@@ -52,6 +56,35 @@ const trainerReducer = (state = initialState, action) => {
                 ...state,
                 message: action.payload.error
             };
+        //add to the bookmark the trainerProfile 
+        case 'ADD_BOOKMARKEDPOST_SUCCESS':
+            console.log('handling get trainer')
+            return {
+                ...state,
+                addBookMarkedPost: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'ADD_BOOKMARKEDPOSTFAILURE':
+            console.error("Handling failure trainer:", action.payload);
+            return {
+                ...state,
+                message: action.payload.error
+            };
+            case 'GET_BOOKMARKEDPOST_SUCCESS':
+                console.log('handling get trainer book marked')
+                return {
+                    ...state,
+                    addBookMarkedPost: action.payload,
+                    message: action.payload.message,
+                    success: action.payload.success
+                };
+            case 'GET_BOOKMARKEDPOSTFAILURE':
+                console.error("Handling failure trainer:", action.payload);
+                return {
+                    ...state,
+                    message: action.payload.error
+                };
         default:
             return state;
     }
