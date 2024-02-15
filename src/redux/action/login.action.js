@@ -2,6 +2,7 @@ import Axios from "axios";
 const baseUrl=localStorage.getItem('baseUrl')
 
 export const verifyOtp = (phoneNumber, otp) => {
+  console.log('otp verify action ',phoneNumber,otp)
   return async (dispatch) => {
     // try {
     //   const response = await Axios.post(`${baseUrl}/user/verifyotp`, { phoneNumber, otp });
@@ -12,6 +13,7 @@ export const verifyOtp = (phoneNumber, otp) => {
     // }
     await Axios.post(`${baseUrl}/user/verifyotp`, { phoneNumber, otp })
     .then((resp)=>{
+        console.log('resp',resp.data)
         dispatch(verifyOtpSuccess(resp.data));
     })
     .catch((error)=>{

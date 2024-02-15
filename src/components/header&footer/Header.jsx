@@ -12,6 +12,7 @@ const Header = () => {
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [user, setUser] = useState(null)
+  const [profileImg, setProfileImg] = useState(null)
 
   const employer = useSelector(({ employerSignUp }) => {
     return employerSignUp?.employerDetails
@@ -19,8 +20,8 @@ const Header = () => {
   const trainer = useSelector(({ trainerSignUp }) => {
     return trainerSignUp?.trainerDetails;
   })
-  console.log("employer",employer)
-  console.log("trainer",trainer)
+  console.log("employer", employer)
+  console.log("trainer", trainer)
   useEffect(() => {
     if (employer?.success) {
       setUser(employer?.employerDetails);
@@ -31,6 +32,23 @@ const Header = () => {
   }, [employer, trainer]);
 
   console.log("user", user)
+
+
+  useEffect(() => {
+    if (user && user?.profileImg && user?.profileImg?.data) {
+      const bufferData = user.profileImg.data;
+      const arrayBufferView = new Uint8Array(bufferData);
+      const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
+      const reader = new FileReader();
+      reader.readAsDataURL(blob);
+      reader.onload = () => {
+        // Set the base64-encoded image data
+        setProfileImg(reader.result);
+      };
+    }
+  }, [user]);
+  // console.log(profileImg)
+
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -213,8 +231,34 @@ const Header = () => {
 
           {/* Profile Dropdown */}
           <div className="profile" onClick={handleprofile}>
-            <div className="profile-header">
-              <img src={Favi} alt="" style={{ float: "left", clear: "both" }} />
+            {/* <div className="profile-header">
+              <img src={profileImg} alt="" style={{ float: "left", clear: "both" ,height:'50px',width:'50px' }} />
+              <div>
+                <h4>{user?.fullName?.charAt(0)?.toUpperCase() + user?.fullName?.slice(1)}</h4>
+                <p>{user?.companyName?.charAt(0)?.toUpperCase() + user?.companyName?.slice(1) || 'N/A'}</p>
+              </div>
+            </div> */}
+            <div className="profile-header ">
+              {profileImg ? (
+                <img
+                  className="border rounded-full"
+                  src={profileImg}
+                  alt=""
+                  style={{ float: "left", clear: "both", height: '50px', width: '50px' }}
+                />
+              ) : (
+                <div
+                  className="border rounded-full"
+                  style={{
+                    float: "left",
+                    clear: "both",
+                    height: '50px',
+                    width: '50px',
+                    backgroundColor: "gray", // Placeholder color
+                    
+                  }}
+                ></div>
+              )}
               <div>
                 <h4>{user?.fullName?.charAt(0)?.toUpperCase() + user?.fullName?.slice(1)}</h4>
                 <p>{user?.companyName?.charAt(0)?.toUpperCase() + user?.companyName?.slice(1) || 'N/A'}</p>
@@ -223,7 +267,7 @@ const Header = () => {
             {showProfileDropdown && (
               <div className="absolute right-[0] w-[234px] h-[133px] bg-white border-2 border-zinc-300">
                 <div className="bg-white font-['Poppins']">
-                  <div onClick={()=>{navigate('/trainerProfile')}} className="viewprofile text-neutral-700 flex justify-center items-center w-[100%] h-[43px] text-lg font-normal font-['Poppins']">
+                  <div onClick={() => { navigate('/trainerProfile') }} className="viewprofile text-neutral-700 flex justify-center items-center w-[100%] h-[43px] text-lg font-normal font-['Poppins']">
                     {/* <Link to="/trainerDashboard/trainerProfile"> View Profile</Link> */}
                     View Profile
                     <div className="triangle2"></div>

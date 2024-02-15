@@ -1,7 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import '../../styles/TrainerProfileEdit.css'
-import Banner from '../../assets/banner.png'
-import profileTrainer from '../../assets/profileTrainer.png'
 import ReactImg from '../../assets/react.png'
 import AdobImg from '../../assets/adobe.png'
 import FigmaImg from '../../assets/figma.png'
@@ -11,8 +9,10 @@ import CropImage from "./trainerprofileedit/CropingImage";
 import SquareCropImg from "./trainerprofileedit/SquareCrop";
 import Header from '../../header&footer/Header'
 import { useNavigate } from "react-router-dom";
-import {trainerProfileUpdate,trainerDetails} from '../../../redux/action/trainer.action'
+// import {trainerProfileUpdate,trainerDetails} from '../../../redux/action/trainer.action'
 import { useDispatch, useSelector } from 'react-redux'
+import { trainerProfileUpdate } from "../../../redux/action/trainer.action";
+import { trainerDetails } from "../../../redux/action/trainer.action";
 
 
 
@@ -27,8 +27,8 @@ const UpdateProfile = () => {
     }
     //croping and popup in basicinfo
 
-    const [profileImage, setProfileImage] = useState(profileTrainer);
-    const [banermage, setBanerImage] = useState(Banner);
+    const [profileImage, setProfileImage] = useState();
+    const [banermage, setBanerImage] = useState();
     const [showProfileCropPopup, setShowProfileCropPopup] = useState(false);
     const [showBannerCropPopup, setShowBannerCropPopup] = useState(false);
 
@@ -61,6 +61,7 @@ const UpdateProfile = () => {
                     setProfileImage({ file: newImage, name: file.name });
                 } else if (imageType === 'banner') {
                     setBanerImage({ file: newImage, name: file.name });
+
                 }
             };
 
@@ -71,13 +72,12 @@ const UpdateProfile = () => {
 
 
     const handleUpdateProfileImage2 = (newImage) => {
-        const fileName = banermage.name || 'Squrecropped.jpg';
+        const fileName = banermage && banermage.name ? banermage.name : 'Squrecropped.jpg';
 
         const croppedFile = new File([newImage], fileName, { type: 'image/jpeg' });
 
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(croppedFile);
-
 
         const inputElement = profileBanner.current;
         inputElement.files = dataTransfer.files;
@@ -86,13 +86,12 @@ const UpdateProfile = () => {
         setShowBannerCropPopup(false);
     };
     const handleUpdateProfileImage = (newImage) => {
-        const fileName = profileImage.name || 'cropped.jpg';
+        const fileName = profileImage && profileImage.name ? profileImage.name : 'cropped.jpg';
 
         const croppedFile = new File([newImage], fileName, { type: 'image/jpeg' });
 
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(croppedFile);
-
 
         const inputElement = profileImg.current;
         inputElement.files = dataTransfer.files;
@@ -100,6 +99,7 @@ const UpdateProfile = () => {
         setProfileImage({ file: newImage, name: fileName });
         setShowProfileCropPopup(false);
     };
+
 
 
     //sorting and maping in skills
@@ -139,7 +139,7 @@ const UpdateProfile = () => {
     };
 
     //image file drop and drag
-
+ 
     let certificateImg = useRef(null);
     const [labelText, setLabelText] = useState();
     const [labelTextName, setLabelTextName] = useState(false);
@@ -212,6 +212,17 @@ const UpdateProfile = () => {
         handleSubmitReset()
     };
 
+    const handleSubmitReset = () => {
+        // Reset other form fields
+        certificateHead.current.value = '';
+        institution.current.value = '';
+        certificationDescription.current.value = '';
+        // Reset file input by clearing its value
+        setLabelText('');
+        setLabelTextName(false);
+        certificateImg.current.value = null; // Clear the input value
+    };
+
     const handleDelete = (index) => {
         const newData = [...storedData];
         newData.splice(index, 1);
@@ -227,9 +238,9 @@ const UpdateProfile = () => {
             certificationDescription: '',
             certificateImg: '',
         });
-        setLabelTextName(false)
+        handleSubmitReset()
+    };
 
-    }
 
     //input click next
     const firstName = useRef()
@@ -254,7 +265,7 @@ const UpdateProfile = () => {
     const website = useRef()
 
     const expertIn = useRef()
-    const experinence = useRef()
+    const experience = useRef()
     const sinceInTheFiled = useRef()
     const recentCompnyRef = useRef()
 
@@ -309,10 +320,10 @@ const UpdateProfile = () => {
 
             }
             else if (event.target === expertIn.current) {
-                experinence.current.focus();
+                experience.current.focus();
 
             }
-            else if (event.target === experinence.current) {
+            else if (event.target === experience.current) {
                 sinceInTheFiled.current.focus();
 
             }
@@ -326,133 +337,95 @@ const UpdateProfile = () => {
         console.log(formData);
     })
 
-    const [formData, setFormData] = useState({
-        profileImg: null,
-        profileBanner: null,
-        firstName: '',
-        lastName: '',
-        designation: '',
-        company: '',
-        age: '',
-        location: '',
-        objective: '',
-        aboutYou: '',
-        skills: [],
-        certificateDetails: [],
-        primaryNumber: '',
-        secondaryNumber: '',
-        address: '',
-        email: '',
-        website: '',
-        expertIn: '',
-        experinence: '',
-        sinceInTheFiled: '',
-        recentCompnyRef: ''
-    });
+    const [formData, setFormData] = useState(new FormData());
 
-    const handleCase0Data = (e) => {
-        e.preventDefault()
+    const handleCase0Data = async (e) => {
+        e.preventDefault();
         const fileInput = profileImg.current;
         const fileInput2 = profileBanner.current;
         if (fileInput && fileInput2 && fileInput.files.length > 0 && fileInput2.files.length > 0) {
-
             const file = fileInput.files[0];
             const file2 = fileInput2.files[0];
-            setFormData(prevData => ({
-                ...prevData,
-                profileImg: file,
-                profileBanner: file2,
-                firstName: firstName.current.value,
-                lastName: lastName.current.value,
-                designation: designation.current.value,
-                company: company.current.value,
-                age: age.current.value,
-                location: location.current.value,
-                objective: objective.current.value,
-                aboutYou: aboutYou.current.value,
-            }));
-            handleOptionClick(1)
-        }
-        else {
+
+            // Append form data to formData
+            formData.append('profileImg', file);
+            formData.append('profileBanner', file2);
+            formData.append('firstName', firstName.current.value);
+            formData.append('lastName', lastName.current.value);
+            formData.append('designation', designation.current.value);
+            formData.append('company', company.current.value);
+            formData.append('age', age.current.value);
+            formData.append('location', location.current.value);
+            formData.append('objective', objective.current.value);
+            formData.append('aboutYou', aboutYou.current.value);
+
+            handleOptionClick(1);
+        } else {
             alert("No file selected");
-
         }
-
-    }
+    };
 
     const handleCase1Data = () => {
 
-        setFormData(prevData => ({
-            ...prevData,
-            skills: [...clickedTitles]
-        }));
+        clickedTitles.forEach(skill => {
+            formData.append('skills', skill);
+        });
         handleOptionClick(2)
+    };
 
-    }
 
     const handleCase2Data = () => {
         const file = certificateImg.current.files[0];
 
         if (file) {
-            const newCertificate = {
-                certificateHead: certificateHead.current.value,
-                institution: institution.current.value,
-                certificationDescription: certificationDescription.current.value,
-                certificateImg: file,
-            };
+            // Append form data to formData
+            formData.append('certificateHead', certificateHead.current.value);
+            formData.append('institution', institution.current.value);
+            formData.append('certificationDescription', certificationDescription.current.value);
+            formData.append('certificateImg', file);
 
-            setFormData(prevData => ({
-                ...prevData,
-                certificateDetails: [...prevData.certificateDetails, newCertificate], // Add new certificate to the array
-            }));
-
-            handleSubmit(); // You can call your submit function here if needed
+            handleSubmit();
         } else {
             alert("No file selected");
         }
-    }
-    const handleSubmitReset = () => {
-        certificateHead.current.value = ''
-        institution.current.value = ''
-        certificationDescription.current.value = ''
-        certificateImg = ''
-    }
+    };
+
 
     const handleCase3Data = (e) => {
         e.preventDefault()
-        setFormData(prevData => ({
-            ...prevData,
-            primaryNumber: primaryNumber.current.value,
-            secondaryNumber: secondaryNumber.current.value,
-            address: address.current.value,
-            email: email.current.value,
-            website: website.current.value,
-        }));
+
+        formData.append('primaryNumber', primaryNumber.current.value)
+        formData.append('secondaryNumber', secondaryNumber.current.value)
+        formData.append('address', address.current.value)
+        formData.append('email', email.current.value)
+        formData.append('website', website.current.value)
+
         handleOptionClick(4)
 
     }
-    const handleCase4Data = () => {
-        
-        setFormData(prevData => ({
-            ...prevData,
-            expertIn: expertIn.current.value,
-            experinence: experinence.current.value,
-            sinceInTheFiled: sinceInTheFiled.current.value,
-            recentCompnyRef: recentCompnyRef.current.value,
+    const handleCase4Data = async () => {
 
-        }));
+        formData.append('expertIn', expertIn.current.value)
+        formData.append('experience', experience.current.value)
+        formData.append('sinceInTheFiled', sinceInTheFiled.current.value)
+        formData.append('recentCompnyRef', recentCompnyRef.current.value)
+
+        await dispatch(trainerProfileUpdate(formData));
+        setFormData(null)
+        setClickedTitles([])
+        setStoredData([])
     }
+
     const handleItemChange = (index, value) => {
         const updatedTitles = [...clickedTitles];
         updatedTitles[index] = value;
         setClickedTitles(updatedTitles);
     }
 
+
     const handleSubmitData = async (e) => {
         e.preventDefault()
         await handleCase4Data()
-        console.log(formData);
-        dispatch(trainerProfileUpdate(trainer?._id, formData))
     }
 
     const getContentBasedOnOption = () => {
@@ -468,7 +441,7 @@ const UpdateProfile = () => {
                             <div className="updateval" >
 
                                 <img
-                                    src={profileImage.file}
+                                    src={profileImage ? profileImage.file : ''}
                                     style={{ borderRadius: "50%", width: '100px', height: '100px', border: '0.5px solid rgba(227, 227, 227)', backgroundColor: 'rgba(227, 227, 227, 0.5)' }}
                                     alt=" "
                                 />
@@ -490,7 +463,7 @@ const UpdateProfile = () => {
                                 </div>
                                 <hr style={{ marginTop: "12px", marginBottom: '12px' }} />
                                 <img
-                                    src={banermage.file}
+                                    src={banermage ? banermage.file : ''}
                                     alt=" "
                                     style={{
                                         width: '150px',
@@ -521,33 +494,33 @@ const UpdateProfile = () => {
                                 <div className="updateLabel">
                                     <div className="flex">
                                         <div style={{ marginRight: "30px" }}>
-                                            <label htmlFor="">First Name</label>
+                                            <label htmlFor="">First Name *</label>
                                             <br />
                                             <input type="text" ref={firstName} name="firstName" onKeyDown={handleKeyDown} placeholder="Type your First Name" required />
                                         </div>
                                         <div>
                                             <label htmlFor="">Last Name</label>
                                             <br />
-                                            <input type="text" ref={lastName} name="lastName" onKeyDown={handleKeyDown} placeholder="Type your Last Name" required />
+                                            <input type="text" ref={lastName} name="lastName" onKeyDown={handleKeyDown} placeholder="Type your Last Name" />
                                         </div>
                                     </div>
                                     <div className="mt-2">
-                                        <label htmlFor="">Designation</label>
+                                        <label htmlFor="">Designation *</label>
                                         <br />
                                         <input style={{ width: '508px' }} type="text" ref={designation} name="designation" onKeyDown={handleKeyDown} placeholder="Type your Occupation" required />
                                     </div>
                                     <div className="mt-2" >
                                         <label htmlFor="">Company</label>
                                         <br />
-                                        <input style={{ width: '508px' }} type="text" ref={company} name="company" onKeyDown={handleKeyDown} placeholder="Type your Company Name" required />
+                                        <input style={{ width: '508px' }} type="text" ref={company} name="company" onKeyDown={handleKeyDown} placeholder="Type your Company Name" />
                                     </div>
                                     <div className="mt-2" >
-                                        <label htmlFor="">Age</label>
+                                        <label htmlFor="">Age *</label>
                                         <br />
                                         <input style={{ width: '508px' }} type="number" ref={age} name="age" onKeyDown={handleKeyDown} placeholder="Type your age" required />
                                     </div>
                                     <div className="mt-2">
-                                        <label htmlFor="">Location</label>
+                                        <label htmlFor="">Location *</label>
                                         <br />
                                         <select name="" id="" ref={location}>
                                             <option value="Banglore" selected>Banglore</option>
@@ -559,11 +532,11 @@ const UpdateProfile = () => {
                                     <div className="mt-2" >
                                         <label htmlFor="">Objective</label>
                                         <br />
-                                        <input style={{ width: '508px' }} type="text" ref={objective} name="objective" onKeyDown={handleKeyDown} placeholder="Profile title" required />
+                                        <input style={{ width: '508px' }} type="text" ref={objective} name="objective" onKeyDown={handleKeyDown} placeholder="Profile title" />
                                     </div>
                                     <div className="mt-2" >
                                         <label htmlFor="">About you</label>
-                                        <textarea ref={aboutYou} name="aboutYou" id="" cols="67" rows="5" placeholder="Type here" required></textarea>
+                                        <textarea ref={aboutYou} name="aboutYou" id="" cols="67" rows="5" placeholder="Type here"></textarea>
                                     </div>
                                     <button type="submit" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '20px', marginLeft: "315px", marginBottom: '20px' }} >Update</button>
 
@@ -645,7 +618,7 @@ const UpdateProfile = () => {
                         <h6 style={{ color: "#535353", fontWeight: '400', fontSize: "18px", marginTop: '14px', marginBottom: "30px" }} >Certifications</h6>
                         <div className="flex justify-between">
                             <div>
-                                <label htmlFor=""> Heading for your Certificate</label> <br />
+                                <label htmlFor=""> Heading for your Certificate *</label> <br />
                                 <input type="text"
                                     name="heading"
                                     placeholder="Type Headline"
@@ -657,7 +630,7 @@ const UpdateProfile = () => {
                                     required />
                             </div>
                             <div>
-                                <label htmlFor=""> Institution </label> <br />
+                                <label htmlFor=""> Institution * </label> <br />
                                 <input type="text"
                                     name="institution"
                                     placeholder="Type your Institution"
@@ -670,7 +643,7 @@ const UpdateProfile = () => {
                             </div>
                         </div>
                         <div>
-                            <label htmlFor=""> Description</label> <br />
+                            <label htmlFor=""> Description *</label> <br />
                             <textarea
                                 name="description" id=""
                                 cols="67" rows="5"
@@ -688,7 +661,7 @@ const UpdateProfile = () => {
                                 onDragOver={handleDragOver}
                                 onDrop={handleDrop}
                             >
-                                <label htmlFor="">Upload Certificates</label> <br />
+                                <label htmlFor="">Upload Certificates *</label> <br />
 
                                 <input
                                     type="file"
@@ -760,10 +733,10 @@ const UpdateProfile = () => {
                                                 </svg>
                                             </span>
                                         </div>
-                                        <pre style={{ fontSize: '16px', color: '#535353', fontWeight: "400", marginTop: '10px' }}>{certificateData.description}</pre>
+                                        <p style={{ fontSize: '16px', color: '#535353', fontWeight: "400", marginTop: '10px' }}>{certificateData.description}</p>
                                         {certificateData.image &&
-                                                <iframe src={certificateData.image} type="application/pdf" title="PDF Viewer" style={{ width: '100%', height: '600px', overflow: 'hidden' }}></iframe>
-                                          }
+                                            <embed src={certificateData.image} type="application/pdf" title="PDF Viewer" style={{ width: '100%', height: '600px', overflow: 'hidden' }}></embed>
+                                        }
                                     </div>
                                 )}
                             </div>
@@ -785,9 +758,9 @@ const UpdateProfile = () => {
                                                 </svg>
                                             </span>
                                         </div>
-                                        <pre style={{ fontSize: '16px', color: '#535353', fontWeight: "400", marginTop: '10px' }}>{data.description}</pre>
+                                        <p style={{ fontSize: '16px', color: '#535353', fontWeight: "400", marginTop: '10px' }}>{data.description}</p>
                                         {data.image &&
-                                            <iframe src={data.image} title="PDF Viewer" type="application/pdf" frameborder="0" style={{width: '400px', height: '400px', overflow: 'hidden' }}></iframe>
+                                            <embed src={data.image} title="PDF Viewer" type="application/pdf" frameborder="0" style={{ width: '400px', height: '400px', overflow: 'hidden' }}></embed>
                                         }
 
                                     </div>
@@ -808,30 +781,30 @@ const UpdateProfile = () => {
                         <form onSubmit={handleCase3Data}>
                             <div className="flex">
                                 <div style={{ marginRight: "50px" }}>
-                                    <label htmlFor="">Primary Contact*</label>
+                                    <label htmlFor="">Primary Contact *</label>
                                     <br />
-                                    <input type="text" ref={primaryNumber} name="primaryNumber" onKeyDown={handleKeyDown} required placeholder="Type your mobile number" />
+                                    <input type="tel" maxLength='10' minLength='10' ref={primaryNumber} name="primaryNumber" onKeyDown={handleKeyDown} required placeholder="Type your mobile number" />
                                 </div>
                                 <div>
                                     <label htmlFor="">Secondary Contact</label>
                                     <br />
-                                    <input type="text" ref={secondaryNumber} name="secondaryNumber" onKeyDown={handleKeyDown} required placeholder="Type your mobile number" />
+                                    <input type="tel" maxLength='10' minLength='10' ref={secondaryNumber} name="secondaryNumber" onKeyDown={handleKeyDown} placeholder="Type your mobile number" />
                                 </div>
                             </div>
                             <div className="mt-2">
-                                <label htmlFor="">Address</label>
+                                <label htmlFor="">Address *</label>
                                 <br />
                                 <input style={{ width: '690px' }} type="text" ref={address} name="address" onKeyDown={handleKeyDown} required placeholder="Type your address" />
                             </div>
                             <div className="mt-2">
-                                <label htmlFor="">Email</label>
+                                <label htmlFor="">Email *</label>
                                 <br />
                                 <input style={{ width: '690px' }} type="email" ref={email} name="email" onKeyDown={handleKeyDown} required placeholder="Type your mail address" />
                             </div>
                             <div className="mt-2">
-                                <label htmlFor="">Website</label>
+                                <label htmlFor="">Website </label>
                                 <br />
-                                <input style={{ width: '690px' }} type="url" ref={website} name="website" onKeyDown={handleKeyDown} required placeholder="Type website link here" />
+                                <input style={{ width: '690px' }} type="url" ref={website} name="website" onKeyDown={handleKeyDown} placeholder="Type website link here" />
                             </div>
 
                             <button type="submit" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '30px', marginLeft: "490px" }}>Update</button>
@@ -845,27 +818,27 @@ const UpdateProfile = () => {
 
                         <form onSubmit={handleSubmitData}>
                             <span>
-                                <label htmlFor="">Expert In</label>
+                                <label htmlFor="">Expert In *</label>
                                 <br />
                                 <input style={{ width: '690px' }} type="text" ref={expertIn} name="expertIn" onKeyDown={handleKeyDown} placeholder="Enter your skill name" required />
                             </span>
                             <br />
                             <span >
-                                <label htmlFor="">Experience</label>
+                                <label htmlFor="">Experience *</label>
                                 <br />
-                                <input style={{ width: '690px' }} type="text" ref={experinence} name="experinence" onKeyDown={handleKeyDown} placeholder="Select your experience" required />
+                                <input style={{ width: '690px' }} type="number" ref={experience} name="experience" onKeyDown={handleKeyDown} placeholder="Select your experience" required />
                             </span>
                             <br />
                             <span >
-                                <label htmlFor="">Since in this field</label>
+                                <label htmlFor="">Since in this field *</label>
                                 <br />
-                                <input style={{ width: '690px' }} type="text" ref={sinceInTheFiled} name="sinceInTheFiled" onKeyDown={handleKeyDown} placeholder="yyyy" required />
+                                <input style={{ width: '690px' }} type="number" ref={sinceInTheFiled} name="sinceInTheFiled" onKeyDown={handleKeyDown} placeholder="yyyy" required />
                             </span>
                             <br />
                             <span>
-                                <label htmlFor="">Last Organization</label>
+                                <label htmlFor="">Last Organization </label>
                                 <br />
-                                <input style={{ width: '690px' }} type="text" ref={recentCompnyRef} name="recentCompnyRef" onKeyDown={handleKeyDown} placeholder="Enter your Last Organization" required />
+                                <input style={{ width: '690px' }} type="text" ref={recentCompnyRef} name="recentCompnyRef" onKeyDown={handleKeyDown} placeholder="Enter your Last Organization" />
                             </span>
                             <button type="submit" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '30px', marginLeft: "490px" }}>Submit</button>
                         </form>

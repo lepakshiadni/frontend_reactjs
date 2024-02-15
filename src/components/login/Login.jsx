@@ -29,7 +29,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [toastShown, setToastShown] = useState(false);
-  
+
   const user = useSelector(({ verifyOTP }) => verifyOTP, shallowEqual);
 
   const startInitialTimer = () => {
@@ -65,15 +65,16 @@ const Login = () => {
     }
   };
 
-  
+
   useEffect(() => {
     console.log('user', user);
   }, [user]);
- 
+
   const handleVerifyOTP = useMemo(() => {
     return async (e) => {
-      // e?.preventDefault()
+      // e.preventDefault()
       const otp = validotp.join("")
+      console.log(otp, phoneNumber[0])
       if (otp.length !== 4) {
         // toast.error("enter 4 digit otp");
         toast.error('enter otp', {
@@ -89,62 +90,117 @@ const Login = () => {
         await dispatch(verifyOtp(phoneNumber[0], otp))
       }
     }
-  }, [dispatch, validotp, phoneNumber])
-  
+  }, [dispatch, phoneNumber, validotp])
+
+  // const handleKeyDown = (e, index) => {
+  //   if (e.key === "Backspace") {
+  //     // Handle backspace functionality;
+  //     setOtp((prevOtp) => {
+  //       const newOtp = [...prevOtp];
+  //       newOtp[index] = "";
+  //       // Move focus to the previous input box on backspace
+  //       if (index > 0) {
+  //         document.getElementById(`otp-input-${index - 1}`).focus();
+  //       }
+  //       else {
+  //         // If it's the first input box, set focus to the current input
+  //         document.getElementById(`otp-input-${index}`).focus();
+  //       }
+  //       return newOtp;
+  //     });
+  //   }
+  //   if (index === 3 && e.key === "Enter") {
+  //     console.log('handling verify otp')
+  //     handleVerifyOTP()
+  //   }
+  // };
+  // const handleKeyDown = (e, index) => {
+  //   if (e.key === "Backspace") {
+  //     // Handle backspace functionality
+  //     e.preventDefault();
+
+  //     // If the current input box is empty, move focus to the previous input box
+  //     if (validotp[index] === "") {
+  //       if (index > 0) {
+  //         document.getElementById(`otp-input-${index - 1}`).focus();
+  //       }
+  //       return;
+  //     }
+  //     // Clear the current input box
+  //     setOtp((prevOtp) => {
+  //       const newOtp = [...prevOtp];
+  //       newOtp[index] = "";
+
+  //       // Move focus to the current input box
+  //       document.getElementById(`otp-input-${index}`).focus();
+  //       return newOtp;
+
+  //     });
+  //   }
+  //   else if (index === 3 && e.key === "Enter") {
+  //       console.log('handling verify otp')
+  //       handleVerifyOTP()
+  //     }
+  //   }
+  // };
+
   const handleKeyDown = (e, index) => {
     if (e.key === "Backspace") {
       // Handle backspace functionality
-      // e?.preventDefault();
-      setOtp((prevOtp) => {
-        const newOtp = [...prevOtp];
-        newOtp[index] = "";
-        // Move focus to the previous input box on backspace
+      e.preventDefault();
+      // If the current input box is empty, move focus to the previous input box
+      if (validotp[index] === "") {
         if (index > 0) {
           document.getElementById(`otp-input-${index - 1}`).focus();
         }
-         else {
-          // If it's the first input box, set focus to the current input
-          document.getElementById(`otp-input-${index}`).focus();
-        }
+        return;
+      }
+      // Clear the current input box
+      setOtp((prevOtp) => {
+        const newOtp = [...prevOtp];
+        newOtp[index] = "";
+
+        // Move focus to the current input box
+        document.getElementById(`otp-input-${index}`).focus();
         return newOtp;
       });
-    }
-    if(index === 3 && e.key === "Enter"){
-      handleVerifyOTP()
+    } else if (index === 3 && e.key === "Enter") {
+      e.preventDefault(); // Prevent default behavior of Enter key
+      console.log('handling verify otp')
+      handleVerifyOTP();
     }
   };
 
-  
-useEffect(() => {
-  if (user?.message === "verifiedExitingEmployer" && user?.data?.existEmployer?.role === 'employer') {
-    toast.success(user?.data?.existEmployer?.role, {
-      style: { backgroundColor: "#4CAF90", color: "#ffffff" },
-    });
-    Cookies.set("token", user?.data?.token);
-    localStorage.setItem('role', user?.data?.existEmployer?.role);
-    navigate("/dashboard"); // Navigate to the next page
-  }
-  if (user?.message === 'Invalid OTP') {
-    // Handle invalid OTP case if needed
-    toast.error(user?.message);
-  }
-  if (user?.message === 'verifiedExitingTrainer' && user?.data?.existTrainer?.role === 'trainer') {
-    toast.success(user?.data?.existTrainer?.role, {
-      style: { backgroundColor: "#4CAF90", color: "#ffffff" },
-    })
-    Cookies.set("token", user?.data?.token)
-    localStorage.setItem('role', user?.data?.existTrainer?.role)
-    navigate('/trainerDashboard/dashboard'); // Navigate to the next page
-  };
-  if (user?.message === "newUser") {
-    toast.success(user?.message, {
-      style: { backgroundColor: "#4CAF90", color: "#ffffff" },
-    });
-    setTimeout(() => {
-      navigate("/selectrole"); // Navigate to the next page
-    }, 1000)
-  };
-}, [user, navigate]);
+  useEffect(() => {
+    if (user?.message === "verifiedExitingEmployer" && user?.data?.existEmployer?.role === 'employer') {
+      toast.success(user?.data?.existEmployer?.role, {
+        style: { backgroundColor: "#4CAF90", color: "#ffffff" },
+      });
+      Cookies.set("token", user?.data?.token);
+      localStorage.setItem('role', user?.data?.existEmployer?.role);
+      navigate("/dashboard"); // Navigate to the next page
+    }
+    if (user?.message === 'Invalid OTP') {
+      // Handle invalid OTP case if needed
+      toast.error(user?.message);
+    }
+    if (user?.message === 'verifiedExitingTrainer' && user?.data?.existTrainer?.role === 'trainer') {
+      toast.success(user?.data?.existTrainer?.role, {
+        style: { backgroundColor: "#4CAF90", color: "#ffffff" },
+      })
+      Cookies.set("token", user?.data?.token)
+      localStorage.setItem('role', user?.data?.existTrainer?.role)
+      navigate('/trainerDashboard/dashboard'); // Navigate to the next page
+    };
+    if (user?.message === "newUser") {
+      toast.success(user?.message, {
+        style: { backgroundColor: "#ffff", color: "#2676c2", borderColor:'#2676c2'  },
+      });
+      setTimeout(() => {
+        navigate("/selectrole"); // Navigate to the next page
+      }, 1000)
+    };
+  }, [user, navigate]);
 
 
 
@@ -266,12 +322,9 @@ useEffect(() => {
             <p style={{ color: "gray" }}>
               Enter the 4-digit OTP to verify your Sissoo Training <br />
               App account, Resend if needed{" "}
-              <span>
-                {initialTimer > 0 ? <span style={{ color: 'gray' }}>OTP Expires In: <span style={{ color: '#2676C2', fontWeight: 'bold' }}>{initialTimer}sec</span></span> : <span style={{ color: 'red', fontWeight: 'bold' }}>OTP Expired</span>}
-              </span>
             </p>
             <p>
-              
+              {initialTimer > 0 ? <span style={{ color: 'gray' }}>OTP Expires In: <span style={{ color: '#2676C2', fontWeight: 'bold' }}>{initialTimer}sec</span></span> : <span style={{ color: 'red', fontWeight: 'bold' }}>OTP Expired</span>}
             </p>
 
             <div className="otp-input-container">
@@ -295,7 +348,7 @@ useEffect(() => {
             </div>
             <button onClick={handleVerifyOTP}>Verify</button>
             <p>
-              <span style={{ color: "gray" }}>If you haven't received the OTP?</span>{" "}
+              <span className="" style={{ color: "gray" }}>If you haven't received the OTP?</span>{" "}
               <Link
                 href="#"
                 style={{
@@ -310,7 +363,7 @@ useEffect(() => {
                 onClick={() => {
                   if (initialTimer === 0 && !disableResend) {
                     dispatch(generateOtp(phoneNumber[0]));
-                    setInitialTimer(10);
+                    setInitialTimer(60);
                     setDisableResend(true);
                     setOtp(["", "", "", ""])
                   }

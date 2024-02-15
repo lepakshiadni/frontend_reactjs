@@ -2,30 +2,37 @@
 //TrainerReducer
 
 const initialState = {
-    trainerDetails:{
+    trainerDetails: {
     },
-
-    addBookMarkedPost:{
+    addBookMarkedPost: {
 
     },
-    message:'',
-    success:null
+    trainerAppliedTraining: {
+
+    },
+    gettrainerAppliedTraining:{
+
+    },
+    message: '',
+    success: null
 
 }
 
 const trainerReducer = (state = initialState, action) => {
     switch (action.type) {
         case 'TRAINER_SIGNUP_SUCCESS':
-            return { ...state,
-                trainerDetails : action.payload,
-                message : action.payload.message,
-                success : action.payload.success
+            return {
+                ...state,
+                trainerDetails: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
             };
         case 'TRAINER_SIGNUP_FAILURE':
-            return { ...state,
-                message : action.payload.error
+            return {
+                ...state,
+                message: action.payload.error
             };
-        
+
         //geting trainer details after signup
         case 'GET_TRAINERDETAILS_FETCHED':
             console.log('handling get trainer')
@@ -36,7 +43,7 @@ const trainerReducer = (state = initialState, action) => {
                 success: action.payload.success
             };
         case 'UNAUTHORIZED':
-            console.error("Handling failure trainer:", action.payload);
+            console.log("Handling failure trainer:", action.payload);
             return {
                 ...state,
                 message: action.payload.error
@@ -51,7 +58,7 @@ const trainerReducer = (state = initialState, action) => {
                 success: action.payload.success
             };
         case 'TRAINERDETAILS_UPDATE_FAILURE':
-            console.error("Handling failure trainer:", action.payload);
+            console.log("Handling failure trainer:", action.payload);
             return {
                 ...state,
                 message: action.payload.error
@@ -66,28 +73,57 @@ const trainerReducer = (state = initialState, action) => {
                 success: action.payload.success
             };
         case 'ADD_BOOKMARKEDPOSTFAILURE':
-            console.error("Handling failure trainer:", action.payload);
+            console.log("Handling failure trainer:", action.payload);
             return {
                 ...state,
                 message: action.payload.error
             };
-            case 'GET_BOOKMARKEDPOST_SUCCESS':
-                console.log('handling get trainer book marked')
-                return {
-                    ...state,
-                    addBookMarkedPost: action.payload,
-                    message: action.payload.message,
-                    success: action.payload.success
-                };
-            case 'GET_BOOKMARKEDPOSTFAILURE':
-                console.error("Handling failure trainer:", action.payload);
-                return {
-                    ...state,
-                    message: action.payload.error
-                };
+        case 'GET_BOOKMARKEDPOST_SUCCESS':
+            console.log('handling get trainer book marked', action.payload)
+            return {
+                ...state,
+                addBookMarkedPost: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'GET_BOOKMARKEDPOST_FAILURE':
+            console.log("Handling failure trainer:", action.payload);
+            return {
+                ...state,
+                message: action.payload.error
+            };
+        case 'POST_TRAINERAPPLIEDTRAINING_SUCCESS':
+            console.log('handling post trainer applied trainer', action.payload)
+            return {
+                ...state,
+                trainerAppliedTraining: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'POST_TRAINERAPPLIEDTRAINING_FAILURE':
+            console.log("Handling failure trainer:", action.payload);
+            return {
+                ...state,
+                message: action.payload,
+                success: action.payload
+            };
+        case 'GET_APPLIEDTRAINING_SUCCESS':
+            console.log('handling get trainer APPLIED TRAINING', action.payload)
+            return {
+                ...state,
+                gettrainerAppliedTraining: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'GET_APPLIEDTRAINING_FAILURE':
+            console.log("Handling failure trainer:", action.payload);
+            return {
+                ...state,
+                message: action.payload.error
+            };
         default:
             return state;
     }
 };
 
-export  {trainerReducer}
+export { trainerReducer }

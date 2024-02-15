@@ -33,7 +33,7 @@
 
 
 .Rectangle-side {
-  height: calc(87vh - 1px);
+  height: calc(86vh - 1px);
   overflow-y: scroll;
   scrollbar-color: #bfbfbf;
 
@@ -57,7 +57,7 @@
   line-height: 27px;
   letter-spacing: 0em;
   text-align: right;
-  height: 40px;
+  height: 45px;
 }
 
 /* .arrow-icon {
@@ -130,88 +130,79 @@
   transition: all 0.4s ease;
   /* padding-bottom: 5px; */
 }
+
 .sidebar-option.reverse {
   animation: myreversemove 0.2s cubic-bezier(0, 0, 0, 0);
-  background-image: linear-gradient(to right, /* #2676c2 100%, */ #fff 0%);
+  background-image: linear-gradient(to right,
+      /* #2676c2 100%, */
+      #fff 0%);
 }
 
 @keyframes myreversemove {
   0% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 100%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 100%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   10% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 90%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 90%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   20% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 80%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 80%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   30% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 70%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 70%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   40% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 60%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 60%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   50% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 50%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 50%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   60% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 40%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 40%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   70% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 30%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 30%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   80% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 20%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 20%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   90% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 10%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 10%,
+        rgba(255, 0, 0, 0) 0%);
   }
+
   100% {
-    background-image: linear-gradient(
-      to right,
-      #2676c2 0%,
-      rgba(255, 0, 0, 0) 0%
-    );
+    background-image: linear-gradient(to right,
+        #2676c2 0%,
+        rgba(255, 0, 0, 0) 0%);
   }
 }
 
@@ -304,14 +295,11 @@
 /*  */
 .content {
   width: 100%;
-  height: calc(72vh - 2px);
+  height: calc(76vh - 1px);
   overflow-y: scroll;
-  /* scrollbar-width: thin; */
-  scrollbar-color: #bfbfbf;
 
   &::-webkit-scrollbar {
     width: 0px;
-    border-radius: 8px;
   }
 }
 

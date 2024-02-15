@@ -5,6 +5,8 @@ import TrainerFeedData from './TrainerFeedData';
 import { getPostTrainingRequirementAction, } from '../../../../redux/action/postRequirement.action'
 import { getBookMarkedPost } from '../../../../redux/action/trainer.action'
 import { useDispatch, useSelector } from 'react-redux'
+import Skeleton from '@mui/material/Skeleton';
+
 
 
 
@@ -60,22 +62,15 @@ const TrainerFeed = () => {
     const datafile = useSelector(({ postRequirement }) => {
         return postRequirement?.postTrainingDetails?.postTrainingDetails
     })
+    useEffect(() => {
+        setPostTrainingDetails(datafile)
+    }, [datafile]);
 
+    // console.log("datafile", datafile)
     const bookMarkedPost = useSelector(({ trainerSignUp }) => {
         return trainerSignUp?.addBookMarkedPost?.bookmarkedPosts;
     })
-    console.log(SavedData, "bookmark")
-    console.log("data file",bookMarkedPost)
-    useEffect(() => {
-        if (datafile) {
-            setPostTrainingDetails(datafile);
-        }
-        if (bookMarkedPost !== undefined) {
-            const onlybookmarkedpost=bookMarkedPost.filter(obj => obj.post);
-            setSavedData(onlybookmarkedpost)
-        }
-    }, [datafile, bookMarkedPost]);
-    // console.log("saved data", SavedData)
+
 
 
     return (
@@ -97,11 +92,11 @@ const TrainerFeed = () => {
                         <section ref={showmoreRef} className='scroll' style={{ border: '1px solid #EEEEEE', padding: '10px', height: '300px', marginTop: '10px' }}>
 
                             {
-                                SavedData.length > 0 ?<>
+                                bookMarkedPost?.length > 0 ? <>
                                     {
-                                        SavedData.map(({ post }, index) => (
+                                        bookMarkedPost?.map(({ postDetails }, index) => (
                                             <div key={index}>
-            
+
                                                 <div className='bookmark data' style={{ display: 'flex', alignItems: 'center', textAlign: 'center', justifyContent: 'space-between' }}>
                                                     <div style={{ display: 'flex' }}>
                                                         <div style={{ marginRight: '10px' }}>
@@ -112,7 +107,7 @@ const TrainerFeed = () => {
                                                             <p style={{ fontSize: '14px', margin: '0px', color: '#535353' }}>Wipro</p>
                                                         </div>
                                                     </div>
-            
+
                                                     <div style={{ position: 'relative', display: 'inline-block' }}>
                                                         <div
                                                             ref={menuRef}
@@ -139,27 +134,27 @@ const TrainerFeed = () => {
                                                             </div>
                                                         )}
                                                     </div>
-            
+
                                                 </div>
-            
+
                                                 <p
                                                     className={showMoreArray[index] ? "show-more" : "show-less"} style={{ fontSize: '14px', color: '#888888', marginTop: "10px" }}>
-                                                    {post?.description}
+                                                    {postDetails?.description}
                                                     <hr style={{ margin: '10px 0px' }} />
                                                     <div className='skilldata' >
                                                         <h5 style={{ color: '#888888' }}>Wanted skills</h5>
-                                                        {post?.topics.map((val, index) => (
+                                                        {postDetails?.topics.map((val, index) => (
                                                             <div key={index}>
                                                                 <p>{val}</p>
                                                             </div>
                                                         ))}
-            
+
                                                     </div>
                                                     <div className='skilldata2'>
-                                                        <h5><span className='skillchild'>Type of training -</span> <span className='skillchild2'>{post?.typeOfTraining}</span></h5>
-                                                        <h5><span className='skillchild' >Experience - </span><span className='skillchild2'>{post?.experience} years</span></h5>
-                                                        <h5><span className='skillchild' >Duration of training -</span> <span className='skillchild2'>{post?.durationCount} {post?.durationType}</span></h5>
-                                                        <h5><span className='skillchild' >Budget -</span> <span className='skillchild2'>₹ {post?.minBudget} - ₹ {post?.maxBudget}</span> </h5>
+                                                        <h5><span className='skillchild'>Type of training -</span> <span className='skillchild2'>{postDetails?.typeOfTraining}</span></h5>
+                                                        <h5><span className='skillchild' >Experience - </span><span className='skillchild2'>{postDetails?.experience} years</span></h5>
+                                                        <h5><span className='skillchild' >Duration of training -</span> <span className='skillchild2'>{postDetails?.durationCount} {postDetails?.durationType}</span></h5>
+                                                        <h5><span className='skillchild' >Budget -</span> <span className='skillchild2'>₹ {postDetails?.minBudget} - ₹ {postDetails?.maxBudget}</span> </h5>
                                                         <h5 style={{ display: 'flex', alignItems: 'center', marginTop: '0px' }}><span className='skillchild' >Table of content - <span style={{ color: 'rgb(180, 161, 161)' }}> For Developer.pdf</span></span>
                                                             <span className='downlod'>
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16" fill="none">
@@ -168,12 +163,12 @@ const TrainerFeed = () => {
                                                             </span>
                                                         </h5>
                                                         <div style={{ display: 'flex' }}>
-                                                            <h5 style={{ marginRight: '20px', marginTop: "0px", marginBottom: '0px' }}><span className='skillchild' style={{ marginBottom: '15px' }}>Start Date</span> <br /> <span className='skillchild2'>{post?.startDate}</span> </h5>
-            
-                                                            <h5 style={{ margin: '0px' }}><span className='skillchild' >End Date</span> <br /> <span className='skillchild2'>{post?.endDate}</span> </h5>
-            
+                                                            <h5 style={{ marginRight: '20px', marginTop: "0px", marginBottom: '0px' }}><span className='skillchild' style={{ marginBottom: '15px' }}>Start Date</span> <br /> <span className='skillchild2'>{postDetails?.startDate}</span> </h5>
+
+                                                            <h5 style={{ margin: '0px' }}><span className='skillchild' >End Date</span> <br /> <span className='skillchild2'>{postDetails?.endDate}</span> </h5>
+
                                                         </div>
-                                                        <h5><span className='skillchild' >Mode of Training -</span> <span className='skillchild2'>{post?.modOfTraining}</span> </h5>
+                                                        <h5><span className='skillchild' >Mode of Training -</span> <span className='skillchild2'>{postDetails?.modOfTraining}</span> </h5>
                                                         <button style={{
                                                             backgroundColor: '#2676C2',
                                                             border: '0px',
@@ -194,12 +189,25 @@ const TrainerFeed = () => {
                                                     </div>
                                                 )}
                                                 <hr style={{ margin: '10px 0px' }} />
-            
+
                                             </div>
                                         ))
                                     }
 
-                                </> : null
+                                </> : <>
+                                    <div className='flex gap-2'>
+                                        <Skeleton variant="circular" width={50} height={50} />
+                                        <Skeleton variant="text" width={270} sx={{ fontSize: '1rem' }} />
+                                    </div>
+                                    <div className='flex flex-col ml-[48px] gap-1 '>
+                                        <Skeleton className='rounded-sm' variant="rectangular" width={270} height={60} />
+                                        <Skeleton variant="text" width={270} sx={{ fontSize: '1rem' }} />
+                                        <Skeleton variant="text" width={270} sx={{ fontSize: '1rem' }} />
+                                        <Skeleton variant="text" width={270} sx={{ fontSize: '1rem' }} />
+                                        <Skeleton variant="text" width={270} sx={{ fontSize: '1rem' }} />
+                                    </div>
+
+                                </>
                             }
 
 
@@ -211,6 +219,7 @@ const TrainerFeed = () => {
 
                 <section>
                     <TrainerFeedData PostTrainingData={postTrainingDetails} />
+                    
                 </section>
 
             </div>

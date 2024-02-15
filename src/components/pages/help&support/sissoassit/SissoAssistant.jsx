@@ -1,9 +1,8 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import Assist from '../../../assets/Assist Logo 1.svg'
 import '../../../styles/SissoAssistant.css'
 import favi from '../../../assets/favi.png'
 import profileTrainer from '../../../assets/profileTrainer.png'
-import { useRef } from 'react';
  
  
  

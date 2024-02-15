@@ -51,13 +51,13 @@ const trainerDetails = () => {
         }
     }
 }
-const trainerProfileUpdate = (userId, details) => {
+const trainerProfileUpdate = (details) => {
     const token = Cookies.get('token')
     // console.log(token)
-    console.log('trainer details action ', userId)
+    console.log('trainer details action ',details)
     return async (dispatch) => {
         try {
-            Axios.put(`${baseUrl}/trainer/trainerProfileUpdate/${userId}`, details, {
+            Axios.put(`${baseUrl}/trainer/trainerProfileUpdate`, details, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -79,17 +79,16 @@ const trainerProfileUpdate = (userId, details) => {
     }
 }
 
-const addBookMarkePost = (postId) => {
+const addBookMarkePost = (postId, postDetails) => {
     const token = Cookies.get('token')
-    console.log(token)
-    console.log(postId, 'add bookmark post ')
+    console.log(postId, 'add bookmark post ', postDetails)
     return async (dispatch) => {
         try {
-            Axios.put(`${baseUrl}/trainer/addBookMarkePost/${postId}`,'tesing the body',{
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
+            Axios.post(`${baseUrl}/trainer/addBookMarkePost/${postId}`, postDetails, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
                 .then((resp) => {
                     // console.log(resp)
                     dispatch({
@@ -128,7 +127,63 @@ const getBookMarkedPost = () => {
         }
         catch (err) {
             dispatch({
-                type: "GET_BOOKMARKEDPOSTFAILURE",
+                type: "GET_BOOKMARKEDPOST_FAILURE",
+                payload: err
+            })
+        }
+    }
+
+}
+const trainerAppliedTraining = (trainingPostId, trainingDetails) => {
+    const token = Cookies.get('token')
+    console.log('POST trainerApplied  Action')
+    return async (dispatch) => {
+
+        Axios.post(`${baseUrl}/trainer/trainerAppliedTraining/${trainingPostId} `, trainingDetails, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((resp) => {
+                // console.log(resp)
+                dispatch({
+                    type: 'POST_TRAINERAPPLIEDTRAINING_SUCCESS',
+                    payload: resp.data
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+                dispatch({
+                    type: "POST_TRAINERAPPLIEDTRAINING_FAILURE",
+                    payload: error?.response?.data
+                })
+            })
+
+    }
+
+}
+
+const gettrainerAppliedTraining = () => {
+    const token = Cookies.get('token')
+    console.log('get getAppliedTraining Action')
+    return async (dispatch) => {
+        try {
+            Axios.get(`${baseUrl}/trainer/getAppliedTraining `, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'GET_APPLIEDTRAINING_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "GET_APPLIEDTRAINING_FAILURE",
                 payload: err
             })
         }
@@ -138,4 +193,12 @@ const getBookMarkedPost = () => {
 
 
 
-export { trainerSignUpAction, trainerDetails, trainerProfileUpdate, addBookMarkePost, getBookMarkedPost }
+export {
+    trainerSignUpAction,
+    trainerDetails,
+    trainerProfileUpdate,
+    addBookMarkePost,
+    getBookMarkedPost,
+    trainerAppliedTraining,
+    gettrainerAppliedTraining
+}

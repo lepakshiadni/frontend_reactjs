@@ -62,9 +62,10 @@
     color: #2676C2;
 }
 .same {
-    font-size: 16px;
+    font-size: 14px;
     /* color: #2676c2; */
     color: #535353;
+    text-transform: capitalize;
    
 }
  

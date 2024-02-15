@@ -11,29 +11,31 @@ import AdobeImg from "../../assets/adobe.png";
 import PythonImg from "../../assets/python.png";
 import Favi from "../../assets/favi.png";
 import { useNavigate } from "react-router-dom";
-import {useSelector}from 'react-redux'
+import {useSelector,useDispatch}from 'react-redux'
+import { trainerDetails } from "../../../redux/action/trainer.action";
 const TrainerProfile = () => {
   const [showAll, setShowAll] = useState(false);
   const [user,setUser]=useState(null)
+  const disptach=useDispatch()
   const navigate = useNavigate()
   // const user = useSelector(({ user }) => {
   //   return user?.user
   // })
-  const employer = useSelector(({ employerSignUp }) => {
-    return employerSignUp?.employerDetails
-  })
+  // const employer = useSelector(({ employerSignUp }) => {
+  //   return employerSignUp?.employerDetails
+  // })
   const trainer=useSelector(({trainerSignUp})=>{
     return  trainerSignUp?.trainerDetails;
   })
+  useEffect(()=>{
+    disptach(trainerDetails())
+  },[disptach])
 
   useEffect(() => {
-    if (employer?.success) {
-      setUser(employer?.employerDetails);
-    }
     if (trainer?.success) {
       setUser(trainer?.trainerDetails);
     }
-  }, [employer, trainer]);
+  }, [trainer]);
   console.log('user',user)
   const data = [
     {
@@ -130,20 +132,20 @@ const TrainerProfile = () => {
                   <div className="relative text-center text-[#6A6A6A] text-[14px] font-[400] font-['Poppins']">
                     {/* Figma | Illustrator | Photoshop | Adobe XD |<br />
                     Coreldraw | Balsamiq | Wifrframe | Prototyping */}
-                    {
-                      user?.skills?.slice(0,7).map((skill,{value})=>{
+                    {/* {
+                      user?.skills?.slice(0,7).map((skill)=>{
                         return <>
-                        <span>{skill}{value} | </span>
+                        <span>{skill} | </span>
                         </>
                       })
                     }<br/>
                     {
-                      user?.skills?.slice(7,10).map((skill,{value})=>{
+                      user?.skills?.slice(7,10).map((skill)=>{
                         return <>
-                        <span>{skill}{value} | </span>
+                        <span>{skill} | </span>
                         </>
                       })
-                    }{user?.skills?.length>10?<span className="text-[#2676c2] hover:cursor-pointer">....more</span>:""}
+                    }{user?.skills?.length>10?<span className="text-[#2676c2] hover:cursor-pointer">....more</span>:""} */}
                   </div>
                 </div>
               </div>

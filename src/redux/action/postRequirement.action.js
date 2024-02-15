@@ -40,10 +40,10 @@ export const getPostTrainingRequirementAction = () => {
     }
 }
 
-export const addPostTrainingComments = (postId,comment) => {
+export const addPostTrainingComments = (postId, comment) => {
     // console.log('add post traiingcomments',comment)
     return async (dispatch) => {
-        await Axios.put(`${baseUrl}/employerpost/postTrainingRequirementComments/${postId}`,{comment: comment})
+        await Axios.put(`${baseUrl}/employerpost/postTrainingRequirementComments/${postId}`, { comment: comment })
             .then((resp) => {
                 dispatch({
                     type: 'ADD_POSTTRAININGCOMMENTS_SUCCESS',
@@ -71,6 +71,24 @@ export const getPostTrainingComments = (postId) => {
             .catch((error) => {
                 dispatch({
                     type: "GET_TRAININGCOMMENTS_FAILURE",
+                    payload: error
+                })
+            })
+    }
+}
+export const addlikePostTraining = (likedBy, postId) => {
+    console.log(likedBy, postId);
+    return async (dispatch) => {
+        await Axios.put(`${baseUrl}/employerpost/addLikeToTrainingPost/${postId}`, { likedBy })
+            .then((resp) => {
+                dispatch({
+                    type: 'ADD_LIKEPOSTTRAINING_SUCCESS',
+                    payload: resp.data
+                })
+            })
+            .catch((error) => {
+                dispatch({
+                    type: "ADD_LIKEPOSTTRAINING_FAILURE",
                     payload: error
                 })
             })

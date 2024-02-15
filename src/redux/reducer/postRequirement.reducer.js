@@ -7,7 +7,10 @@ const initialState = {
     postTrainingComments: {
 
     },
-    getTrainingComments:{
+    addlikePostTraning:{
+
+    },
+    getTrainingComments: {
 
     },
     postJobDetails: {
@@ -46,10 +49,10 @@ const postRequirementReducer = (state = initialState, action) => {
                 success: action.payload.success
             };
         case 'GET_TRAININGREQUIREMENTS_FAILURE':
-            console.error("Handling failure employer:", action.payload);
+            // console.error("Handling failure employer:", action.payload);
             return {
                 ...state,
-                message: action.payload.error
+                message: action.payload
             };
         //post employer post job requiement  
         case 'POST_JOBREQUIREMENTS_SUCCESS':
@@ -94,20 +97,34 @@ const postRequirementReducer = (state = initialState, action) => {
                 ...state,
                 message: action.payload.error
             };
-            case 'GET_TRAININGCOMMENTS_SUCCESS':
+            case 'ADD_LIKEPOSTTRAINING_SUCCESS':
                 console.log('handling add post traiing comments')
                 return {
                     ...state,
-                    getTrainingComments: action.payload,
+                    addlikePostTraning: action.payload,
                     message: action.payload.message,
                     success: action.payload.success
                 };
-            case 'GET_TRAININGCOMMENTS_FAILURE':
+            case 'ADD_LIKEPOSTTRAINING_FAILURE':
                 console.error("Handling failure employer:", action.payload);
                 return {
                     ...state,
                     message: action.payload.error
                 };
+        case 'GET_TRAININGCOMMENTS_SUCCESS':
+            console.log('handling add post traiing comments')
+            return {
+                ...state,
+                getTrainingComments: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'GET_TRAININGCOMMENTS_FAILURE':
+            console.error("Handling failure employer:", action.payload);
+            return {
+                ...state,
+                message: action.payload.error
+            };
         default:
             return state;
     }

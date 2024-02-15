@@ -1,12 +1,12 @@
 .messageChat {
   height: calc(45vh - 2px);
   overflow-y: scroll;
-  scrollbar-width: thin;
   scrollbar-color: #BFBFBF;
 
   &::-webkit-scrollbar {
-    width: 4px;
     border-radius: 8px;
+    width: 4px;
+
   }
 
    &::-webkit-scrollbar-track {

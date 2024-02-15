@@ -211,7 +211,7 @@ const Requirements = () => {
         setDurationCount(0);
     };
 
-    const company = useRef()
+    const trainingName = useRef()
     const description = useRef()
     const topics = useRef()
     const location = useRef()
@@ -219,8 +219,7 @@ const Requirements = () => {
 
     console.log('toc', tocFile)
     const [tocContent, setTocContent] = useState(null)
-    // console.log("tocFileName",tocFileName)
-    // console.log('tocContent', tocContent)
+
 
 
 
@@ -229,12 +228,12 @@ const Requirements = () => {
             let formData = new FormData();
 
             // Append fields to FormData
-            formData.append("company", company.current.value);
+            formData.append("trainingName", trainingName.current.value);
             formData.append("description", description.current.value);
             formData.append("topics", JSON.stringify(selectedTopics.map(topic => topic.value)));
             formData.append("typeOfTraining", trainingType);
             formData.append("participantCount", participantCount);
-            formData.append("modefTraining", trainingMode);
+            formData.append("modeOfTraining", trainingMode);
             formData.append("location", location.current ? location.current.value : null);
             formData.append("minBudget", minBudget);
             formData.append("maxBudget", maxBudget);
@@ -266,7 +265,7 @@ const Requirements = () => {
 
 
     const handleResetPostTraining = () => {
-        company.current.value = ''
+        trainingName.current.value = ''
         description.current.value = ''
         setSelectedTopics([])
         setTrainingType('')
@@ -344,7 +343,7 @@ const Requirements = () => {
         if (event.key === 'Enter') {
             event.preventDefault()
 
-            if (event.target === company.current) {
+            if (event.target === trainingName.current) {
                 description.current.focus();
             }
         }
@@ -375,8 +374,8 @@ const Requirements = () => {
                                 <input
                                     type="text" style={{ padding: '0 10px', color: '#333333', }}
                                     placeholder="Training Name"
-                                    ref={company}
-                                    name="company"
+                                    ref={trainingName}
+                                    name="trainingName"
                                     onKeyDown={handleKeyDown}
                                 />
                             </div>
