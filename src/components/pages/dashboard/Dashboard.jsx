@@ -6,7 +6,7 @@ import Header from "../../header&footer/Header";
 import { useDispatch } from "react-redux";
 import { employerDetails } from '../../../redux/action/employers.action'
 // import { trainerDetails } from '../../../redux/action/trainer.action'
-import {trainerDetails} from '../../../redux/action/trainer.action'
+// import {trainerDetails} from '../../../redux/action/trainer.action'
 import { IoIosArrowUp } from "react-icons/io";
 import { option } from './Data'
 const DashboardApp = () => {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import timesago from "timesago";
+const baseUrl=localStorage.getItem('baseUrl');
 
 
 function Conversation({ conversation, currentuser, selectedConversation,lastMessage }) {
@@ -14,7 +15,7 @@ function Conversation({ conversation, currentuser, selectedConversation,lastMess
     setUser(friendid)
     const fetchLastMessage = async () => {
       try {
-        const response = await Axios.get(`http://192.168.1.14:4000/message/lastMessage/${conversation._id}`);
+        const response = await Axios.get(`${baseUrl}/message/lastMessage/${conversation._id}`);
         // setLastMessage(response.data.lastMessage);
         console.log(response.data?.lastMessage?.text)
       } catch (error) {

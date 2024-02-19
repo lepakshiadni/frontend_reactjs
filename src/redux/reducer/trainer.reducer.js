@@ -1,8 +1,9 @@
-
+import { toast } from 'react-toastify'
 //TrainerReducer
 
 const initialState = {
     trainerDetails: {
+
     },
     addBookMarkedPost: {
 
@@ -10,7 +11,7 @@ const initialState = {
     trainerAppliedTraining: {
 
     },
-    gettrainerAppliedTraining:{
+    gettrainerAppliedTraining: {
 
     },
     message: '',
@@ -36,6 +37,7 @@ const trainerReducer = (state = initialState, action) => {
         //geting trainer details after signup
         case 'GET_TRAINERDETAILS_FETCHED':
             console.log('handling get trainer')
+            // toast.success(action.payload.message)
             return {
                 ...state,
                 trainerDetails: action.payload,
@@ -49,7 +51,7 @@ const trainerReducer = (state = initialState, action) => {
                 message: action.payload.error
             };
         //updating the trainerProfile 
-        case 'TRAINERDETAILS_UPDATED_SUCCESS':
+        case 'TRAINERBASICINFO_UPDATED_SUCCESS':
             console.log('handling get trainer')
             return {
                 ...state,
@@ -57,7 +59,63 @@ const trainerReducer = (state = initialState, action) => {
                 message: action.payload.message,
                 success: action.payload.success
             };
-        case 'TRAINERDETAILS_UPDATE_FAILURE':
+        case 'TRAINERBASICINFO_UPDATE_FAILURE':
+            console.log("Handling failure trainer:", action.payload);
+            return {
+                ...state,
+                message: action.payload.error
+            };
+        case 'TRAINERSKILSSINFO_UPDATED_SUCCESS':
+            console.log('handling get trainer')
+            return {
+                ...state,
+                trainerDetails: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'TRAINERSKILSSINFO_UPDATE_FAILURE':
+            console.log("Handling failure trainer:", action.payload);
+            return {
+                ...state,
+                message: action.payload.error
+            };
+        case 'TRAINERCERTIFICATEINFO_UPDATED_SUCCESS':
+            console.log('handling get trainer')
+            return {
+                ...state,
+                trainerDetails: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'TRAINERCERTIFICATEINFO_UPDATE_FAILURE':
+            console.log("Handling failure trainer:", action.payload);
+            return {
+                ...state,
+                message: action.payload.error
+            };
+        case 'TRAINERCONTACTINFO_UPDATED_SUCCESS':
+            console.log('handling get trainer')
+            return {
+                ...state,
+                trainerDetails: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'TRAINERCONTACTINFO_UPDATE_FAILURE':
+            console.log("Handling failure trainer:", action.payload);
+            return {
+                ...state,
+                message: action.payload.error
+            };
+        case 'TRAINEREXPERIENCEINFO_UPDATED_SUCCESS':
+            console.log('handling get trainer')
+            return {
+                ...state,
+                trainerDetails: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'TRAINEREXPERIENCEINFO_UPDATE_FAILURE':
             console.log("Handling failure trainer:", action.payload);
             return {
                 ...state,

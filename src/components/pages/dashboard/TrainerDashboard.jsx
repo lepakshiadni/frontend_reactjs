@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, } from "react";
 import "../../styles/Dashboard.css"; // Import your CSS file for styling
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
 import Done from "../../assets/Done.png";
@@ -10,14 +10,13 @@ import {
     Route,
     Routes,
     NavLink,
-    useNavigate,
     useLocation,
 } from "react-router-dom";
 import Chat from "../messages/Chat";
 import TrainerProposalMangement from "../proposalMangement/TrainerProposalMangement.jsx";
 import TrainerSettings from "../settings/TrainerSettings";
 import TrainerHelpSupport from "../help&support/TrainerHelpSupport";
-import Feed from "../feed/Feed.jsx";
+// import Feed from "../feed/Feed.jsx";
 import TrainerFeed from '../feed/trainerFeed/TrainerFeed.jsx'
 import TrainersList from "../trainerlist/TrainersList.js";
 import CreatePostPopup from "../../utils/CreatePostPopUp.jsx";
@@ -29,13 +28,16 @@ import Upcoming from "../mytrainings/childs/Upcoming.jsx";
 import OngoingTraining from "../mytrainings/childs/OnGoingTraining.jsx";
 import Completed from "../mytrainings/childs/Completed.jsx";
 import Denied from "../mytrainings/childs/Denied.jsx";
+import TrainerProposalApplied from "../proposalMangement/TrainerProposalManagement/TrainerProposalApplied.jsx";
+import TrainerProposalRequest from "../proposalMangement/TrainerProposalManagement/TrainerProposalRequest.jsx";
+import TrainerBillPayments from '../billpayments/TrainerBillPayments.jsx'
 function TrainerDashboard() {
     const [selectedOption, setSelectedOption] = useState("dashboard");
     const [showWelcome, setShowWelcome] = useState(true);
     const [prevSelectedOption, setPrevSelectedOption] = useState("");
     const [model, setModel] = useState(false);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
@@ -208,9 +210,12 @@ function TrainerDashboard() {
                                             <Route path="denied" element={<Denied />} />
                                         </Route>
                                         <Route path="messages" element={<Chat />} />
-                                        <Route path="BillingPayments" element={<TrainersList />} />
+                                        <Route path="billingpayments" element={<TrainerBillPayments/>} />
                                         <Route path="settings" element={<TrainerSettings />} />
-                                        <Route path="proposalmanagement/*" element={<TrainerProposalMangement />} />
+                                        <Route path="proposalmanagement/*" element={<TrainerProposalMangement />}>
+                                            <Route path="applied" element={<TrainerProposalApplied />} />
+                                            <Route path="proposalrequest" element={<TrainerProposalRequest />} />
+                                        </Route>
                                         <Route path="help&support" element={<TrainerHelpSupport />} />
                                     </Routes>
 

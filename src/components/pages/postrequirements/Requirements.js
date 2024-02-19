@@ -32,9 +32,7 @@ const Requirements = () => {
     const [experience2, setExperience2] = React.useState(0);
     const [isDragging, setIsDragging] = React.useState(false);
     const [isDraggingg, setIsDraggingg] = React.useState(false);
-    const employer = useSelector(({ employerSignUp }) => {
-        return employerSignUp?.employerDetails?.employerDetails
-    })
+    
     const postRequiement = useSelector(({ postRequirement }) => {
         return postRequirement;
     })
@@ -217,7 +215,7 @@ const Requirements = () => {
     const location = useRef()
     const tocFile = useRef()
 
-    console.log('toc', tocFile)
+    // console.log('toc', tocFile)
     const [tocContent, setTocContent] = useState(null)
 
 
@@ -245,19 +243,12 @@ const Requirements = () => {
             formData.append("startDate", startDate);
             formData.append("endDate", endDate);
             formData.append("urgentlyNeedTrainer", urgentlyNeedTrainer);
-            formData.append('postedByName', employer?.fullName)
-            formData.append('postedByCompanyName', employer?.companyName)
-            formData.append('postedByImg', employer?.profileImg)
-            formData.append('postedByDesignation', employer?.designation)
-            console.log('emplooyer', employer?.fullName)
             // Append file to FormData
             if (tocFile.current && tocFile.current.files.length > 0) {
-                console.log("tocFile",tocFile.current.files[0])
-                
-                // formData.append("tocFile", tocFile.current.files[0],tocFile.current?.files[0]?.name);
+                // console.log("tocFile",tocFile.current.files[0])
                 formData.append("tocFile", tocFile.current.files[0], tocFile.current?.files[0]?.name);
             }
-            await dispatch(postTrainingRequirementAction(formData));
+            dispatch(postTrainingRequirementAction(formData));
         } catch (error) {
             console.log(error);
         }

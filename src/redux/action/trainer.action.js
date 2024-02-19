@@ -8,14 +8,12 @@ const trainerSignUpAction = (details) => {
         try {
             await Axios.post(`${baseUrl}/trainer/trainerSignup`, details)
                 .then((resp) => {
-                    // dispatch(employerSignUpSuccess(resp.data));
                     dispatch({
                         type: 'TRAINER_SIGNUP_SUCCESS',
                         payload: resp.data
                     })
                 })
         } catch (error) {
-            // dispatch(employerSignUpFailure(error));
             dispatch({
                 type: 'TRAINER_SIGNUP_FAILURE',
                 payload: { error }
@@ -51,13 +49,41 @@ const trainerDetails = () => {
         }
     }
 }
-const trainerProfileUpdate = (details) => {
+
+const trainerBasicInfoUpdate = (details) => {
     const token = Cookies.get('token')
     // console.log(token)
-    console.log('trainer details action ',details)
+    console.log('trainer details action ', details)
     return async (dispatch) => {
         try {
-            Axios.put(`${baseUrl}/trainer/trainerProfileUpdate`, details, {
+            Axios.put(`${baseUrl}/trainer/trainerBasicInfoUpdate`, details, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    dispatch({
+                        type: 'TRAINERBASICINFO_UPDATED_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "TRAINERBASICINFO_UPDATE_FAILURE",
+                payload: err
+            })
+        }
+    }
+}
+
+export const trainerSkillsUpdate = (details) => {
+    const token = Cookies.get('token')
+    // console.log(token)
+    console.log('trainer details action ', details)
+    return async (dispatch) => {
+        try {
+            Axios.put(`${baseUrl}/trainer/trainerSkillsUpdate`, details, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -65,14 +91,98 @@ const trainerProfileUpdate = (details) => {
                 .then((resp) => {
                     // console.log(resp)
                     dispatch({
-                        type: 'TRAINERDETAILS_UPDATED_SUCCESS',
+                        type: 'TRAINERSKILSSINFO_UPDATED_SUCCESS',
                         payload: resp.data
                     })
                 })
         }
         catch (err) {
             dispatch({
-                type: "TRAINERDETAILS_UPDATE_FAILURE",
+                type: "TRAINERSKILSSINFO_UPDATE_FAILURE",
+                payload: err
+            })
+        }
+    }
+}
+
+export const trainerCertificateUpdate = (details) => {
+    const token = Cookies.get('token')
+    // console.log(token)
+    console.log('trainer details action ', details)
+    return async (dispatch) => {
+        try {
+            Axios.put(`${baseUrl}/trainer/trainerCertificateUpdate`, details, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'TRAINERCERTIFICATEINFO_UPDATED_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "TRAINERCERTIFICATEINFO_UPDATE_FAILURE",
+                payload: err
+            })
+        }
+    }
+}
+
+export const trainerContactInfoUpdate = (details) => {
+    const token = Cookies.get('token')
+    // console.log(token)
+    console.log('trainer details action ', details)
+    return async (dispatch) => {
+        try {
+            Axios.put(`${baseUrl}/trainer/trainerContactInfoUpdate`, details, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'TRAINERCONTACTINFO_UPDATED_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "TRAINERCONTACTINFO_UPDATE_FAILURE",
+                payload: err
+            })
+        }
+    }
+}
+
+export const trainerExperienceInfoUpdate = (details) => {
+    const token = Cookies.get('token')
+    // console.log(token)
+    console.log('trainer details action ', details)
+    return async (dispatch) => {
+        try {
+            Axios.put(`${baseUrl}/trainer/trainerExperienceInfoUpdate`, details, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'TRAINEREXPERIENCEINFO_UPDATED_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "TRAINEREXPERIENCEINFO_UPDATE_FAILURE",
                 payload: err
             })
         }
@@ -134,6 +244,7 @@ const getBookMarkedPost = () => {
     }
 
 }
+
 const trainerAppliedTraining = (trainingPostId, trainingDetails) => {
     const token = Cookies.get('token')
     console.log('POST trainerApplied  Action')
@@ -196,9 +307,9 @@ const gettrainerAppliedTraining = () => {
 export {
     trainerSignUpAction,
     trainerDetails,
-    trainerProfileUpdate,
     addBookMarkePost,
     getBookMarkedPost,
     trainerAppliedTraining,
-    gettrainerAppliedTraining
+    gettrainerAppliedTraining,
+    trainerBasicInfoUpdate
 }

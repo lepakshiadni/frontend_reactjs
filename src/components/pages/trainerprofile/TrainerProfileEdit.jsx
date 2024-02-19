@@ -9,10 +9,9 @@ import CropImage from "./trainerprofileedit/CropingImage";
 import SquareCropImg from "./trainerprofileedit/SquareCrop";
 import Header from '../../header&footer/Header'
 import { useNavigate } from "react-router-dom";
-// import {trainerProfileUpdate,trainerDetails} from '../../../redux/action/trainer.action'
+import { trainerBasicInfoUpdate,trainerSkillsUpdate,trainerCertificateUpdate,trainerContactInfoUpdate,trainerExperienceInfoUpdate, trainerDetails } from '../../../redux/action/trainer.action'
 import { useDispatch, useSelector } from 'react-redux'
-import { trainerProfileUpdate } from "../../../redux/action/trainer.action";
-import { trainerDetails } from "../../../redux/action/trainer.action";
+// import { trainerSignUpAction } from "../../../redux/action/trainer.action";
 
 
 
@@ -32,13 +31,13 @@ const UpdateProfile = () => {
     const [showProfileCropPopup, setShowProfileCropPopup] = useState(false);
     const [showBannerCropPopup, setShowBannerCropPopup] = useState(false);
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(trainerDetails())
-    },[dispatch])
+    }, [dispatch])
 
 
     const trainer = useSelector(({ trainerSignUp }) => {
-        return trainerSignUp?.trainerDetails?.trainerDetails;
+        return trainerSignUp?.trainerDetails?.trainerDetails ;
     })
 
 
@@ -70,34 +69,60 @@ const UpdateProfile = () => {
 
     };
 
+    const handleUpdateBannerImage = (newImage, fileName) => {
+        // Convert base64 image to Blob
+        const byteCharacters = atob(newImage.split(',')[1]);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
-    const handleUpdateProfileImage2 = (newImage) => {
-        const fileName = banermage && banermage.name ? banermage.name : 'Squrecropped.jpg';
+        // Create a File from the Blob
+        const SqurecroppedFile = new File([blob], fileName, { type: 'image/jpeg' });
 
-        const croppedFile = new File([newImage], fileName, { type: 'image/jpeg' });
-
+        // Create a DataTransfer object and add the cropped file
         const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(croppedFile);
+        dataTransfer.items.add(SqurecroppedFile);
 
+        // Set the files of the input element to the DataTransfer object's files
         const inputElement = profileBanner.current;
         inputElement.files = dataTransfer.files;
 
+        // Update state and close popup
         setBanerImage({ file: newImage, name: fileName });
         setShowBannerCropPopup(false);
+
+        // console.log(newImage);
     };
-    const handleUpdateProfileImage = (newImage) => {
-        const fileName = profileImage && profileImage.name ? profileImage.name : 'cropped.jpg';
 
-        const croppedFile = new File([newImage], fileName, { type: 'image/jpeg' });
+    const handleUpdateProfileImage = (newImage, fileName) => {
+        // Convert base64 image to Blob
+        const byteCharacters = atob(newImage.split(',')[1]);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: 'image/jpeg' });
 
+        // Create a File from the Blob
+        const croppedFile = new File([blob], fileName, { type: 'image/jpeg' });
+
+        // Create a DataTransfer object and add the cropped file
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(croppedFile);
 
+        // Set the files of the input element to the DataTransfer object's files
         const inputElement = profileImg.current;
         inputElement.files = dataTransfer.files;
 
+        // Update state and close popup
         setProfileImage({ file: newImage, name: fileName });
         setShowProfileCropPopup(false);
+
+        // console.log(newImage);
     };
 
 
@@ -139,15 +164,15 @@ const UpdateProfile = () => {
     };
 
     //image file drop and drag
- 
+
     let certificateImg = useRef(null);
     const [labelText, setLabelText] = useState();
     const [labelTextName, setLabelTextName] = useState(false);
 
     const [certificateData, setCertificateData] = useState({
-        heading: '',
+        certificateHead: '',
         institution: '',
-        description: '',
+        certificationDescription: '',
         certificateImg: null,
     });
 
@@ -159,7 +184,7 @@ const UpdateProfile = () => {
 
             reader.onload = (event) => {
                 const newImage = event.target.result;
-                setCertificateData((prevData) => ({ ...prevData, image: newImage }));
+                setCertificateData((prevData) => ({ ...prevData, image: newImage , certificateImg : file}));
             };
 
             reader.readAsDataURL(file);
@@ -209,8 +234,10 @@ const UpdateProfile = () => {
             certificateImg: '',
         });
         setLabelTextName(false)
+        // dispatch(trainerCertificateUpdate(formData))
         handleSubmitReset()
     };
+    console.log('certificate', storedData);
 
     const handleSubmitReset = () => {
         // Reset other form fields
@@ -242,15 +269,23 @@ const UpdateProfile = () => {
     };
 
 
-    //input click next
-    const firstName = useRef()
-    const lastName = useRef()
-    const designation = useRef()
-    const company = useRef()
-    const age = useRef()
-    const location = useRef()
-    const objective = useRef()
-    const aboutYou = useRef()
+    const [firstName, setFirstName] = useState("Manoj")
+    const [lastName, setLastName] = useState("Gowda")
+    const [designation, setDesignation] = useState("Associate")
+    const [company, setComapany] = useState("Zepto")
+    const [age, setAge] = useState("23")
+    const [location, setLocation] = useState("Bangalore")
+    const [objective, setObjective] = useState("It seems you've commented out the code that updates the trainer's profile in the database based on the received data.")
+    const [aboutYou, setAboutYou] = useState(" To integrate uploading the profile image, profile banner, and certificates to AWS S3 into this function, you can follow these steps")
+    const [primaryNumber, setPrimaryNumber] = useState(3333333333)
+    const [secondaryNumber, setSecondaryNumber] = useState(2222222222)
+    const [address, setAddress] = useState("Upload the profile image, profile banner, and certificates to S3.")
+    const [email, setEmail] = useState("majoj@gmail.com")
+    const [website, setWebsite] = useState("https://chat.openai.com/")
+    const [expertIn, setExpertIn] = useState("Once all uploads are completed successfully")
+    const [experience, setExperience] = useState(3)
+    const [sinceInTheFiled, setSinceInTheFiled] = useState(2202)
+    const [recentCompny, setRecentCompny] = useState("Here's how you can integrate S3 uploading into your")
 
     const skillRef = useRef()
 
@@ -258,91 +293,63 @@ const UpdateProfile = () => {
     const institution = useRef()
     const certificationDescription = useRef();
 
-    const primaryNumber = useRef()
-    const secondaryNumber = useRef()
-    const address = useRef()
-    const email = useRef()
-    const website = useRef()
 
-    const expertIn = useRef()
-    const experience = useRef()
-    const sinceInTheFiled = useRef()
-    const recentCompnyRef = useRef()
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault()
 
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault()
-
-
-            if (event.target === firstName.current) {
-                lastName.current.focus();
-
+            if (e.target.name === 'firstName') {
+                document.querySelector('[name=lastName]').focus();
             }
-            else if (event.target === lastName.current) {
-                designation.current.focus();
-
+            else if (e.target.name === 'lastName') {
+                document.querySelector('[name=designation]').focus();
             }
-            else if (event.target === designation.current) {
-                company.current.focus();
-
+            else if (e.target.name === 'designation') {
+                document.querySelector('[name=company]').focus();
             }
-            else if (event.target === company.current) {
-                age.current.focus();
-
+            else if (e.target.name === 'company') {
+                document.querySelector('[name=age]').focus();
             }
-            else if (event.target === objective.current) {
-                aboutYou.current.focus();
-
+            else if (e.target.name === 'objective') {
+                document.querySelector('[name=aboutYou]').focus();
             }
-            else if (event.target === certificateHead.current) {
+            else if (e.target.name === 'primaryNumber') {
+                document.querySelector('[name=secondaryNumber]').focus();
+            }
+            else if (e.target.name === 'secondaryNumber') {
+                document.querySelector('[name=address]').focus();
+            }
+            else if (e.target.name === 'address') {
+                document.querySelector('[name=email]').focus();
+            }
+            else if (e.target.name === 'email') {
+                document.querySelector('[name=website]').focus();
+            }
+            else if (e.target.name === 'expertIn') {
+                document.querySelector('[name=experience]').focus();
+            }
+            else if (e.target.name === 'experience') {
+                document.querySelector('[name=sinceInTheFiled]').focus();
+            }
+            else if (e.target.name === 'sinceInTheFiled') {
+                document.querySelector('[name=recentCompny]').focus();
+            }
+            else if (e.target === certificateHead.current) {
                 institution.current.focus();
-
             }
-            else if (event.target === institution.current) {
+            else if (e.target === institution.current) {
                 certificationDescription.current.focus();
-
             }
 
-            else if (event.target === primaryNumber.current) {
-                secondaryNumber.current.focus();
-
-            }
-            else if (event.target === secondaryNumber.current) {
-                address.current.focus();
-
-            }
-            else if (event.target === address.current) {
-                email.current.focus();
-
-            }
-            else if (event.target === email.current) {
-                website.current.focus();
-
-            }
-            else if (event.target === expertIn.current) {
-                experience.current.focus();
-
-            }
-            else if (event.target === experience.current) {
-                sinceInTheFiled.current.focus();
-
-            }
-            else if (event.target === sinceInTheFiled.current) {
-                recentCompnyRef.current.focus();
-
-            }
         }
     };
-    useEffect(() => {
-        console.log(formData);
-    })
-
-    const [formData, setFormData] = useState(new FormData());
 
     const handleCase0Data = async (e) => {
         e.preventDefault();
+        const formData=new  FormData();
         const fileInput = profileImg.current;
         const fileInput2 = profileBanner.current;
+
         if (fileInput && fileInput2 && fileInput.files.length > 0 && fileInput2.files.length > 0) {
             const file = fileInput.files[0];
             const file2 = fileInput2.files[0];
@@ -350,14 +357,17 @@ const UpdateProfile = () => {
             // Append form data to formData
             formData.append('profileImg', file);
             formData.append('profileBanner', file2);
-            formData.append('firstName', firstName.current.value);
-            formData.append('lastName', lastName.current.value);
-            formData.append('designation', designation.current.value);
-            formData.append('company', company.current.value);
-            formData.append('age', age.current.value);
-            formData.append('location', location.current.value);
-            formData.append('objective', objective.current.value);
-            formData.append('aboutYou', aboutYou.current.value);
+            formData.append('firstName', firstName);
+            formData.append('lastName', lastName);
+            formData.append('designation', designation);
+            formData.append('company', company);
+            formData.append('age', age);
+            formData.append('location', location);
+            formData.append('objective', objective);
+            formData.append('aboutYou', aboutYou);
+            formData.append('status', true);
+
+            dispatch(trainerBasicInfoUpdate(formData));
 
             handleOptionClick(1);
         } else {
@@ -365,16 +375,17 @@ const UpdateProfile = () => {
         }
     };
 
-    const handleCase1Data = () => {
 
-        clickedTitles.forEach(skill => {
-            formData.append('skills', skill);
-        });
+    const handleCase1Data = () => {
+        // const formDatas=new FormData()
+        clickedTitles.forEach(skill => skill);
+        dispatch(trainerSkillsUpdate(clickedTitles))
         handleOptionClick(2)
     };
 
-
-    const handleCase2Data = () => {
+    const [formData, setFormData] = useState(new FormData());
+    const handleCase2Data = (e) => {
+        e.preventDefault()
         const file = certificateImg.current.files[0];
 
         if (file) {
@@ -383,37 +394,56 @@ const UpdateProfile = () => {
             formData.append('institution', institution.current.value);
             formData.append('certificationDescription', certificationDescription.current.value);
             formData.append('certificateImg', file);
-
+            formData.append('status', true)
             handleSubmit();
         } else {
             alert("No file selected");
         }
     };
+    const handlecertificate=async()=>{
+        dispatch(trainerCertificateUpdate(formData))
+    }
 
 
     const handleCase3Data = (e) => {
         e.preventDefault()
+        // const formData=new FormData()
+        // formData.append('primaryNumber', primaryNumber)
+        // formData.append('secondaryNumber', secondaryNumber)
+        // formData.append('address', address)
+        // formData.append('email', email)
+        // formData.append('website', website)
+        // formData.append('status', true)
+        const contactInfo={
+            primaryNumber: primaryNumber, 
+            secondaryNumber : secondaryNumber || null ,
+            address: address,
+            email : email,
+            website : website,
+            status:true
+        }
 
-        formData.append('primaryNumber', primaryNumber.current.value)
-        formData.append('secondaryNumber', secondaryNumber.current.value)
-        formData.append('address', address.current.value)
-        formData.append('email', email.current.value)
-        formData.append('website', website.current.value)
+        dispatch(trainerContactInfoUpdate(contactInfo));
 
         handleOptionClick(4)
 
     }
     const handleCase4Data = async () => {
-
-        formData.append('expertIn', expertIn.current.value)
-        formData.append('experience', experience.current.value)
-        formData.append('sinceInTheFiled', sinceInTheFiled.current.value)
-        formData.append('recentCompnyRef', recentCompnyRef.current.value)
-
-        await dispatch(trainerProfileUpdate(formData));
-        setFormData(null)
-        setClickedTitles([])
-        setStoredData([])
+        // const formData=new FormData()
+        // formData.append('expertIn', expertIn)
+        // formData.append('experience', experience)
+        // formData.append('sinceInTheFiled', sinceInTheFiled)
+        // formData.append('recentCompny', recentCompny)
+        // formData.append('status', true)
+        const experienceDetails={
+            expertIn: expertIn,
+            experience: experience,
+            sinceInTheFiled: sinceInTheFiled,
+            recentCompany:recentCompny,
+            status:true
+        }
+        dispatch(trainerExperienceInfoUpdate(experienceDetails))
+        // await dispatch(trainerProfileUpdate(formData));
     }
 
     const handleItemChange = (index, value) => {
@@ -429,7 +459,7 @@ const UpdateProfile = () => {
     }
 
     const getContentBasedOnOption = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" })
+        window.scrollTo({ top: 0, behavior: "auto" })
 
         switch (selectedOption) {
             case 0:
@@ -441,7 +471,7 @@ const UpdateProfile = () => {
                             <div className="updateval" >
 
                                 <img
-                                    src={profileImage ? profileImage.file : ''}
+                                    src={trainer?.basicInfo?.profileImg ? `${trainer?.basicInfo?.profileImg}` : ''}
                                     style={{ borderRadius: "50%", width: '100px', height: '100px', border: '0.5px solid rgba(227, 227, 227)', backgroundColor: 'rgba(227, 227, 227, 0.5)' }}
                                     alt=" "
                                 />
@@ -463,7 +493,7 @@ const UpdateProfile = () => {
                                 </div>
                                 <hr style={{ marginTop: "12px", marginBottom: '12px' }} />
                                 <img
-                                    src={banermage ? banermage.file : ''}
+                                    src={trainer?.basicInfo?.profileBanner ? `${trainer?.basicInfo?.profileBanner}` : ''}
                                     alt=" "
                                     style={{
                                         width: '150px',
@@ -496,33 +526,33 @@ const UpdateProfile = () => {
                                         <div style={{ marginRight: "30px" }}>
                                             <label htmlFor="">First Name *</label>
                                             <br />
-                                            <input type="text" ref={firstName} name="firstName" onKeyDown={handleKeyDown} placeholder="Type your First Name" required />
+                                            <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} name="firstName" onKeyDown={handleKeyDown} placeholder="Type your First Name" required />
                                         </div>
                                         <div>
                                             <label htmlFor="">Last Name</label>
                                             <br />
-                                            <input type="text" ref={lastName} name="lastName" onKeyDown={handleKeyDown} placeholder="Type your Last Name" />
+                                            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} name="lastName" onKeyDown={handleKeyDown} placeholder="Type your Last Name" />
                                         </div>
                                     </div>
                                     <div className="mt-2">
                                         <label htmlFor="">Designation *</label>
                                         <br />
-                                        <input style={{ width: '508px' }} type="text" ref={designation} name="designation" onKeyDown={handleKeyDown} placeholder="Type your Occupation" required />
+                                        <input style={{ width: '508px' }} type="text" value={designation} onChange={(e) => setDesignation(e.target.value)} name="designation" onKeyDown={handleKeyDown} placeholder="Type your Occupation" required />
                                     </div>
                                     <div className="mt-2" >
                                         <label htmlFor="">Company</label>
                                         <br />
-                                        <input style={{ width: '508px' }} type="text" ref={company} name="company" onKeyDown={handleKeyDown} placeholder="Type your Company Name" />
+                                        <input style={{ width: '508px' }} type="text" value={company} onChange={(e) => setComapany(e.target.value)} name="company" onKeyDown={handleKeyDown} placeholder="Type your Company Name" />
                                     </div>
                                     <div className="mt-2" >
                                         <label htmlFor="">Age *</label>
                                         <br />
-                                        <input style={{ width: '508px' }} type="number" ref={age} name="age" onKeyDown={handleKeyDown} placeholder="Type your age" required />
+                                        <input style={{ width: '508px' }} type="number" value={age} onChange={(e) => setAge(e.target.value)} name="age" onKeyDown={handleKeyDown} placeholder="Type your age" required />
                                     </div>
                                     <div className="mt-2">
                                         <label htmlFor="">Location *</label>
                                         <br />
-                                        <select name="" id="" ref={location}>
+                                        <select name="" id="" value={location} onChange={(e) => setLocation(e.target.value)}>
                                             <option value="Banglore" selected>Banglore</option>
                                             <option value="Manglore">Manglore</option>
                                             <option value="Mysore">Mysore</option>
@@ -532,11 +562,11 @@ const UpdateProfile = () => {
                                     <div className="mt-2" >
                                         <label htmlFor="">Objective</label>
                                         <br />
-                                        <input style={{ width: '508px' }} type="text" ref={objective} name="objective" onKeyDown={handleKeyDown} placeholder="Profile title" />
+                                        <input style={{ width: '508px' }} type="text" value={objective} onChange={(e) => setObjective(e.target.value)} name="objective" onKeyDown={handleKeyDown} placeholder="Profile title" />
                                     </div>
                                     <div className="mt-2" >
                                         <label htmlFor="">About you</label>
-                                        <textarea ref={aboutYou} name="aboutYou" id="" cols="67" rows="5" placeholder="Type here"></textarea>
+                                        <textarea value={aboutYou} onChange={(e) => setAboutYou(e.target.value)} name="aboutYou" id="" cols="67" rows="5" placeholder="Type here"></textarea>
                                     </div>
                                     <button type="submit" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '20px', marginLeft: "315px", marginBottom: '20px' }} >Update</button>
 
@@ -598,7 +628,7 @@ const UpdateProfile = () => {
                                 <div className="skillData flex flex-wrap cursor-pointer justify-evenly">
                                     {filteredItems.length > 0 ? (
                                         filteredItems.map((item, index) => (
-                                            <div className="mt-5 me-6" style={{ width: '142px' }} key={index} onClick={() => handleItemClick(item.title)}>
+                                            <div className="mt-5 me-6" style={{ width: '130px' }} key={index} onClick={() => handleItemClick(item.title)}>
                                                 <img style={{ height: "147px", padding: '20px', borderRadius: '8px', boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)" }} src={item.image} alt="" />
                                                 <h6 style={{ fontSize: '14px', color: "#535353", marginTop: '10px', fontWeight: '400', display: 'flex' }}>{item.title} <img style={{ marginLeft: '10px' }} src={vector} alt="" /></h6>
                                                 <p style={{ color: '#000', fontSize: '12px', fontWeight: "400" }}>{item.description}</p>
@@ -615,14 +645,17 @@ const UpdateProfile = () => {
             case 2:
                 return (
                     <div className="certificateData">
-                        <h6 style={{ color: "#535353", fontWeight: '400', fontSize: "18px", marginTop: '14px', marginBottom: "30px" }} >Certifications</h6>
+                        <div className="flex justify-between items-center mb-[30px]">
+                        <h6 style={{ color: "#535353", fontWeight: '400', fontSize: "18px", marginTop: '14px', }} >Certifications</h6>
+                        <button onClick={handlecertificate} className="bg-[#2676c2] rounded-lg text-white pl-[70px] pr-[70px] pt-[8px] pb-[8px] mt-[10px]" disabled={!storedData.length > 0}>Update</button>
+                        </div>
                         <div className="flex justify-between">
                             <div>
                                 <label htmlFor=""> Heading for your Certificate *</label> <br />
                                 <input type="text"
-                                    name="heading"
+                                    name="certificateHead"
                                     placeholder="Type Headline"
-                                    value={certificateData.heading}
+                                    value={certificateData.certificateHead}
                                     onChange={handleInputChange}
                                     onKeyDown={handleKeyDown}
                                     ref={certificateHead}
@@ -645,10 +678,10 @@ const UpdateProfile = () => {
                         <div>
                             <label htmlFor=""> Description *</label> <br />
                             <textarea
-                                name="description" id=""
+                                name="certificationDescription" id=""
                                 cols="67" rows="5"
                                 placeholder="Type what you want"
-                                value={certificateData.description}
+                                value={certificateData.certificationDescription}
                                 onChange={handleInputChange}
                                 ref={certificationDescription}
                                 style={{ whiteSpace: "pre-line" }}
@@ -722,7 +755,7 @@ const UpdateProfile = () => {
                         <div>
                             <label htmlFor="">Preview </label> <br />
                             <div className="previewCertifyData mt-2 mb-2 p-2 " style={{}}>
-                                {certificateData.heading && certificateData.description && certificateData.image && (
+                                {certificateData.certificateHead && certificateData.certificationDescription && certificateData.certificateImg && (
                                     <div>
                                         <h6 style={{ fontSize: '18px', color: '#535353', fontWeight: "500", marginTop: '10px' }}>Certifications</h6>
                                         <div className="flex items-center justify-between">
@@ -740,7 +773,7 @@ const UpdateProfile = () => {
                                     </div>
                                 )}
                             </div>
-                            {certificateData.heading && certificateData.description && certificateData.image && (
+                            {certificateData.certificateHead && certificateData.certificationDescription && certificateData.certificateImg && (
                                 <button className="" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '10px', marginLeft: "620px", marginBottom: '20px' }} onClick={handleCase2Data}>Submit</button>
                             )}
                         </div>
@@ -783,28 +816,28 @@ const UpdateProfile = () => {
                                 <div style={{ marginRight: "50px" }}>
                                     <label htmlFor="">Primary Contact *</label>
                                     <br />
-                                    <input type="tel" maxLength='10' minLength='10' ref={primaryNumber} name="primaryNumber" onKeyDown={handleKeyDown} required placeholder="Type your mobile number" />
+                                    <input type="tel" maxLength='10' minLength='10' value={primaryNumber} onChange={(e) => setPrimaryNumber(e.target.value)} name="primaryNumber" onKeyDown={handleKeyDown} required placeholder="Type your mobile number" />
                                 </div>
                                 <div>
                                     <label htmlFor="">Secondary Contact</label>
                                     <br />
-                                    <input type="tel" maxLength='10' minLength='10' ref={secondaryNumber} name="secondaryNumber" onKeyDown={handleKeyDown} placeholder="Type your mobile number" />
+                                    <input type="tel" maxLength='10' minLength='10' value={secondaryNumber} onChange={(e) => setSecondaryNumber(e.target.value)} name="secondaryNumber" onKeyDown={handleKeyDown} placeholder="Type your mobile number" />
                                 </div>
                             </div>
                             <div className="mt-2">
                                 <label htmlFor="">Address *</label>
                                 <br />
-                                <input style={{ width: '690px' }} type="text" ref={address} name="address" onKeyDown={handleKeyDown} required placeholder="Type your address" />
+                                <input style={{ width: '690px' }} type="text" value={address} onChange={(e) => setAddress(e.target.value)} name="address" onKeyDown={handleKeyDown} required placeholder="Type your address" />
                             </div>
                             <div className="mt-2">
                                 <label htmlFor="">Email *</label>
                                 <br />
-                                <input style={{ width: '690px' }} type="email" ref={email} name="email" onKeyDown={handleKeyDown} required placeholder="Type your mail address" />
+                                <input style={{ width: '690px' }} type="email" value={email} onChange={(e) => setEmail(e.target.value)} name="email" onKeyDown={handleKeyDown} required placeholder="Type your mail address" />
                             </div>
                             <div className="mt-2">
                                 <label htmlFor="">Website </label>
                                 <br />
-                                <input style={{ width: '690px' }} type="url" ref={website} name="website" onKeyDown={handleKeyDown} placeholder="Type website link here" />
+                                <input style={{ width: '690px' }} type="url" value={website} onChange={(e) => setWebsite(e.target.value)} name="website" onKeyDown={handleKeyDown} placeholder="Type website link here" />
                             </div>
 
                             <button type="submit" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '30px', marginLeft: "490px" }}>Update</button>
@@ -820,25 +853,25 @@ const UpdateProfile = () => {
                             <span>
                                 <label htmlFor="">Expert In *</label>
                                 <br />
-                                <input style={{ width: '690px' }} type="text" ref={expertIn} name="expertIn" onKeyDown={handleKeyDown} placeholder="Enter your skill name" required />
+                                <input style={{ width: '690px' }} type="text" value={expertIn} onChange={(e) => setExpertIn(e.target.value)} name="expertIn" onKeyDown={handleKeyDown} placeholder="Enter your skill name" required />
                             </span>
                             <br />
                             <span >
                                 <label htmlFor="">Experience *</label>
                                 <br />
-                                <input style={{ width: '690px' }} type="number" ref={experience} name="experience" onKeyDown={handleKeyDown} placeholder="Select your experience" required />
+                                <input style={{ width: '690px' }} type="number" value={experience} onChange={(e) => setExperience(e.target.value)} name="experience" onKeyDown={handleKeyDown} placeholder="Select your experience" required />
                             </span>
                             <br />
                             <span >
                                 <label htmlFor="">Since in this field *</label>
                                 <br />
-                                <input style={{ width: '690px' }} type="number" ref={sinceInTheFiled} name="sinceInTheFiled" onKeyDown={handleKeyDown} placeholder="yyyy" required />
+                                <input style={{ width: '690px' }} type="number" value={sinceInTheFiled} onChange={(e) => setSinceInTheFiled(e.target.value)} name="sinceInTheFiled" onKeyDown={handleKeyDown} placeholder="yyyy" required />
                             </span>
                             <br />
                             <span>
                                 <label htmlFor="">Last Organization </label>
                                 <br />
-                                <input style={{ width: '690px' }} type="text" ref={recentCompnyRef} name="recentCompnyRef" onKeyDown={handleKeyDown} placeholder="Enter your Last Organization" />
+                                <input style={{ width: '690px' }} type="text" value={recentCompny} onChange={(e) => setRecentCompny(e.target.value)} name="recentCompny" onKeyDown={handleKeyDown} placeholder="Enter your Last Organization" />
                             </span>
                             <button type="submit" style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", marginTop: '30px', marginLeft: "490px" }}>Submit</button>
                         </form>
@@ -848,7 +881,6 @@ const UpdateProfile = () => {
             default:
                 return null;
         }
-
     };
 
     return (
@@ -864,7 +896,7 @@ const UpdateProfile = () => {
                 trigger={showBannerCropPopup}
                 setTrigger={setShowBannerCropPopup}
                 handleFileInputChange={handleFileInputChange}
-                handleUpdateProfileImage2={handleUpdateProfileImage2}
+                handleUpdateBannerImage={handleUpdateBannerImage}
             />
 
             <div className='updatepage'>

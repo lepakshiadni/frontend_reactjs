@@ -207,7 +207,7 @@
   border: 1px solid #EEEEEE;
 }
 
-.scroll {
+/* .scroll {
 
   height: 600px;
   overflow-y: scroll;
@@ -229,7 +229,7 @@
     background-color: #BFBFBF;
     border-radius: 8px;
   }
-}
+} */
 
 .messageContent {
   display: flex;

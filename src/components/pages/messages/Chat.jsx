@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { IoSearchOutline } from "react-icons/io5";
 import "../../styles/Chat.css";
 import { useSelector } from "react-redux";
-
+const baseUrl=localStorage.getItem('baseUrl');
 
 
 
@@ -30,10 +30,10 @@ function Chat() {
     }
   };
 
-  const handleFileChange = (e) => {
-    const selectedFile = e.target.files[0];
-    console.log('Selected File:', selectedFile);
-  };
+  // const handleFileChange = (e) => {
+  //   const selectedFile = e.target.files[0];
+  //   console.log('Selected File:', selectedFile);
+  // };
 
   const employer = useSelector(({ employerSignUp }) => {
     return employerSignUp?.employerDetails
@@ -63,7 +63,7 @@ function Chat() {
 
 
   useEffect(() => {
-    socket.current = io("http://192.168.1.7:4040", {
+    socket.current = io(`${baseUrl}`, {
       transports: ["websocket"],
       withCredentials: true,
       extraHeaders: {
@@ -122,7 +122,7 @@ function Chat() {
   useEffect(() => {
     const getconversation = async () => {
       if (user) {
-        await Axios.get(`http://192.168.1.7:4000/conversation/${user?._id}`)
+        await Axios.get(`${baseUrl}/conversation/${user?._id}`)
           .then((resp) => {
             // console.log(resp.data);
             setConversation(resp.data.conversation);
@@ -139,7 +139,7 @@ function Chat() {
 
   useEffect(() => {
     const getmessage = async () => {
-      await Axios.get(`http://192.168.1.7:4000/message/allMessage/${currentChat?._id}`)
+      await Axios.get(`${baseUrl}/message/allMessage/${currentChat?._id}`)
         .then((resp) => {
           // console.log(resp.data.messages);
           setMessages(resp.data.messages);
@@ -187,7 +187,7 @@ function Chat() {
     });
 
     try {
-      await Axios.post("http://192.168.1.7:4000/message/addMesage", message)
+      await Axios.post(`${baseUrl}/message/addMesage`, message)
         .then((resp) => {
           setMessages([...messages, resp.data.savedMessage]);
           setNewmessage(" ");

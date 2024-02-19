@@ -3,7 +3,6 @@ import HeaderImage from "../assets/LOGO.png";
 import "../styles/Header.css";
 import Favi from "../assets/favi.png";
 import { Link, useNavigate } from 'react-router-dom'
-// import Chat from "../pages/messages/Chat";
 import { useSelector } from "react-redux";
 const Header = () => {
   const navigate = useNavigate()
@@ -12,7 +11,6 @@ const Header = () => {
   const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [user, setUser] = useState(null)
-  const [profileImg, setProfileImg] = useState(null)
 
   const employer = useSelector(({ employerSignUp }) => {
     return employerSignUp?.employerDetails
@@ -33,21 +31,6 @@ const Header = () => {
 
   console.log("user", user)
 
-
-  useEffect(() => {
-    if (user && user?.profileImg && user?.profileImg?.data) {
-      const bufferData = user.profileImg.data;
-      const arrayBufferView = new Uint8Array(bufferData);
-      const blob = new Blob([arrayBufferView], { type: "image/jpeg" });
-      const reader = new FileReader();
-      reader.readAsDataURL(blob);
-      reader.onload = () => {
-        // Set the base64-encoded image data
-        setProfileImg(reader.result);
-      };
-    }
-  }, [user]);
-  // console.log(profileImg)
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -231,18 +214,11 @@ const Header = () => {
 
           {/* Profile Dropdown */}
           <div className="profile" onClick={handleprofile}>
-            {/* <div className="profile-header">
-              <img src={profileImg} alt="" style={{ float: "left", clear: "both" ,height:'50px',width:'50px' }} />
-              <div>
-                <h4>{user?.fullName?.charAt(0)?.toUpperCase() + user?.fullName?.slice(1)}</h4>
-                <p>{user?.companyName?.charAt(0)?.toUpperCase() + user?.companyName?.slice(1) || 'N/A'}</p>
-              </div>
-            </div> */}
             <div className="profile-header ">
-              {profileImg ? (
+              {user?.basicInfo?.profileImg ? (
                 <img
                   className="border rounded-full"
-                  src={profileImg}
+                  src={user?.basicInfo?.profileImg}
                   alt=""
                   style={{ float: "left", clear: "both", height: '50px', width: '50px' }}
                 />
@@ -255,13 +231,12 @@ const Header = () => {
                     height: '50px',
                     width: '50px',
                     backgroundColor: "gray", // Placeholder color
-                    
                   }}
                 ></div>
               )}
               <div>
-                <h4>{user?.fullName?.charAt(0)?.toUpperCase() + user?.fullName?.slice(1)}</h4>
-                <p>{user?.companyName?.charAt(0)?.toUpperCase() + user?.companyName?.slice(1) || 'N/A'}</p>
+                <h4 className=" capitalize">{user?.basicInfo?.firstName || user?.fullName}</h4>
+                <p className=" capitalize">{user?.companyName}</p>
               </div>
             </div>
             {showProfileDropdown && (

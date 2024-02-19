@@ -1,12 +1,18 @@
 import Axios from 'axios'
+import Cookies from 'js-cookie'
 const baseUrl = localStorage.getItem('baseUrl')
 
 
 export const postTrainingRequirementAction = (postTrainingDetails) => {
-    console.log(postTrainingDetails)
-
+    // console.log(postTrainingDetails)
+    const token = Cookies.get('token')
+    console.log(token);
     return async (dispatch) => {
-        await Axios.post(`${baseUrl}/employerpost/postTrainingRequirement`, postTrainingDetails)
+        await Axios.post(`${baseUrl}/employerpost/postTrainingRequirement`, postTrainingDetails,{
+            headers:{
+                Authorization: `Bearer ${token}`
+            }
+        })
             .then((resp) => {
                 dispatch({
                     type: 'POST_TRAININGREQUIREMENT_SUCCESS',

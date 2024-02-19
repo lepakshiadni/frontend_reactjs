@@ -3,18 +3,36 @@ import Time from 'timesago'
 import { useSelector } from "react-redux";
 
 
-function Messages({ messages, own,selecteduser }) {
+function Messages({ messages, own, selecteduser }) {
+  console.log('selectedUser', selecteduser)
   const [ownUser,setOwnUser]=useState(null)
-  const user = useSelector(({ user }) => {
-    return user?.user
+
+  const employer = useSelector(({ employerSignUp }) => {
+    return employerSignUp?.employerDetails
   })
-  const timeagp = Time(messages.createdAt)
-  useEffect(()=>{
-    const ownUser=user?._id!==selecteduser?._id
-    if(ownUser){
-      setOwnUser(user)
+  const trainer = useSelector(({ trainerSignUp }) => {
+    return trainerSignUp?.trainerDetails;
+  })
+  console.log("employer", employer)
+  console.log("trainer", trainer)
+  useEffect(() => {
+    if (employer?.success) {
+      setOwnUser(employer?.employerDetails);
     }
-  },[selecteduser?._id,user])
+    if (trainer?.success) {
+      setOwnUser(trainer?.trainerDetails);
+    }
+  }, [employer, trainer]);
+  // const user = useSelector(({ user }) => {
+  //   return user?.user
+  // })
+  const timeagp = Time(messages.createdAt)
+  // useEffect(()=>{
+  //   const ownUser=user?._id!==selecteduser?._id
+  //   if(ownUser){
+  //     setOwnUser(user)
+  //   }
+  // },[selecteduser?._id,user])
   // console.log(conversation)
   return (
     <div >
@@ -31,7 +49,7 @@ function Messages({ messages, own,selecteduser }) {
                 alt=""
               /> */}
               <div className='w-[50px] h-[50px] rounded-full mt-[10px] flex justify-center items-center bg-slate-500'>
-                 <p className="text-['Poppins'] text-lg"> {ownUser?.name[0].toUpperCase()}</p>
+                 <p className="text-['Poppins'] text-lg"> {ownUser?.fullName[0]}</p>
               </div>
             </div>
 
@@ -62,7 +80,7 @@ function Messages({ messages, own,selecteduser }) {
                 alt=""
               /> */}
               <div className='w-[50px] h-[50px] rounded-full mt-[10px] flex justify-center items-center bg-slate-500'>
-                 <p className="text-['Poppins'] text-lg"> {selecteduser?.name[0].toUpperCase()}</p>
+                 <p className="text-['Poppins'] text-lg"> {selecteduser?.fullName[0]}</p>
               </div>
             </div>
             <div>

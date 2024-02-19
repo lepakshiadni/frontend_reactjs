@@ -5,17 +5,16 @@ import "cropperjs/dist/cropper.css";
 const SquareCropImg = (props) => {
     const [image, setImage] = useState(false);
     const [cropData, setCropData] = useState(null);
-    const [fileSelected, setFileSelected] = useState(false);
+    const [fileName, setFileName] = useState(null);
     const cropperRef = useRef(null);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
                 setImage(reader.result);
-                setFileSelected(true)
+                setFileName(file.name); // Store selected filename
             };
             reader.readAsDataURL(file);
         }
@@ -26,15 +25,17 @@ const SquareCropImg = (props) => {
             const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas();
             const croppedImageBase64 = croppedCanvas.toDataURL();
             setCropData(croppedImageBase64);
-            props.handleUpdateProfileImage2(croppedImageBase64);
+            props.handleUpdateBannerImage(croppedImageBase64, fileName); // Pass filename along with cropped image data
         }
         setImage(null);
-        setFileSelected(false);
-        setCropData(null)
+        setFileName(null); 
+        setCropData(null);
     };
+    
+    
     const handleClosePopUp = () => {
         setImage(null);
-        setFileSelected(false);
+        setFileName(null);
         props.setTrigger(false)
     }
     const handleCropChange = () => {
@@ -76,7 +77,7 @@ const SquareCropImg = (props) => {
                             crop={handleCropChange}
                         />
 
-                        {!fileSelected && (
+                        {!fileName && (
                             <input className="cursor-pointer " type="file" onChange={handleFileChange} />
                         )}
 
