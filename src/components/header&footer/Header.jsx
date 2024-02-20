@@ -18,8 +18,8 @@ const Header = () => {
   const trainer = useSelector(({ trainerSignUp }) => {
     return trainerSignUp?.trainerDetails;
   })
-  console.log("employer", employer)
-  console.log("trainer", trainer)
+  // console.log("employer", employer)
+  // console.log("trainer", trainer)
   useEffect(() => {
     if (employer?.success) {
       setUser(employer?.employerDetails);
@@ -29,7 +29,7 @@ const Header = () => {
     }
   }, [employer, trainer]);
 
-  console.log("user", user)
+  // console.log("user", user)
 
 
   const handleInputChange = (event) => {

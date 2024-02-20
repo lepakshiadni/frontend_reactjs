@@ -268,24 +268,24 @@ const UpdateProfile = () => {
         handleSubmitReset()
     };
 
-
-    const [firstName, setFirstName] = useState("Manoj")
-    const [lastName, setLastName] = useState("Gowda")
-    const [designation, setDesignation] = useState("Associate")
-    const [company, setComapany] = useState("Zepto")
-    const [age, setAge] = useState("23")
-    const [location, setLocation] = useState("Bangalore")
-    const [objective, setObjective] = useState("It seems you've commented out the code that updates the trainer's profile in the database based on the received data.")
-    const [aboutYou, setAboutYou] = useState(" To integrate uploading the profile image, profile banner, and certificates to AWS S3 into this function, you can follow these steps")
-    const [primaryNumber, setPrimaryNumber] = useState(3333333333)
-    const [secondaryNumber, setSecondaryNumber] = useState(2222222222)
-    const [address, setAddress] = useState("Upload the profile image, profile banner, and certificates to S3.")
-    const [email, setEmail] = useState("majoj@gmail.com")
-    const [website, setWebsite] = useState("https://chat.openai.com/")
-    const [expertIn, setExpertIn] = useState("Once all uploads are completed successfully")
-    const [experience, setExperience] = useState(3)
-    const [sinceInTheFiled, setSinceInTheFiled] = useState(2202)
-    const [recentCompny, setRecentCompny] = useState("Here's how you can integrate S3 uploading into your")
+    console.log(trainer?.basicInfo?.firstName || '')
+    const [firstName, setFirstName] = useState(`${trainer?.basicInfo?.firstName}` || '')
+    const [lastName, setLastName] = useState(`${trainer?.basicInfo?.lastName}` || null);
+    const [designation, setDesignation] = useState(`${trainer?.basicInfo?.designation}` || null)
+    const [company, setComapany] = useState(`${trainer?.basicInfo?.company}` || null)
+    const [age, setAge] = useState(`${trainer?.basicInfo?.age}` || null)
+    const [location, setLocation] = useState(`${trainer?.basicInfo?.location}` || '')
+    const [objective, setObjective] = useState(`${trainer?.basicInfo?.objective}` || '')
+    const [aboutYou, setAboutYou] = useState(`${trainer?.basicInfo?.aboutYou}` || '')
+    const [primaryNumber, setPrimaryNumber] = useState(`${trainer?.contactInfo?.primaryNumber}`  || null)
+    const [secondaryNumber, setSecondaryNumber] = useState(`${trainer?.contactInfo?.secondaryNumber}` || null)
+    const [address, setAddress] = useState(`${trainer?.contactInfo?.address}` || null)
+    const [email, setEmail] = useState(`${trainer?.contactInfo?.email}` || null)
+    const [website, setWebsite] = useState(`${trainer?.contactInfo?.website}` || null)
+    const [expertIn, setExpertIn] = useState(`${trainer?.experience?.expertIn}` || null)
+    const [experience, setExperience] = useState(`${trainer?.experience?.experience}` || null)
+    const [sinceInTheFiled, setSinceInTheFiled] = useState(`${trainer?.experience?.sinceInTheFiled}` || null)
+    const [recentCompny, setRecentCompny] = useState(`${trainer?.experience?.recentCompany}` || null)
 
     const skillRef = useRef()
 
@@ -350,7 +350,7 @@ const UpdateProfile = () => {
         const fileInput = profileImg.current;
         const fileInput2 = profileBanner.current;
 
-        if (fileInput && fileInput2 && fileInput.files.length > 0 && fileInput2.files.length > 0) {
+        // if (fileInput && fileInput2 && fileInput.files.length > 0 && fileInput2.files.length > 0) {
             const file = fileInput.files[0];
             const file2 = fileInput2.files[0];
 
@@ -367,12 +367,10 @@ const UpdateProfile = () => {
             formData.append('aboutYou', aboutYou);
             formData.append('status', true);
 
-            dispatch(trainerBasicInfoUpdate(formData));
+             dispatch(trainerBasicInfoUpdate(formData));
 
-            handleOptionClick(1);
-        } else {
-            alert("No file selected");
-        }
+             handleOptionClick(1);
+        // }
     };
 
 

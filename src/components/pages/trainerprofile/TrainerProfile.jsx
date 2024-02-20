@@ -18,12 +18,7 @@ const TrainerProfile = () => {
   const [user,setUser]=useState(null)
   const disptach=useDispatch()
   const navigate = useNavigate()
-  // const user = useSelector(({ user }) => {
-  //   return user?.user
-  // })
-  // const employer = useSelector(({ employerSignUp }) => {
-  //   return employerSignUp?.employerDetails
-  // })
+
   const trainer=useSelector(({trainerSignUp})=>{
     return  trainerSignUp?.trainerDetails;
   })
@@ -117,13 +112,13 @@ const TrainerProfile = () => {
                 <div className="relative flex justify-center items-center flex-col">
                   <img
                     className="relative top-[-5px] w-[100px] h-[100px] rounded-full"
-                    src={TrainerProfileImage}
+                    src={user?.basicInfo?.profileImg}
                     alt=""
                   />
                   <img onClick={() => (navigate('/trainerProfileEdit'))} className="absolute right-[30.33px] cursor-pointer" src={Edit} alt="" />
                   <div className="relative flex justify-center items-center flex-col">
-                    <div className="text-[#263238] text-[20px] font-[500] font-['Poppins']">
-                      {user?.fullName?.charAt(0)?.toUpperCase()+ user?.fullName?.slice(1)}
+                    <div className="text-[#263238] text-[20px] font-[500] font-['Poppins'] capitalize">
+                      {user?.basicInfo?.firstName}
                     </div>
                     <div className="text-[#232323] text-base font-normal font-['Poppins']">
                       {user?.designation?.charAt(0)?.toUpperCase()+ user?.designation?.slice(1) || ""}
@@ -132,7 +127,7 @@ const TrainerProfile = () => {
                   <div className="relative text-center text-[#6A6A6A] text-[14px] font-[400] font-['Poppins']">
                     {/* Figma | Illustrator | Photoshop | Adobe XD |<br />
                     Coreldraw | Balsamiq | Wifrframe | Prototyping */}
-                    {/* {
+                    {
                       user?.skills?.slice(0,7).map((skill)=>{
                         return <>
                         <span>{skill} | </span>
@@ -145,7 +140,7 @@ const TrainerProfile = () => {
                         <span>{skill} | </span>
                         </>
                       })
-                    }{user?.skills?.length>10?<span className="text-[#2676c2] hover:cursor-pointer">....more</span>:""} */}
+                    }{user?.skills?.length>10?<span className="text-[#2676c2] hover:cursor-pointer">....more</span>:""}
                   </div>
                 </div>
               </div>
@@ -154,15 +149,18 @@ const TrainerProfile = () => {
               </div>
               <div className="pl-[30px] pr-[30px]">
                 <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins']">
-                  UI/UX Trainer & Developer | Passionate about Crafting Seamless
-                  Experiences
+                  {/* UI/UX Trainer & Developer | Passionate about Crafting Seamless
+                  Experiences */}
+                  {user?.basicInfo?.objective}
                 </div>
                 <div className="text-[#535353] text-[16px] mt-[10px] font-[400px] font-['Poppins']">
-                  I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a
+                  {/* I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a
                   keen eye for design and a <br />
                   commitment to education, I'm on a mission to share my
                   expertise with aspiring <br />
-                  designers.
+                  designers. */}
+                  {user?.basicInfo?.aboutYou}
+
                 </div>
               </div>
               <div className="flex justify-center items-center flex-col mt-[30px] mr-[10px] ml-[10px]">
