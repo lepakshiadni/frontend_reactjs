@@ -6,7 +6,7 @@ import { io } from "socket.io-client";
 import { IoSearchOutline } from "react-icons/io5";
 import "../../styles/Chat.css";
 import { useSelector } from "react-redux";
-const baseUrl=localStorage.getItem('baseUrl');
+const baseUrl = localStorage.getItem('baseUrl');
 
 
 
@@ -18,8 +18,8 @@ function Chat() {
   const [arrivalMessage, setArrivalMessage] = useState(null)
   const [selectedUser, setSelectedUser] = useState(null)
   const [selectedConversation, setSelectedConversation] = useState(null)
-  const [lastMessage,setLastMessage]=useState(null)
-  const [user,setUser]=useState(null)
+  const [lastMessage, setLastMessage] = useState(null)
+  const [user, setUser] = useState(null)
 
 
   const fileInputRef = useRef(null);
@@ -38,8 +38,8 @@ function Chat() {
   const employer = useSelector(({ employerSignUp }) => {
     return employerSignUp?.employerDetails
   })
-  const trainer=useSelector(({trainerSignUp})=>{
-    return  trainerSignUp?.trainerDetails;
+  const trainer = useSelector(({ trainerSignUp }) => {
+    return trainerSignUp?.trainerDetails;
   })
   // console.log("employer",employer)
   // console.log("trainer",trainer)
@@ -51,7 +51,7 @@ function Chat() {
       setUser(trainer?.trainerDetails);
     }
   }, [employer, trainer]);
-  console.log('user',user)
+  console.log('user', user)
 
   const lastMessageRef = useRef(null);
 
@@ -61,9 +61,8 @@ function Chat() {
   // console.log("conversation", conversation)
 
 
-
   useEffect(() => {
-    socket.current = io(`${baseUrl}`, {
+    socket.current = io(`http://192.168.1.45:4040`, {
       transports: ["websocket"],
       withCredentials: true,
       extraHeaders: {
@@ -82,26 +81,23 @@ function Chat() {
     });
 
     // Listen for the updateLastMessage event
-  socket.current.on("updateLastMessage", ({ conversationId, lastMessage }) => {
-    console.log(lastMessage)
-    setConversation((prev) =>
-      prev.map((c) =>
-        c._id === conversationId
-          ? {
+    socket.current.on("updateLastMessage", ({ conversationId, lastMessage }) => {
+      // console.log(lastMessage)
+      // console.log(conversationId)
+      setConversation((prev) =>
+        prev.map((c) =>
+          c._id === conversationId
+            ? {
               ...c,
               lastMessage: lastMessage,
             }
-          : c
-      )
-    );
-  });
-
-    // return () => {
-    //   // Clean up the socket connection when the component unmounts
-    //   socket.current.disconnect();
-    // };
+            : c
+        )
+      );
+      // setLastMessage(lastMessage);
+    });
   }, []);
-  
+
   useEffect(() => {
 
     arrivalMessage &&
@@ -150,12 +146,7 @@ function Chat() {
     };
     getmessage();
 
-  }, [currentChat,arrivalMessage]);
-  
-
-
-
-
+  }, [currentChat, arrivalMessage]);
 
   const handlesubmit = async (event) => {
 
@@ -170,6 +161,7 @@ function Chat() {
       sender: user?._id,
       text: newmessage,
       conversationId: currentChat?._id,
+      createdAt: new Date().toISOString(),
     };
 
     const receiver = currentChat.members.find((member) => member?._id !== user?._id);
@@ -196,8 +188,24 @@ function Chat() {
     } catch (err) {
       console.log(err);
     }
+    try {
+
+      await Axios.put(`${baseUrl}/conversation/updatedLastmessage/${currentChat?._id}`, { lastMessage: message })
+        .then((resp) => {
+          console.log(resp.data)
+          setLastMessage(resp.data.updatedConversation?.lastMessage?.text);
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+    catch (error) {
+      console.log(error)
+    }
 
   };
+
+
 
   useEffect(() => {
     const receiver = currentChat?.members?.find((member) => member?._id !== user?._id);
@@ -247,7 +255,7 @@ function Chat() {
                       conversation={c}
                       currentuser={user}
                       selectedConversation={selectedConversation === c?._id}
-                      lastMessage={messages}
+                      lastMessage={lastMessage}
                     />
                   </div>
                 );
@@ -263,19 +271,24 @@ function Chat() {
             <div className=" w-auto  h-[65vh] rounded border mt-[20px] mb-[20px]  mr-[20px]  flex flex-col ">
               <div className="flex">
                 <div className=" static">
-                  {/* <img
+                  {
+                    selectedUser?.basicInfo?.profileImg ? <>
+                      <img
                     className="Ellipse21 w-[60px] h-[60px] mt-[10px] ml-[16px]  rounded-full"
-                    src="https://via.placeholder.com/60x60"
+                    src={selectedUser?.basicInfo?.profileImg}
                     alt=""
-                  /> */}
-                  <div className="w-[60px] h-[60px] mt-[10px] ml-[16px]  rounded-full bg-slate-400 flex justify-center items-center">
-                    <p className="  text-['Poppins'] text-lg">
-                      {selectedUser?.fullName[0].toUpperCase()}
-                    </p>
-                  </div>
+                    />
+                    </> : <>
+                      <div className="w-[60px] h-[60px] mt-[10px] ml-[16px]  rounded-full bg-slate-400 flex justify-center items-center">
+                        <p className="  text-['Poppins'] text-lg capitalize">
+                          {selectedUser?.fullName[0] }
+                        </p>
+                      </div>
+                    </>
+                  }
                 </div>
                 <div className="Julia text-gray-800 text-xl font-medium font-['Poppins'] mt-[25px] ml-[20px]">
-                  {selectedUser?.fullName}
+                  { selectedUser?.basicInfo?.firstName || selectedUser?.fullName }
                 </div>
               </div>
 

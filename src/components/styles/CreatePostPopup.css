@@ -1,9 +1,33 @@
+.createPopUp {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.createPopUpContainer {
+    padding: 20px;
+    width: 600px;
+    height: auto;
+    border-radius: 20px;
+    margin: 20px;
+    padding-right: 0px;
+    min-height: 500px;
+    background-color: #fff;
+}
+
 .name {
     display: flex;
     gap: 10px;
     font-family: "Poppins";
-
 }
+
 
 .Radio-labels {
     font-family: Poppins;
@@ -73,6 +97,19 @@ hr {
     background: none;
     cursor: pointer;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .popup {
     position: fixed;

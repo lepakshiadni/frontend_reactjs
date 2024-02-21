@@ -118,7 +118,7 @@ const TrainerProfile = () => {
                   <img onClick={() => (navigate('/trainerProfileEdit'))} className="absolute right-[30.33px] cursor-pointer" src={Edit} alt="" />
                   <div className="relative flex justify-center items-center flex-col">
                     <div className="text-[#263238] text-[20px] font-[500] font-['Poppins'] capitalize">
-                      {user?.basicInfo?.firstName}
+                      {user?.basicInfo?.firstName || user?.fullName}
                     </div>
                     <div className="text-[#232323] text-base font-normal font-['Poppins']">
                       {user?.designation?.charAt(0)?.toUpperCase()+ user?.designation?.slice(1) || ""}
@@ -127,20 +127,7 @@ const TrainerProfile = () => {
                   <div className="relative text-center text-[#6A6A6A] text-[14px] font-[400] font-['Poppins']">
                     {/* Figma | Illustrator | Photoshop | Adobe XD |<br />
                     Coreldraw | Balsamiq | Wifrframe | Prototyping */}
-                    {
-                      user?.skills?.slice(0,7).map((skill)=>{
-                        return <>
-                        <span>{skill} | </span>
-                        </>
-                      })
-                    }<br/>
-                    {
-                      user?.skills?.slice(7,10).map((skill)=>{
-                        return <>
-                        <span>{skill} | </span>
-                        </>
-                      })
-                    }{user?.skills?.length>10?<span className="text-[#2676c2] hover:cursor-pointer">....more</span>:""}
+                    
                   </div>
                 </div>
               </div>
