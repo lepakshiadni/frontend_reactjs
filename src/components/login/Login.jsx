@@ -15,7 +15,7 @@ import Cookies from "js-cookie";
 import { toast, } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import { BiChevronDown } from "react-icons/bi";
-import { css } from 'glamor'
+
 
 
 const Login = () => {
@@ -77,13 +77,7 @@ const Login = () => {
       console.log(otp, phoneNumber[0])
       if (otp.length !== 4) {
         // toast.error("enter 4 digit otp");
-        toast.error('enter otp', {
-          className: css({
-            background: "#00FF00",
-            color: "white",
-            fontWeight: "bold"
-          }),
-        })
+        toast.error('enter otp')
         setToastShown(true)
       }
       else {
