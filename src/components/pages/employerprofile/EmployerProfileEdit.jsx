@@ -35,7 +35,7 @@ const EmployerProfieEdit = () => {
 
   useEffect(() => {
     dispatch(employerDetails());
-  }, []);
+  }, [dispatch]);
 
   const employer = useSelector(({ employerSignUp }) => {
     return employerSignUp?.employerDetails?.employerDetails;
@@ -207,7 +207,7 @@ const EmployerProfieEdit = () => {
       setFirstName(employer?.basicInfo?.firstName);
       setLastName(employer?.basicInfo?.lastName);
       setDesignation(employer?.basicInfo?.designation);
-      setComapany(employer?.basicInfo?.company);
+      setComapany(employer?.companyName);
       setAge(employer?.basicInfo?.age);
       setLocation(employer?.basicInfo?.location);
       setObjective(employer?.basicInfo?.objective);

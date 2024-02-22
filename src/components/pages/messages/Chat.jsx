@@ -54,15 +54,13 @@ function Chat() {
   console.log('user', user)
 
   const lastMessageRef = useRef(null);
-
   const socket = useRef();
-  // console.log(user)
   console.log("currentChat", currentChat)
-  // console.log("conversation", conversation)
+
 
 
   useEffect(() => {
-    socket.current = io(`http://192.168.1.117:4040`, {
+    socket.current = io(`http://192.168.1.106:4040`, {
       transports: ["websocket"],
       withCredentials: true,
       extraHeaders: {
@@ -82,8 +80,6 @@ function Chat() {
 
     // Listen for the updateLastMessage event
     socket.current.on("updateLastMessage", ({ conversationId, lastMessage }) => {
-      // console.log(lastMessage)
-      // console.log(conversationId)
       setConversation((prev) =>
         prev.map((c) =>
           c._id === conversationId
@@ -94,7 +90,6 @@ function Chat() {
             : c
         )
       );
-      // setLastMessage(lastMessage);
     });
   }, []);
 

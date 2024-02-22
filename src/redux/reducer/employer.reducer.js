@@ -23,8 +23,9 @@ const employerReducer = (state = initialState, action) => {
       };
 
     //geting trainer details after signup
-    case "GET_EMPLOYERDETAILS_FETCHED":
+    case "GET_EMPLOYEEDETAILS_FETCHED":
       console.log("handling get employer");
+      
       // toast.success(action.payload.message)
       return {
         ...state,

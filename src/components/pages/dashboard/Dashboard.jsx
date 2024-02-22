@@ -39,7 +39,7 @@ const DashboardApp = () => {
   const [openPost, setOpenPost] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
-  console.log("locaa", location.pathname);
+  // console.log("locaa", location.pathname);
   const style = {
     rotate: "180deg",
   };
@@ -54,7 +54,7 @@ const DashboardApp = () => {
   };
 
   const role = localStorage.getItem("role");
-  console.log(role);
+
 
   const handleOptionClick = (option) => {
     if (selectedOption !== option) {

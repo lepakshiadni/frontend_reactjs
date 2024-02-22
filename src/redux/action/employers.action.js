@@ -29,7 +29,8 @@ const employerSignUpAction = (details) => {
 
 const employerDetails = () => {
   const token = Cookies.get("token");
-  console.log(token);
+  // console.log(token);
+  console.log('employerAction')
   return async (dispatch) => {
     try {
       Axios.get(`${baseUrl}/employer/getemployerProfile`, {
@@ -37,7 +38,7 @@ const employerDetails = () => {
           Authorization: `Bearer ${token}`,
         },
       }).then((resp) => {
-        // console.log(resp)
+        console.log(resp.data)
         dispatch({
           type: "GET_EMPLOYEEDETAILS_FETCHED",
           payload: resp.data,
