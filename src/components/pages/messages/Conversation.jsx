@@ -4,25 +4,24 @@ import timesago from "timesago";
 const baseUrl = localStorage.getItem('baseUrl');
 
 
-function Conversation({ conversation, currentuser, selectedConversation, lastMessage }) {
+function Conversation({ conversation, currentuser, selectedConversation, lastMessage,onlineUser }) {
   const [user, setUser] = useState(null);
   const [lastmessage, setLastmessage] = useState("");
-  // console.log()
+  const isUserOnline = onlineUser.some((u) => u.userId === user?._id);
   useEffect(() => {
     const friendid = conversation?.members?.find((m) => m?._id !== currentuser._id);
     setUser(friendid)
+
     const fetchLastMessage = async () => {
       try {
         const response = await Axios.get(`${baseUrl}/conversation/lastMessage/${conversation._id}`);
         setLastmessage(response.data?.lastMessage?.lastMessage);
-        // console.log(response.data?.lastMessage?.lastMessage?.createdAt)
       } catch (error) {
         console.error("Error fetching last message:", error);
       }
     };
     fetchLastMessage();
   }, [conversation, currentuser, lastMessage]);
-  console.log(lastmessage)
 
 
   return (
@@ -30,13 +29,10 @@ function Conversation({ conversation, currentuser, selectedConversation, lastMes
       <div className={`${selectedConversation ? "Rectangle115 hover:cursor-pointer  w-[317px] h-[70px] flex justify-between justify-items-center bg-[#E3E3E3] " : "Rectangle115 hover:cursor-pointer  w-[317px] h-[70px] flex justify-between justify-items-center bg-white "}`}>
         <div className="flex">
           <div className="mt-[12px] ml-[10px] ">
-
-
             <div className="Group1189  w-[51px] h-[51px]   rounded-[50%] ">
-
-              <div className="relative">
+              <div  className="relative">
                 {/* onlineuserdesaing */}
-                <div className=" hidden">
+                <div className={isUserOnline?"absolute top-0":"hidden"}> 
                   <svg width="55" height="55" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g id="Group 1189">
                       <circle id="Ellipse 112" cx="24" cy="24" r="24" fill="#00D46F" fill-opacity="0.2" />
@@ -45,6 +41,7 @@ function Conversation({ conversation, currentuser, selectedConversation, lastMes
                     </g>
                   </svg>
                 </div>
+                <div className="absolute top-1 z-10 left-1 ">
                 {
                   user?.basicInfo?.profileImg ? <>
                     <img
@@ -55,18 +52,19 @@ function Conversation({ conversation, currentuser, selectedConversation, lastMes
                   </> : <>
                     <div className="w-[47px] h-[47px] absolute   rounded-[50%] bg-slate-400 flex justify-center items-center  ">
                       <p className="  text-['Poppins'] text-lg">
-                        {user?.fullName[0]}
+                        {user?.basicInfo?.firstName[0]}
                       </p>
                     </div>
                   </>
                 }
+                </div>
               </div>
             </div>
 
           </div>
           <div className="flex flex-col space-y-1 ml-[10px] mt-[13px] ">
             <div className="Charlie text-gray-800 text-base font-medium font-['Poppins'] capitalize">
-              {user?.fullName}
+              {user?.basicInfo?.firstName || user?.fullName}
             </div>
             <div className="Typing text-neutral-500 text-xs font-normal font-['Poppins']">
               {lastmessage ? lastmessage?.text : "No messages"}

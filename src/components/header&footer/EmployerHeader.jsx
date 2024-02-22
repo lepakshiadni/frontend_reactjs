@@ -24,7 +24,7 @@ const EmployerHeader = () => {
     dispatch(employerDetails());
   }, [dispatch]);
 
-  console.log("user", user);
+  // console.log("user", user);
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
   };

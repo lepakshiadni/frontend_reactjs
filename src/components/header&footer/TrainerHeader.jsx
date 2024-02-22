@@ -233,7 +233,6 @@ const TrainerHeader = () => {
           >
             <div className="profile-header">
               <div className="flex justify-start items-start">
-                {/* <img src={Favi} alt="" /> */}
                 {
                   user?.basicInfo?.profileImg?<img className="w-[60px] h-[60px] rounded-full" src={user?.basicInfo?.profileImg}/>:<div className="w-[60px] h-[60px] rounded-full capitalize items-center">{user?.fullName[0]}</div>
                 }
@@ -255,8 +254,6 @@ const TrainerHeader = () => {
                 <div className="text-neutral-700 w-[100%] flex justify-center items-center h-[43px] text-lg font-normal font-['Poppins'] hover:bg-[#E3E3E3]">
                   <Link to="/trainerDashboard/settings">Settings</Link>
                 </div>
-                {/* <div className="bg-white font-['Poppins']">
-                </div> */}
               </div>
             )}
           </div>

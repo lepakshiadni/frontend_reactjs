@@ -71,7 +71,7 @@ const SkillsSet = () => {
     // Handle sign-in logic here
     trainerDetails.fullName=fullName;
     trainerDetails.experience=experience;
-    trainerDetails.skills=selectedSkills;
+    trainerDetails.skills=selectedSkills?.map(({value})=>value);
     // console.log(trainerDetails)
     setFullName("")
     setExperience("")
