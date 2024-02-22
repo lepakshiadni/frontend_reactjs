@@ -57,8 +57,8 @@
   height: 2rem;
 }
 
-.Post_Buttons button:hover,
-/* .Post_Buttons button:active, */
+/* .Post_Buttons button:hover,
+.Post_Buttons button:active,
 .Post_Buttons button:focus {
   color: #2676c2;
   font-family: Poppins;
@@ -69,7 +69,7 @@
   border-radius: 2.5rem;
   border: 1px solid #2676C2;
   background: rgba(38, 118, 194, 0.1);
-}
+} */
 
 .Post_Buttons button.active {
   color: #2676c2;
@@ -79,7 +79,7 @@
   font-weight: 400;
   line-height: normal;
   border-radius: 2.5rem;
-  border: 1px solid #2676C2;
+  border: 1px solid #2676c2;
   background: rgba(38, 118, 194, 0.1);
 }
 
@@ -123,7 +123,7 @@
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
-  color: #2676C2;
+  color: #2676c2;
   /* font-family: Poppins; */
   /* font-size: 0.855rem; */
   /* font-style: normal; */
@@ -149,7 +149,6 @@
   box-sizing: border-box;
   border-radius: 15px;
 }
-
 
 .Company input,
 .Training_Description input {
@@ -227,8 +226,6 @@
   border-radius: 0.4rem;
 }
 
-
-
 .RadioTOT {
   align-items: center;
   justify-content: flex-start;
@@ -296,7 +293,6 @@
   /* margin-bottom: 0.3rem; */
 }
 
-
 .Radio_Duration_Count {
   display: flex;
   align-items: center;
@@ -315,10 +311,6 @@
   width: 8%;
   /* justify-content: space-evenly; */
 }
-
-
-
-
 
 .TOT_Input,
 .Duration_Input {
@@ -347,7 +339,7 @@
   font-style: normal;
   font-weight: bold;
   line-height: normal;
-  background: #FFF;
+  background: #fff;
 }
 
 .Radio_Duration_Count {
@@ -356,7 +348,6 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-
 }
 
 .RadioTOT_Count {
@@ -410,7 +401,6 @@
   font-weight: bold;
   line-height: normal;
   outline: none;
-  /* margin-top: 1rem; */
 }
 
 .Budgets select {
@@ -431,24 +421,6 @@
   line-height: normal;
   outline: none;
 }
-
-/* .inputBudget{
-    border-radius: 0.3rem 0 0 0.3rem ;
-    width: 88px;
-    border: 2px #DADADA solid;
-    padding: 4px 5px ;
-
-   }
-   .inputBudget2{
-    border-radius: 0 0.3rem 0.3rem 0 ;
-    border: 2px #DADADA solid;
-    border-left: none; 
-    width: 88px;
-    padding: 4px 5px ;
-   }
-   .inputBudget2:focus .inputBudget:focus{
-    border: 2px #DADADA solid;
-   } */
 
 .Budget_MM input {
   border: 2px #2676c2 solid;
@@ -478,11 +450,10 @@
   margin-bottom: 1rem;
 }
 
-
 .UPLOADFILE {
   width: 14rem;
   height: 2.1rem;
-  border: 2px solid #DADADA;
+  border: 2px solid #dadada;
   border-radius: 0.3rem;
   cursor: pointer;
   /* display: flex; */
@@ -502,7 +473,7 @@
   height: 2.1rem;
   bottom: 3rem;
   position: relative;
-  color: #B8B8B8;
+  color: #b8b8b8;
 }
 
 .For_Align_Upload {
@@ -511,7 +482,6 @@
   justify-content: space-around;
   width: 100%;
   height: 100%;
-
 }
 
 .For_Align_Upload h4 {
@@ -541,14 +511,14 @@
 #description,
 #description1,
 #description2 {
-  border: 1px solid #DADADA;
+  border: 1px solid #dadada;
   border-radius: 2px;
   background: #fff;
   padding: 9px 10px;
 }
 
 .Content_Wrapper {
-  margin-top: 40px;
+  /* margin-top: 40px; */
   /* Adjust this margin to provide enough space for fixed elements */
   z-index: 50;
   /* Ensure content appears above fixed elements */
@@ -577,7 +547,6 @@
   width: 50%;
   /* padding: 0 25px; */
 /* } */
-
 
 .Post_Button {
   display: flex;
@@ -679,7 +648,6 @@
       top: 40px;
     }
   } */
-
 
 .ChatInput {
   display: flex;
@@ -855,26 +823,20 @@
   min-height: 2.5rem;
 }
 
-.Multiselector {
-  placeholder {
-    color: #888;
-    font-family: Poppins;
-    font-size: 0.975rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-  }
+.Multiselector::placeholder {
+  color: #888;
+  font-family: Poppins;
+  font-size: 0.975rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
-
-
-
 
 .Radio_MOT label.active,
 .Radio_Duration label.active,
 .TOC label.active {
   color: #216bc2;
 }
-
 
 .Training_Description textarea {
   padding-left: 10px;
@@ -913,8 +875,8 @@
 }
 
 .Select_Experience .MuiSlider-track {
-  background-color: #216bc2
-    /* Transparent before drag */
+  background-color: #216bc2;
+  /* Transparent before drag */
 }
 
 .css-7d61z1-MuiSlider-valueLabel.MuiSlider-valueLabelOpen {

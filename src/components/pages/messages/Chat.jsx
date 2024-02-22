@@ -62,7 +62,7 @@ function Chat() {
 
 
   useEffect(() => {
-    socket.current = io(`http://192.168.1.45:4040`, {
+    socket.current = io(`http://192.168.1.117:4040`, {
       transports: ["websocket"],
       withCredentials: true,
       extraHeaders: {
@@ -184,7 +184,6 @@ function Chat() {
           setMessages([...messages, resp.data.savedMessage]);
           setNewmessage(" ");
         });
-      await Axios.post()
     } catch (err) {
       console.log(err);
     }

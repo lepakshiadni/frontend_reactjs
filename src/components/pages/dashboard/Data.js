@@ -1,9 +1,4 @@
 import GridViewIcon from "@mui/icons-material/GridView";
-import Chat from "../messages/Chat";
-import PostRequriement from '../postrequirements/Requirements'
-import TrainingResources from "../trainingresourecs/TrainingResources";
-import TrainersList from "../trainerlist/TrainersList"
-import MyTrainingPrograms from "../mytrainingprogram/MyTrainingProgram";
 import { IoList } from "react-icons/io5";
 import { HiOutlineViewGrid } from "react-icons/hi";
 import { FaRegPenToSquare } from "react-icons/fa6";
@@ -16,67 +11,58 @@ import { TbLockSquare } from "react-icons/tb";
 export const option = [
   {
     name: "Dashboard",
-    icon: <HiOutlineViewGrid style={{fontSize:"25px", marginRight:"10px"}} />,
-    show:<Chat/>
+    icon: (
+      <HiOutlineViewGrid style={{ fontSize: "25px", marginRight: "10px" }} />
+    ),
   },
   {
     name: "TrainerList",
-    icon: <IoList style={{fontSize:"25px", marginRight:"10px"}}  />,
-    show:<TrainersList/>
+    icon: <IoList style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
   {
     name: "Post a Requirements",
-    icon: <FaRegPenToSquare style={{fontSize:"25px", marginRight:"10px"}} />,
-    show:<PostRequriement/>
+    icon: (
+      <FaRegPenToSquare style={{ fontSize: "25px", marginRight: "10px" }} />
+    ),
   },
   {
-    name: "My Training Program’s",
-    icon: <BsCardChecklist style={{fontSize:"25px", marginRight:"10px"}}  />,
-    show:<MyTrainingPrograms/>
+    name: "Training Management",
+    icon: <BsCardChecklist style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
   {
-    name: "Trainers Directory",
-    icon: <BsCardChecklist style={{fontSize:"25px", marginRight:"10px"}} />,
-    show:<Chat/>
+    name: "Feed",
+    icon: <BsCardChecklist style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
   {
     name: "Messages",
-    icon: <MdOutlineMessage style={{fontSize:"25px", marginRight:"10px"}} />,
-    show:<Chat/>
+    icon: (
+      <MdOutlineMessage style={{ fontSize: "25px", marginRight: "10px" }} />
+    ),
   },
   {
     name: "Proposal Management",
-    icon: <MdOutlineMessage style={{fontSize:"25px", marginRight:"10px"}} />,
-    show:<Chat/>
+    icon: (
+      <MdOutlineMessage style={{ fontSize: "25px", marginRight: "10px" }} />
+    ),
   },
   {
     name: "Settings",
-    icon: <SlSettings style={{fontSize:"25px", marginRight:"10px"}} />,
-    show:<Chat/>
+    icon: <SlSettings style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
   {
     name: "Billing & Payments",
-    icon: <SlSettings style={{fontSize:"25px", marginRight:"10px"}}/>,
-    show:<Chat/>
-  },
-  {
-    name: "Training Analytics",
-    icon: <TbBrandGoogleAnalytics style={{fontSize:"25px", marginRight:"10px"}}   />,
-    show:<Chat/>
+    icon: <SlSettings style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
   {
     name: "Training Resource",
-    icon: <GridViewIcon style={{fontSize:"25px", marginRight:"10px"}} />,
-    show:<TrainingResources/>
+    icon: <GridViewIcon style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
   {
     name: "Help & Support",
-    icon: <BiHelpCircle style={{fontSize:"25px", marginRight:"10px"}}  />,
-    show:<Chat/>
+    icon: <BiHelpCircle style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
-  {
-    name: "Privacy & Security",
-    icon: <TbLockSquare style={{fontSize:"25px", marginRight:"10px"}}  />,
-    show:<Chat/>
-  },
+  // {
+  //   name: "Privacy & Security",
+  //   icon: <TbLockSquare style={{fontSize:"25px", marginRight:"10px"}}  />,
+  // },
 ];

@@ -1,5 +1,5 @@
 import React from 'react'
-import Upcoming from '../../mytrainings/childs/Upcoming'
+import Upcoming from '../../mytrainings/TrainerMyTrainingchilds/Upcoming'
 
 const TrainingProgramDasboard = () => {
   return (

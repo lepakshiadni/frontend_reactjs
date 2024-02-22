@@ -10,8 +10,6 @@
   gap: 0.1rem;
 }
 
-
-
 .Notess p {
   color: #535353;
   text-align: center;
@@ -120,14 +118,13 @@
 }
 
 .P205 h1 {
-  color: #2676C2;
+  color: #2676c2;
   font-family: Poppins;
   font-size: 1.875rem;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
 }
-
 
 .DELDIT {
   display: flex;
@@ -271,7 +268,7 @@
   position: relative;
 }
 
-.steps .circle{
+.steps .circle {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -288,15 +285,32 @@
   z-index: 1;
   cursor: pointer, progress;
 }
+.steps .circlered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  width: 3rem;
+  color: #c22626;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border-radius: 50%;
+  background: #ebebeb;
+  /* border: 4px solid #f8f8f8; */
+  transition: all 200ms ease;
+  transition-delay: 0s;
+  z-index: 1;
+  cursor: pointer, progress;
+}
 
 .steps .circle.active {
   transition-delay: 100ms;
   background: #2676c2;
   color: #fff;
 }
-.steps .circlered.active{
+.steps .circlered.active {
   transition-delay: 100ms;
-  background: red;
+  background: #c22626;
   color: #fff;
   display: flex;
   align-items: center;
@@ -328,11 +342,11 @@
   background: #4070f4;
   transition: all 300ms ease;
 }
-.progress-bar .indicatorred{
+.progress-bar .indicatorred {
   position: absolute;
   height: 100%;
   width: 0%;
-  background: red;
+  background: #c22626;
   transition: all 300ms ease;
 }
 .svg-container {
@@ -349,7 +363,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  fill: #2676C2;
+  fill: #2676c2;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -358,4 +372,3 @@
 .svg-container.hovered .background-circle {
   opacity: 0.1;
 }
-

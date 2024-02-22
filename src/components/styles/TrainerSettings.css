@@ -4,20 +4,16 @@
 }
 
 .main-setting {
-  /* position: relative; */
   width: 100%;
   display: flex;
-  /* justify-content: flex-start; */
 }
 
 .settings {
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: flex-start;
   width: 25%;
   position: fixed;
-  /* left: 310px; */
-  /* top: 180px; */
   border-width: 0px;
   border: 1px solid #eeeeee;
 }
@@ -81,21 +77,19 @@
   border: 0.5px solid #eeeeee;
 }
 
-
-
-select {
+.trainer-settings-select {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   /* Some browsers will not display the caret when using calc, so we put the fallback first */
-  background: url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") white no-repeat 98.5% !important;
-  /* !important used for overriding all other customisations */
+  background: url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png")
+    white no-repeat 98.5% !important;
   /* background: url("http://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/br_down.png") white no-repeat calc(100% - 10px) !important; */
   /* Better placement regardless of input width */
 }
 
 /*For IE*/
-select::-ms-expand {
+.trainer-settings-select::-ms-expand {
   display: none;
 }
 
@@ -148,7 +142,6 @@ select::-ms-expand {
 label.radios {
   display: inline-flex;
   gap: 10px;
-  align-items: center;
 }
 
 .radios.selected {

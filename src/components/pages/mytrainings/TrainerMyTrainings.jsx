@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import '../../styles/Requirements.css'
 import '../../styles/TrainerMyTrainings.css'
-import Upcoming from './childs/Upcoming';
-import OngoingTraining from "./childs/OnGoingTraining";
-import Completed from './childs/Completed';
-import Denied from './childs/Denied';
+import Upcoming from './TrainerMyTrainingchilds/Upcoming';
+import OngoingTraining from "./TrainerMyTrainingchilds/OnGoingTraining";
+import Completed from './TrainerMyTrainingchilds/Completed';
+import Denied from './TrainerMyTrainingchilds/Denied';
 
 const TrainerMyTrainings = () => {
     const location = useLocation();
