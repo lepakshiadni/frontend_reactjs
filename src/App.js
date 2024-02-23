@@ -3,7 +3,7 @@ import RouteCompo from "./Routes/RouteCompo";
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import Axios from 'axios'
-
+import "./App.css"
 
 function App() {
   const getlocalip=async()=>{
