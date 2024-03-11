@@ -362,7 +362,7 @@ const Login = () => {
               <div className="Git_Email">
                 <div className="hrtag">
                   <span className="line"></span>
-                  <p>Or With</p>
+                  <p>or with</p>
                   <span className="line"></span>
                 </div>
                 <div className="GEIcons">
