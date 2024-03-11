@@ -17,7 +17,9 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 25rem;
+  /* height: 25rem; */
+  min-height: 25rem;
+  height: auto;
   padding-right: 0.6rem;
   border-radius: 0.5rem;
 }
@@ -86,7 +88,7 @@
 
 .ProposalStatus {
   width: 80%;
-  height: 19.3rem;
+  height: 23rem;
   border-radius: 10px;
   display: flex;
 }
@@ -335,11 +337,12 @@
   padding: 0.5rem;
   display: flex;
   flex-direction: column;
+
   /* align-items: center;
     justify-content: center; */
   padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  /* padding-right: 0.5rem; */
+  /* padding-bottom: 1.5rem; */
+  padding-right: 0.5rem;
   /* gap: 1rem; */
   /* padding-left: 0.5rem; */
 }
@@ -583,11 +586,11 @@
   text-align: left;
 }
 
-.Trainer-Proposal-Management-Popup-button button {
-  background: #fff;
+.Trainer-Proposal-Management-Popup-button button  {
+  /* background: #fff; */
   border: 1px Solid #2676c2;
   border-radius: 2px;
-  color: #2676c2;
+  /* color: #2676c2;  */
   font-family: Poppins;
   font-size: 16px;
   font-weight: 400;
@@ -613,4 +616,229 @@
   font-weight: 400;
   line-height: 24px;
   letter-spacing: 0em;
+}
+
+
+.Rating-Popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #0a0a0a33;
+  z-index: 9998;
+}
+ 
+.Rating-Popup-modalContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 550px;
+  width: 680px;
+  background-color: white;
+  /* border: 1px solid #ccc; */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  z-index: 9999;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* flex-direction: column; */
+  /* align-items: center; */
+}
+ 
+.Rating-Popup-Top {
+  width: 100%;
+  height: 40%;
+  background: #2676c2;
+  border-radius: 18px 18px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  /* margin: auto; */
+}
+ 
+.Rating-Popup-Bottom {
+  width: 100%;
+  height: 58%;
+  background: #fff;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+ 
+.Rating-Popup-Posted-By {
+  width: 44%;
+}
+ 
+.Rating-Popup-info {
+  width: 54%;
+  border-left: 2px solid #fff;
+  margin: auto;
+  display: flex;
+  justify-content: space-evenly;
+  /* align-items: center; */
+  height: 90%;
+}
+ 
+.Rating-Popup-Posted-By h2 {
+  font-family: Poppins;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #fff;
+  white-space: nowrap;
+}
+ 
+.Rating-C-T-B h1,
+.Rating-M-L h1 {
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #fff;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  margin-top: px;
+}
+ 
+.Rating-C-T-B h2,
+.Rating-M-L h2 {
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin-bottom: 12px;
+}
+ 
+.Rating-Popup-Bottom h1 {
+  font-family: Poppins;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 27px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #333333;
+}
+ 
+.Rating-Popup-buttonn button {
+  /* background: #fff;
+  border: 1px Solid #2676c2;
+  border-radius: 2px;
+  color: #2676c2;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em; */
+  width: 10.1875rem;
+  height: 1.9375rem;
+}
+ 
+.Rating-Popup-buttonn {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 3rem;
+}
+ 
+.Rating-Popup-button-Confirm {
+  color: #FFF;
+  font-family: Poppins;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 0.125rem;
+  background: #2676c2;
+  border: #FFF 1px Solid;
+}
+ 
+.Rating-Popup-button-No {
+  color: #2676c2;
+  font-family: Poppins;
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 0.125rem;
+  background: #FFF;
+  border: #2676c2 1px Solid;
+}
+ 
+.Rating_Description textarea {
+  padding-left: 15px;
+  padding-top: 12px;
+  width: 38rem;
+  height: 16px;
+  font-size: 16px;
+  color: #333333;
+  font-weight: 400;
+  border-radius: 0.5rem;
+  resize: none;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  outline: none;
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+  background: #F7F7F7;
+}
+ 
+.Rating_Description ::-webkit-scrollbar {
+  width: 3px;
+  /* Width of the scrollbar */
+}
+ 
+.Rating_Description textarea::-webkit-scrollbar-track {
+  background: transparent;
+  /* Background color of the scrollbar track */
+}
+ 
+.Rating_Description textarea::-webkit-scrollbar-thumb {
+  background-color: #888;
+  /* Color of the scrollbar thumb */
+  border-radius: 1.8px;
+  /* Radius of the scrollbar thumb */
+}
+ 
+.Rating_Description textarea::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+  /* Color of the scrollbar thumb on hover */
+}
+ 
+.Rating_Description button {
+  width: 150px;
+  height: 30px;
+  font-family: Poppins;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 0em;
+  /* text-align: right; */
+  background:#DFDFDF;
+  color: #FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  margin-left: 28rem;
+  margin-top: 0.5rem;
 }

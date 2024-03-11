@@ -6,11 +6,13 @@ import Odometer from "react-odometerjs";
 import "odometer/themes/odometer-theme-default.css";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
-// import ppp from "../../assets/image 15.png";
-// import TrainingPrograms from "./TrainingProgramDasboard";
 import TrainingData from "./TrainingData";
-import TrainingProgramDasboard from "./TrainingProgramDasboard";
 import { Link } from "react-router-dom";
+import EmployerOngoing from '../../mytrainings/EmployerMyTrainingChilds/EmployerOngoing'
+import EmployerProposalRequest from '../../proposalMangement/Employerproposalmanagement/EmpProposalRequest'
+
+import { getAppliedTrainingEmployer,getAllAppliedTraining} from '../../../../redux/action/employers.action'
+import { useDispatch, useSelector } from 'react-redux'
 
 const ScrollingOdometer = ({
   defaultValue1,
@@ -154,16 +156,45 @@ const DashboardData = () => {
   const defaultValue1 = 20;
   const defaultValue2 = 40;
   const defaultValue3 = 200;
+  const dispatch = useDispatch()
 
-  const trainingData = [
-    { role: "UI Developer", topics: "Java, Python, C++, C sharp" },
-    { role: "UI Developer", topics: "Java, Python, C++, C sharp" },
-    { role: "UI Developer", topics: "Java, Python, C++, C sharp" },
-    { role: "UI Developer", topics: "Java, Python, C++, C sharp" },
-    { role: "UI Developer", topics: "Java, Python, C++, C sharp" },
-    { role: "UI Developer", topics: "Java, Python, C++, C sharp" },
-    { role: "UI Developer", topics: "Java, Python, C++, C sharp" },
-  ];
+  let ongoing;
+  useEffect(() => {
+    dispatch(getAppliedTrainingEmployer())
+    dispatch(getAllAppliedTraining())
+  }, [dispatch])
+
+  const appliedTraining = useSelector(({ employerSignUp }) => {
+    return employerSignUp?.getAppliedTrainingEmployer
+  })
+  const proposalMangement=useSelector(({employerSignUp})=>{
+    return employerSignUp?.getAllAppliedTraining?.appliedTrainingDetails
+  })
+
+
+  if (appliedTraining?.success) {
+    ongoing = appliedTraining?.getAppliedTraining?.map((details) => {
+      return {
+        trainerDetails: {
+          trainerId: details.trainerId,
+          trainerProfileImg: details.trainerProfileImg,
+          trainerName: details.trainerName,
+          trainerDesignation: details.trainerDesignation,
+          trainerRating: details.trainerRating
+        },
+        training: details?.trainingDetails?.filter(({ appliedStatus, trainingPostDetails }) => {
+          if (appliedStatus) {
+            // Check if training is ongoing
+            return trainingPostDetails &&
+              trainingPostDetails.startDate <= new Date().toISOString().substr(0, 10) &&
+              trainingPostDetails.endDate >= new Date().toISOString().substr(0, 10);
+          }
+        })
+      };
+    });
+  }
+  // console.log('ongoing', ongoing?.length);
+
 
   return (
     <section>
@@ -667,7 +698,7 @@ const DashboardData = () => {
                       fontSize: "20px",
                       fontWeight: "bold",
                     },
-                    
+
                   }}
                 />
               </div>
@@ -712,18 +743,18 @@ const DashboardData = () => {
         </div>
       </section>
       <section className="w-full mt-[20px] flex justify-center bg-[#EAF2F9] h-[auto] pb-[20px] items-center flex-col rounded-lg">
-        <div className="w-[90%]">
-        <div className="w-full mt-[10px] flex justify-between items-center">
-            <h3 style={{fontSize: "18px", color: "rgb(83, 83, 83)", fontWeight:"500"}}>Ongoing Training</h3>
-            <Link to="/trainerDashboard/mytrainings"><h3 className="textChild" style={{fontWeight:"500"}}>My Training</h3></Link>
-        </div>
-          <TrainingProgramDasboard />
+        <div className="w-[95%]">
+          <div className="w-full mt-[10px] flex justify-between items-center">
+            <h3 style={{ fontSize: "18px", color: "rgb(83, 83, 83)", fontWeight: "500" }}>Ongoing Training</h3>
+            <Link to="/employerDashboard/trainingmanagement/ongoing"><h3 className="textChild" style={{ fontWeight: "500" }}>My Training</h3></Link>
+          </div>
+          <EmployerOngoing onGoing={ongoing} />
         </div>
       </section>
       <section className="mt-4 w-full">
         <div
           style={{
-            height: "485px",
+            // height: "485px",
             // width: "1020px",
             backgroundColor: "#EAF2F9",
             padding: "22px 37px",
@@ -734,86 +765,10 @@ const DashboardData = () => {
             <h3 style={{ fontSize: "18px", color: "#535353" }}>
               Recent Proposal for you
             </h3>
-            <Link to="/trainerDashboard/proposalmanagement"><h3 className="textChild">Proposal Management</h3></Link>
+            <Link to="/employerDashboard/proposalmanagement/proposal"><h3 className="textChild">Proposal Management</h3></Link>
           </div>
           <div className="allaround">
-            {/* <div className="Trainer_Info border-0">
-              <div className="TTTD">
-                <p>Training Program Name</p>
-                <h3 className="Blue_H2">Full Stack Developer</h3>
-                <p>Training Topics & Subjects</p>
-                <h2>Java, Js, Python, React Native</h2>
-                <p>Type Of Training</p>
-                <h2>Corporate</h2>
-                <p>Duration Of Training</p>
-                <h2 className="mb-2">10 Days</h2>
-                <div className="SDED">
-                  <div className="SD">
-                    <p>Start Date</p>
-                    <h2>01-12-2023</h2>
-                  </div>
-                  <div className="ED">
-                    <p>End Date</p>
-                    <h2>01-01-2024</h2>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="ProposalStatus">
-              <div className="Proposall">
-                <div className="C">
-                  <h2>Company Name</h2>
-                  <p>Zipro Technology</p>
-                </div>
-                <>
-                  <h1
-                    style={{
-                      color: "#333",
-                      fontFamily: "Poppins",
-                      fontSize: "1rem",
-                      fontStyle: "normal",
-                      fontWeight: "600",
-                      lineHeight: "normal",
-                      marginBottom: "15px",
-                    }}
-                  >
-                    Posted By
-                  </h1>
-                  <div className="PB">
-                    <img
-                      src={ppp}
-                      alt=""
-                      style={{
-                        borderRadius: "100%",
-                        width: "4rem",
-                        height: "4rem",
-                      }}
-                    />
-                    <span>
-                      <h2>Eleesa</h2>
-                      <p>Zipro</p>
-                    </span>
-                  </div>
-                  <br />
-                  <div className="B">
-                    <h2>Budget</h2>
-                    <h1>$1000-$2000</h1>
-                  </div>
-                  <br />
-                </>
-              </div>
-              <div className="Statuss">
-                <h3>
-                  Zipro Technology has submitted a trainer request seeking a
-                  UI/UX developer for you.
-                </h3>
-                <br />
-                <div className="Statuss_Buttons">
-                  <button className="Statuss_Buttons1">Denied</button>
-                  <button className="Statuss_Buttons2">Accept</button>
-                </div>
-              </div>
-            </div> */}
+            <EmployerProposalRequest appliedTrainingDetails={proposalMangement?.slice(0,1)}/>
           </div>
         </div>
       </section>

@@ -11,13 +11,29 @@ import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import "../../styles/TrainerProfile.css";
 import TrainerPopUp from "./TrainerPopUp";
+import { useNavigate, useParams } from "react-router-dom";
+import Axios from 'axios'
 
-const TrainerListProfile = ({ selectedTrainer }) => {
-  console.log("sleceted trainer", selectedTrainer);
-  const [showPopup, setShowPopup] = useState(false);
+const TrainerListProfile = () => {
+  // console.log("sleceted trainer", selectedTrainer);
+  const { id } = useParams()
+  const navigate = useNavigate()
+  // console.log('seleteTrainer', id)
+  const [seletedUser, setSeletedUser] = useState(null)
+  const [showPopup, setShowPopup] = useState(false)
+  useEffect(() => {
+    Axios.get(`http://192.168.1.103:4000/employer/getTrainerDetailsById/${id}`)
+      .then((resp) => {
+        setSeletedUser(resp.data?.trainerDetails)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [id])
   const handlehirepopup = () => {
-    setShowPopup(true);
-  };
+    setShowPopup(true)
+  }
+  console.log('selectedUser', seletedUser)
   const trainerData = {
     id: 1,
     name: "Kowshik",
@@ -140,28 +156,72 @@ const TrainerListProfile = ({ selectedTrainer }) => {
     };
   });
 
+  const handleTrainerList = () => {
+    // navigate("/employerDashboard/trainerlist")
+    window.history.back()
+  }
   return (
-    <div className="trainerListProfile relative top-9">
+    <div className="trainerListProfile">
+      <div className="w-full flex items-center justify-start h-[70px] sticky top-0 bg-[#FFF] z-[1000]">
+        <div className="flex items-center" onClick={handleTrainerList}>
+          <span className="">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="20"
+              viewBox="0 0 22 20"
+              fill="none"
+            >
+              <path
+                d="M21 10.4286L1 10.4286M1 10.4286L9.57143 19M1 10.4286L9.57143 1.85714"
+                stroke="#888888"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <button className="text-[#888] text-[16px] font-[400] pl-[10px]">
+            Back
+          </button>
+
+        </div>
+      </div>
       <section className="flex w-full">
         <section className="leftsideList w-6/12">
-          <section
-            className="min-h-[230px] h-auto"
-            style={{ border: "1px solid #EEEEEE" }}
-          >
+          <section className="min-h-[200px] h-auto" style={{ border: "1px solid #EEEEEE" }}>
             <div className="pb-3">
-              <img height="80px" src={Banner} alt="" />
+
+              {
+                seletedUser?.basicInfo?.profileBanner ?
+                  <img className="w-full h-[90px]" src={seletedUser?.basicInfo?.profileBanner} />
+                  :
+                  <div className="w-full h-[90px] bg-slate-300">
+                    <span></span>
+                  </div>
+              }
               <div
-                className="flex items-end relative ms-12"
+                className="flex items-end relative ms-12 h-[100px] "
                 style={{ top: "-20px" }}
               >
-                <img
-                  style={{ borderRadius: "10px" }}
-                  height="100px"
-                  width="90px"
-                  src={ProfileTrainer}
-                  alt=""
-                />
-                <div className="ms-5">
+                {
+                  seletedUser?.basicInfo?.profileImg ?
+                    <img
+                      style={{ borderRadius: "10px" }}
+                      height="100px"
+                      width="90px"
+                      src={seletedUser?.basicInfo?.profileImg}
+                      alt=""
+                      className="absolute top-[0]"
+                    />
+
+                    :
+                    <div className="flex justify-center items-center h-[100px] w-[90px] bg-slate-400 rounded-[10px] absolute top-0">
+                      <span className="capitalize text-3xl">{seletedUser?.fullName[0]}</span>
+                    </div>
+                }
+
+                <div className="absolute left-[120px]">
                   <h3
                     style={{
                       fontSize: "20px",
@@ -169,7 +229,7 @@ const TrainerListProfile = ({ selectedTrainer }) => {
                       color: "#2676C2",
                     }}
                   >
-                    {trainerData.name}
+                    {seletedUser?.basicInfo?.firstName + seletedUser?.basicInfo?.lastName || seletedUser?.fullName}
                   </h3>
                   <p
                     style={{
@@ -178,7 +238,7 @@ const TrainerListProfile = ({ selectedTrainer }) => {
                       color: "#6A6A6A",
                     }}
                   >
-                    {trainerData.designation}
+                    {seletedUser?.basicInfo?.designation || "Not Available"}
                   </p>
 
                   <Rating
@@ -208,63 +268,66 @@ const TrainerListProfile = ({ selectedTrainer }) => {
                 Skills
               </h3>
               <div className="mt-2">
-                {trainerData.skills.map((skill, index) => (
-                  <div className="flex mb-5" key={index}>
-                    <img
-                      height="48px"
-                      width="48px"
-                      src={skill.imgSrc}
-                      alt={skill.name}
-                    />
-                    <div className="w-full text-end">
-                      <h6
-                        style={{
-                          fontSize: "16px",
-                          fontWeight: "400",
-                          color: "#6A6A6A",
-                        }}
-                      >{`${skillValues[skill.name]}%`}</h6>
+                {trainerData?.skills.map((val,index) => {
+                  console.log(val.image)
+                  return  <div className="flex mb-5" key={index}>
+                  {/* <img
+                    height="48px"
+                    width="48px"
+                    src={image}
+                    alt='d'
+                  /> */}
+                  <img src={val.image} className="w-[48px] h-[48px]" alt="" />
+                  <div className="w-full text-end">
+                    <h6
+                      style={{
+                        fontSize: "16px",
+                        fontWeight: "400",
+                        color: "#6A6A6A",
+                      }}
+                    >{`${val.name} ${index + 10}%`}</h6>
 
+                    <div
+                      style={{
+                        background: "#ddd",
+                        borderRadius: "5px",
+                        height: "8px",
+                      }}
+                    >
                       <div
+                        className="w-full rounded-[5px]"
                         style={{
-                          background: "#ddd",
-                          borderRadius: "5px",
-                          height: "8px",
+                          width: rendered ? `${index + 10}%` : "0%",
+                          background: "#2676C2",
+                          height: "100%",
+                          transition: "width 1s ease-in-out",
                         }}
-                      >
-                        <div
-                          className="w-full rounded-[5px]"
-                          style={{
-                            width: rendered ? `${skill.percentage}%` : "0%",
-                            background: "#2676C2",
-                            height: "100%",
-                            transition: "width 1s ease-in-out",
-                          }}
-                        />
-                      </div>
+                      />
                     </div>
                   </div>
-                ))}
+                </div>
+                })}
               </div>
             </div>
           </section>
-          <button
-            onClick={handlehirepopup}
-            style={{
-              padding: "5px 81px",
-              backgroundColor: "#2676C2",
-              color: "#FFF",
-              fontSize: "20px",
-              fontWeight: "500",
-              marginTop: "30px",
-              borderRadius: "10px",
-              marginLeft: "116px",
-            }}
-          >
-            Hire
-          </button>
+          <div className="w-[full] flex justify-center items-center mt-[20px]">
+
+            <button
+              onClick={handlehirepopup}
+              style={{
+                padding: "5px 81px",
+                backgroundColor: "#2676C2",
+                color: "#FFF",
+                fontSize: "20px",
+                fontWeight: "500",
+                borderRadius: "10px",
+              }}
+            >
+              Hire
+            </button>
+          </div>
         </section>
-        <TrainerPopUp trigger={showPopup} setTrigger={setShowPopup} />
+        <TrainerPopUp trigger={showPopup} setTrigger={setShowPopup} seletedUser={seletedUser} />
         {/* <TrainerPopUp isActive={isActive} onToggle={handleToggle}/> */}
         <section
           className="rightsideList w-6/12"
@@ -279,47 +342,14 @@ const TrainerListProfile = ({ selectedTrainer }) => {
                   fontWeight: "500",
                 }}
               >
-                About {trainerData.name}
+                About {seletedUser?.basicInfo?.firstName || seletedUser?.fullName}
               </h3>
               <div className="flex items-center">
-                <div className="inst" onClick={handleIconClick}>
-                  {isSelected ? (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 14 18"
-                      fill="none"
-                      onClick={() => handleIconClick(true)}
-                    >
-                      <path
-                        d="M0 18V2C0 1.45 0.195833 0.979167 0.5875 0.5875C0.979167 0.195833 1.45 0 2 0H12C12.55 0 13.0208 0.195833 13.4125 0.5875C13.8042 0.979167 14 1.45 14 2V18L7 15L0 18Z"
-                        fill="#2676C2"
-                      />
-                    </svg>
-                  ) : (
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      onClick={() => handleIconClick(false)}
-                    >
-                      <path
-                        d="M4.16699 17.5V4.16667C4.16699 3.70833 4.33019 3.31597 4.65658 2.98958C4.98296 2.66319 5.37533 2.5 5.83366 2.5H14.167C14.6253 2.5 15.0177 2.66319 15.3441 2.98958C15.6705 3.31597 15.8337 3.70833 15.8337 4.16667V17.5L10.0003 15L4.16699 17.5ZM5.83366 14.9583L10.0003 13.1667L14.167 14.9583V4.16667H5.83366V14.9583Z"
-                        fill="#8D8D8D"
-                        className="icon-path"
-                      />
-                    </svg>
-                  )}
-                </div>
 
                 <div
                   style={{
                     position: "relative",
                     display: "inline-block",
-                    marginLeft: "50px",
                   }}
                 >
                   <div
@@ -382,7 +412,7 @@ const TrainerListProfile = ({ selectedTrainer }) => {
                 marginTop: "20px",
               }}
             >
-              {trainerData.about}
+              {seletedUser?.basicInfo?.aboutYou}
             </h3>
             <p
               style={{
@@ -393,7 +423,7 @@ const TrainerListProfile = ({ selectedTrainer }) => {
               }}
             >
               {" "}
-              {trainerData.skillDescription}
+              {seletedUser?.basicInfo?.objective}
             </p>
             <div>
               <h6
@@ -406,7 +436,7 @@ const TrainerListProfile = ({ selectedTrainer }) => {
               >
                 Certifications
               </h6>
-              {trainerData.certifications.map((certification, index) => (
+              {seletedUser?.certificateDetails?.map(({ certification, certificateHead, certificateUrl, certificationDescription, institution }, index) => (
                 <div key={index}>
                   <h6
                     style={{
@@ -416,7 +446,7 @@ const TrainerListProfile = ({ selectedTrainer }) => {
                       marginTop: "10px",
                     }}
                   >
-                    {certification.title}
+                    {certificateHead}
                   </h6>
                   <p
                     style={{
@@ -426,15 +456,17 @@ const TrainerListProfile = ({ selectedTrainer }) => {
                       marginTop: "20px",
                     }}
                   >
-                    {certification.description}
+                    {certificationDescription}
                   </p>
-                  <img
-                    className="mt-7"
-                    height="221px"
-                    width="284px"
-                    src={certification.image}
-                    alt="img"
-                  />
+                  
+                  {certificateUrl.toLowerCase().endsWith('.pdf') ? (
+                    <iframe
+                      title="Certificate"
+                      style={{ width: '100%', height: '417px' }}
+                      className="mt-7 h-[221px] w-[500px]" src={certificateUrl} alt="PDF Certificate" />
+                  ) : (
+                    <img className="mt-[20px]" src={certificateUrl} alt="Image Certificate" />
+                  )}
                   <hr className="m-3" />
                 </div>
               ))}

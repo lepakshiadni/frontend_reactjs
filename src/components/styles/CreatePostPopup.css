@@ -4,15 +4,28 @@
   font-family: "Poppins";
 }
 
-.popup {
-  position: fixed;
+
+
+.createPopUp{
+  width: 100%;
+  height: 100vh;
+  position:fixed;
   top: 0;
-  /* left: 0; */
-  /* width: 100%; */
-  /* height: 100vh; */
+  left: 0;
   background-color: rgb(0, 0, 0, 0.5);
   z-index: 5000;
+  display: flex;
+  justify-content: center;
+  align-items: center ;
 }
+.createPopUpContainer{
+  background-color: #ffff;
+  width: 600px;
+  height: 500px;
+  border-radius: 20px;
+  padding: 17px;
+}
+
 
 .close {
   /* padding: 4px 4px; */
@@ -58,7 +71,10 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
 }
-
+#filled-multiline-flexible::-webkit-scrollbar{
+  width: 2px;
+  background-color: #888888;
+}
 .MuiInput-underline:after {
   border-bottom: none !important;
   color: #2676c2;
@@ -78,6 +94,3 @@ hr {
   opacity: 0.2;
 }
 
-/* input[type="radio"]:checked + label {
-      color: #2676c2;
-    } */

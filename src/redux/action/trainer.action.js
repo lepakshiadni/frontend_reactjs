@@ -189,6 +189,32 @@ export const trainerExperienceInfoUpdate = (details) => {
     }
 }
 
+export const deleteTrainerCertificate = (_id) => {
+    const token = Cookies.get("token");
+    // console.log(token)
+    console.log("trainer details action ", _id);
+    return async (dispatch) => {
+        try {
+            Axios.delete(`${baseUrl}/trainer/trainerCertificateDelete/${_id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }).then((resp) => {
+                // console.log(resp)
+                dispatch({
+                    type: "DELETE_TRAINER_CERTIFICATE_SUCCESS",
+                    payload: resp.data,
+                });
+            });
+        } catch (err) {
+            dispatch({
+                type: "DELETE_TRAINER_CERTIFICATE_FAILURE",
+                payload: err,
+            });
+        }
+    };
+};
+
 const addBookMarkePost = (postId, postDetails) => {
     const token = Cookies.get('token')
     console.log(postId, 'add bookmark post ', postDetails)
@@ -302,11 +328,172 @@ const gettrainerAppliedTraining = () => {
 
 }
 
+export const deleteAppliedTraining = (trainingPostId) => {
+    const token = Cookies.get('token')
+    console.log('delete training Action')
+    return async (dispatch) => {
+        try {
+            Axios.delete(`${baseUrl}/trainer/deleteAppliedTraining/${trainingPostId} `, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'APPLIEDTRAININGDELETED_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (error) {
+            dispatch({
+                type: "APPLIEDTRAININGDELETED_FAILURE",
+                payload: error
+            })
+        }
+    }
+}
+
+export const getSkillsData = () => {
+    const token = Cookies.get('token')
+    console.log('get SkillsData Action')
+    return async (dispatch) => {
+        try {
+            Axios.get(`${baseUrl}/trainer/skills `, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+
+                    dispatch({
+                        type: 'GET_SKILLDATA_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "GET_SKILLDATA_FAILURE",
+                payload: err
+            })
+        }
+    }
+}
+
+export const createConversation = (senderId, receiverId) => {
+    const token = Cookies.get('token')
+    console.log('create conversation Action')
+    return async (dispatch) => {
+        try {
+            Axios.post(`${baseUrl}/conversation/newconversation/`, { senderId, receiverId }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'CONVERSATIONCREATED_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (error) {
+            dispatch({
+                type: "CONVERSATIONCREATED_FAILURE",
+                payload: error
+            })
+        }
+    }
+}
+
+export const addTrainingResources = (trainingDetailsId, details) => {
+    const token = Cookies.get('token')
+    console.log(trainingDetailsId, 'add resources ', details)
+    return async (dispatch) => {
+        try {
+            Axios.put(`${baseUrl}/trainer/addTrainingResources/${trainingDetailsId}`, details, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'ADD_TRAINING_RESOURCES_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (resp) {
+            dispatch({
+                type: "ADD_TRAINING_RESOURCES_FAILURE",
+                payload: resp.data
+            })
+        }
+    }
+
+}
+
+export const getAllRequestTrainer = () => {
+    const token = Cookies.get('token')
+    // console.log('Add Applicaiton Request   Action')
+    return async (dispatch) => {
+
+        Axios.get(`${baseUrl}/trainer/getAllRequestTrainer`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((resp) => {
+                // console.log(resp)
+                dispatch({
+                    type: 'GET_ALLREQUEST_SUCCESS',
+                    payload: resp.data
+                })
+            })
+            .catch((error) => {
+                console.log(error)
+                dispatch({
+                    type: "GET_ALLREQUEST_FAILURE",
+                    payload: error?.response?.data
+                })
+            })
+
+    }
+}
+
+export const updateApplicationStatus = (trainingDetailsId, employerId,trainingDetails, status) => {
+    const token = Cookies.get("token");
+    // console.log(token);
+    return async (dispatch) => {
+      try {
+        Axios.put(`${baseUrl}/trainer/updateRequestStatus`, { trainingDetailsId, employerId,trainingDetails, status }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((resp) => { 
+          // console.log(resp)
+          dispatch({
+            type: "UPDATEDAPPLIEDSTATUS_SUCCESSS",
+            payload: resp.data,
+          });
+        });
+      } catch (error) {
+        dispatch({
+          type: "UPDATEDAPPLIEDSTATUS_FAILURE",
+          payload: error,
+        });
+      }
+    };
+  }
+
 
 
 export {
-    trainerSignUpAction,
-    trainerDetails,
+    trainerSignUpAction, trainerDetails,
     addBookMarkePost,
     getBookMarkedPost,
     trainerAppliedTraining,

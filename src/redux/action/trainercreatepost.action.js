@@ -27,3 +27,106 @@ export const trainerCreatePost = (postDetails) => {
             })
     }
 }
+
+export const getTrainerCreatePost = () => {
+    const token = Cookies.get('token')
+    console.log('get bookMarkepost Action')
+    return async (dispatch) => {
+        try {
+            Axios.get(`${baseUrl}/trainerpost/getpostTrainingRequirement `, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'GET_TRAINERCREATEPOST_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "GET_TRAINERCREATEPOST_FAILURE",
+                payload: err
+            })
+        }
+    }
+
+}
+
+export const addPostTrainerComments = (postId, comment) => {
+    console.log('add post traiingcomments',comment,postId)
+    return async (dispatch) => {
+        await Axios.put(`${baseUrl}/trainerpost/addTrainerPostComments/${postId}`, { comment: comment })
+            .then((resp) => {
+                dispatch({
+                    type: 'ADD_POSTTRAININGCOMMENTS_SUCCESS',
+                    payload: resp.data
+                })
+            })
+            .catch((error) => {
+                dispatch({
+                    type: "ADD_POSTTRAININGCOMMENTS_FAILURE",
+                    payload: error
+                })
+            })
+    }
+}
+
+export const getPostTrainerComments = (postId) => {
+    return async (dispatch) => {
+        await Axios.get(`${baseUrl}/trainerpost/getTrainierPostComments/${postId}`)
+            .then((resp) => {
+                dispatch({
+                    type: 'GET_TRAININGCOMMENTS_SUCCESS',
+                    payload: resp.data
+                })
+            })
+            .catch((error) => {
+                dispatch({
+                    type: "GET_TRAININGCOMMENTS_FAILURE",
+                    payload: error
+                })
+            })
+    }
+}
+
+export const addlikePostTrainer = (postId, likedBy) => {
+    console.log(likedBy, postId);
+    return async (dispatch) => {
+        await Axios.put(`${baseUrl}/trainerpost/addLikeToTrainerPost/${postId}`, { likedBy })
+            .then((resp) => {
+                dispatch({
+                    type: 'ADD_LIKEPOSTTRAINING_SUCCESS',
+                    payload: resp.data
+                })
+            })
+            .catch((error) => {
+                dispatch({
+                    type: "ADD_LIKEPOSTTRAINING_FAILURE",
+                    payload: error
+                })
+            })
+    }
+}
+
+export const deletePostTrainerComment = (postId, commentId) => {
+    console.log('delete post traiingcomments', postId, commentId)
+    return async (dispatch) => {
+        await Axios.delete(`${baseUrl}/trainerpost/deleteTrainerPostComment/${postId}/${commentId}`)
+            .then((resp) => {
+                dispatch({
+                    type: 'DELETE_COMMENT_SUCCESS',
+                    payload: resp.data
+                })
+            }).catch((error) => {
+                dispatch({
+                    type: 'DELETE_COMMENT_FAILURE',
+                    payload: error
+                })
+            })
+    }
+
+}

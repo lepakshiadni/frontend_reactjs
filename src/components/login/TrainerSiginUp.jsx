@@ -89,7 +89,7 @@ const SkillsSet = () => {
   
       })
       Cookies.set('token',trainerSignUp?.token)
-      navigate('/trainerDashboard')
+      navigate('/trainerDashboard/dashboard')
     }
     else{
       toast.error(trainerSignUp?.message,{
@@ -204,7 +204,7 @@ const SkillsSet = () => {
       <div className='Emp_Details'>
         <div className='Details'>
           <div style={{ display: "flex", justifyContent: "flex-start", width: '68%', margin: 'auto', marginTop: '2rem' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="22" viewBox="0 0 26 22" fill="none">
+            <svg onClick={()=>{navigate('/selectrole')}} className=" cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="26" height="22" viewBox="0 0 26 22" fill="none">
               <path d="M25 10.8004L1 10.8004M1 10.8004L10.6 20.4004M1 10.8004L10.6 1.20039" stroke="#2676C2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
             </svg>
           </div>

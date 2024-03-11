@@ -18,7 +18,7 @@ const TrainerHeader = () => {
   const user = useSelector(({ trainerSignUp }) => {
     return trainerSignUp?.trainerDetails?.trainerDetails;
   });
-  console.log('trainer',user)
+  // console.log('trainer',user)
 
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
@@ -234,11 +234,19 @@ const TrainerHeader = () => {
             <div className="profile-header">
               <div className="flex justify-start items-start">
                 {
-                  user?.basicInfo?.profileImg?<img className="w-[60px] h-[60px] rounded-full" src={user?.basicInfo?.profileImg}/>:<div className="w-[60px] h-[60px] rounded-full capitalize items-center">{user?.fullName[0]}</div>
+                  user?.basicInfo?.profileImg ? <img className="w-[60px] h-[60px] rounded-full" src={user?.basicInfo?.profileImg} />
+                    :
+                    <div className="w-[60px] h-[60px] rounded-full capitalize flex justify-center items-center">
+                     <span className=" capitalize"> {user?.fullName[0]}</span>
+                    </div>
                 }
               </div>
               <div className="text-start min-w-[120px] w-[auto]">
-                <h4>{user?.basicInfo?.firstName || user?.fullName}</h4>
+                {/* <h4>{user?.basicInfo?.firstName + user?.basicInfo?.lastName  || user?.fullName}</h4> */}
+                {user?.basicInfo?.firstName && user?.basicInfo?.lastName
+                  ? `${user.basicInfo.firstName} ${user.basicInfo.lastName}`
+                  : user?.fullName
+                }
                 <p style={{ letterSpacing: "100%" }}>{user?.basicInfo?.designation || ''}</p>
               </div>
             </div>

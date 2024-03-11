@@ -1,10 +1,6 @@
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import "../../styles/TrainerProfileEdit.css";
-import ReactImg from "../../assets/react.png";
-import AdobImg from "../../assets/adobe.png";
-import FigmaImg from "../../assets/figma.png";
 import vector from "../../assets/Vector.svg";
-import PythonImg from "../../assets/python.png";
 import CropImage from "./trainerprofileedit/CropingImage";
 import SquareCropImg from "./trainerprofileedit/SquareCrop";
 import TrainerHeader from "../../header&footer/TrainerHeader";
@@ -16,10 +12,52 @@ import {
   trainerContactInfoUpdate,
   trainerExperienceInfoUpdate,
   trainerDetails,
+  deleteTrainerCertificate,
+  getSkillsData
 } from "../../../redux/action/trainer.action";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const UpdateProfile = () => {
+
+  let states = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry"
+  ];
+
   const [selectedOption, setSelectedOption] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,7 +79,14 @@ const UpdateProfile = () => {
     return trainerSignUp?.trainerDetails?.trainerDetails;
   });
 
-  console.log("trainer", trainer);
+  const message = useSelector(({ trainerSignUp }) => trainerSignUp?.trainerDetails?.message);
+  console.log(message);
+
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+    }
+  }, [message]);
 
   const profileBanner = useRef(null);
   const profileImg = useRef(null);
@@ -122,51 +167,73 @@ const UpdateProfile = () => {
     // console.log(newImage);
   };
 
-  //sorting and maping in skills
+  useEffect(() => {
+    dispatch(getSkillsData());
+  }, [dispatch]);
+
+  const skillDataVal = useSelector(({ employerSignUp }) => {
+    return employerSignUp?.skillData;
+  });
+
+  useEffect(() => {
+    if (skillDataVal?.success) {
+      setFilteredItems(skillDataVal?.skills);
+    }
+  }, [skillDataVal]);
+
+  const [filteredItems, setFilteredItems] = useState([]);
+
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredItems = [
-    {
-      title: "React Native",
-      image: ReactImg,
-      description: "The Rising Popularity of React Native",
-    },
-    { title: "Figma", image: FigmaImg, description: "Some Figma Description" },
-    { title: "Adobe", image: AdobImg, description: "Adobe Description" },
-    { title: "Pythone", image: PythonImg, description: "Python Description" },
-  ].filter((item) =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Moved filtering logic inside a useEffect to update state with filtered items
+  useEffect(() => {
+    if (searchQuery !== "") {
+      const filtered = skillDataVal?.skills.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredItems(filtered);
+    } else {
+      setFilteredItems(skillDataVal?.skills);
+    }
+  }, [searchQuery, skillDataVal]);
 
   const [clickedTitles, setClickedTitles] = useState(trainer?.skills || []);
+
   useLayoutEffect(() => {
     if (trainer?.skills) {
       setClickedTitles(trainer?.skills);
     }
   }, [trainer?.skills]);
 
-  const handleItemClick = (itemName) => {
-    if (!clickedTitles.includes(itemName)) {
-      setClickedTitles((prevTitles) => [...prevTitles, itemName]);
+  const handleItemClick = (itemName, itemImage) => {
+    const newItem = { name: itemName, image: itemImage };
+    const alreadyClicked = clickedTitles.some((item) => item.name === itemName);
+
+    if (!alreadyClicked) {
+      setClickedTitles((prevTitles) => [...prevTitles, newItem]);
     } else if (
       searchQuery &&
-      !filteredItems.some(
-        (item) => item.title.toLowerCase() === searchQuery.toLowerCase()
-      )
+      !filteredItems.some((item) => item.name.toLowerCase() === searchQuery.toLowerCase())
     ) {
-      setClickedTitles((prevTitles) => [...prevTitles, searchQuery]);
+      setClickedTitles((prevTitles) => [
+        ...prevTitles,
+        { name: searchQuery, image: null },
+      ]);
     }
-    setSearchQuery(""); // Clear search query after selecting the item
+    setSearchQuery("");
   };
 
   const handleEnterKeyPressed = () => {
     if (
       searchQuery.trim() !== "" &&
       !filteredItems.some(
-        (item) => item.title.toLowerCase() === searchQuery.toLowerCase()
+        (item) => item.name.toLowerCase() === searchQuery.toLowerCase()
       )
     ) {
-      setClickedTitles((prevTitles) => [...prevTitles, searchQuery]);
+      setClickedTitles((prevTitles) => [
+        ...prevTitles,
+        { name: searchQuery, image: null },
+      ]);
       setSearchQuery("");
     }
   };
@@ -176,6 +243,13 @@ const UpdateProfile = () => {
     newTitles.splice(index, 1);
     setClickedTitles(newTitles);
   };
+
+  const handleItemChange = (index, value) => {
+    const updatedTitles = [...clickedTitles];
+    updatedTitles[index] = value;
+    setClickedTitles(updatedTitles);
+  };
+
 
   //image file drop and drag
 
@@ -251,7 +325,7 @@ const UpdateProfile = () => {
       certificateImg: "",
     });
     setLabelTextName(false);
-    // dispatch(trainerCertificateUpdate(formData))
+    toast.success('data added')
     handleSubmitReset();
   };
 
@@ -264,13 +338,6 @@ const UpdateProfile = () => {
     setLabelText("");
     setLabelTextName(false);
     certificateImg.current.value = null; // Clear the input value
-  };
-
-  const handleDelete = (index) => {
-    const newData = [...storedData];
-    newData.splice(index, 1);
-    setStoredData(newData);
-    setLabelTextName(false);
   };
 
   const handlePreviewData = () => {
@@ -293,29 +360,17 @@ const UpdateProfile = () => {
   const [company, setComapany] = useState(trainer?.basicInfo?.company || "");
   const [age, setAge] = useState(trainer?.basicInfo?.age || "");
   const [location, setLocation] = useState(trainer?.basicInfo?.location || "");
-  const [objective, setObjective] = useState(
-    trainer?.basicInfo?.objective || ""
-  );
+  const [objective, setObjective] = useState(trainer?.basicInfo?.objective || "");
   const [aboutYou, setAboutYou] = useState(trainer?.basicInfo?.aboutYou || "");
-  const [primaryNumber, setPrimaryNumber] = useState(
-    trainer?.contactInfo?.primaryNumber || ""
-  );
-  const [secondaryNumber, setSecondaryNumber] = useState(
-    trainer?.contactInfo?.secondaryNumber || ""
-  );
+  const [primaryNumber, setPrimaryNumber] = useState(trainer?.contactInfo?.primaryNumber || "");
+  const [secondaryNumber, setSecondaryNumber] = useState(trainer?.contactInfo?.secondaryNumber || "");
   const [address, setAddress] = useState(trainer?.contactInfo?.address || "");
   const [email, setEmail] = useState(trainer?.contactInfo?.email || "");
   const [website, setWebsite] = useState(trainer?.contactInfo?.website || "");
   const [expertIn, setExpertIn] = useState(trainer?.experience?.expertIn || "");
-  const [experience, setExperience] = useState(
-    trainer?.experience?.experience || ""
-  );
-  const [sinceInTheFiled, setSinceInTheFiled] = useState(
-    trainer?.experience?.sinceInTheFiled || ""
-  );
-  const [recentCompany, setRecentCompany] = useState(
-    trainer?.experience?.recentCompany || ""
-  );
+  const [experience, setExperience] = useState(trainer?.experience?.experience || "");
+  const [sinceInTheFiled, setSinceInTheFiled] = useState(trainer?.experience?.sinceInTheFiled || "");
+  const [recentCompany, setRecentCompany] = useState(trainer?.experience?.recentCompany || "");
 
   const skillRef = useRef();
 
@@ -441,6 +496,7 @@ const UpdateProfile = () => {
 
   const handlecertificate = async () => {
     dispatch(trainerCertificateUpdate(formData));
+    handleOptionClick(3)
   };
 
   const handleCase3Data = (e) => {
@@ -472,16 +528,16 @@ const UpdateProfile = () => {
 
   };
 
-  const handleItemChange = (index, value) => {
-    const updatedTitles = [...clickedTitles];
-    updatedTitles[index] = value;
-    setClickedTitles(updatedTitles);
-  };
-
   const handleSubmitData = async (e) => {
     e.preventDefault();
     await handleCase4Data();
+
   };
+
+  const handleDelete = (_id) => {
+    dispatch(deleteTrainerCertificate(_id));
+  };
+
 
   const getContentBasedOnOption = () => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -692,17 +748,26 @@ const UpdateProfile = () => {
                   <div className="mt-2">
                     <label htmlFor="">Location *</label>
                     <br />
-                    <select
+                    {/* <select
                       name=""
                       id=""
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                     >
-                      <option value="Banglore" selected>
-                        Banglore
+                      <option value="" selected>
+                        select Location
                       </option>
+                      <option value="Banglore">Banglore</option>
                       <option value="Manglore">Manglore</option>
                       <option value="Mysore">Mysore</option>
+                    </select> */}
+                    <select name="location" id="State" value={location} onChange={(e) => setLocation(e.target.value)} required>
+                      <option value="">Select Location</option>
+                      {states.map((state, index) => (
+                        <option key={index} value={state}>
+                          {state}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="mt-2">
@@ -780,8 +845,8 @@ const UpdateProfile = () => {
               </button>
             </div>
             <div className="flex ">
-              <div className="skillScroll pe-4 border-r-2">
-                {clickedTitles.map((itemName, index) => (
+              <div className="skillScroll border-r-2">
+                {clickedTitles.map((item, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between mt-2 pt-1 pb-1 ps-2 pe-2 "
@@ -793,10 +858,10 @@ const UpdateProfile = () => {
                       cursor: "pointer",
                     }}
                   >
-                    <h6 style={{ marginRight: "10%" }}>{itemName}</h6>
+                    <h6 style={{ marginRight: "10%" }}>{item.name}</h6>
                     <input
                       ref={skillRef}
-                      value={itemName}
+                      value={item.name}
                       type="text"
                       placeholder="Type your skills"
                       onChange={(e) => handleItemChange(index, e.target.value)}
@@ -823,7 +888,7 @@ const UpdateProfile = () => {
                   </div>
                 ))}
               </div>
-              <div className="m-5 mt-0">
+              <div className="m-5 mt-0" style={{ width: '550px' }}>
                 <div
                   className="flex items-center"
                   style={{
@@ -891,7 +956,7 @@ const UpdateProfile = () => {
                         className="mt-5 me-6"
                         style={{ width: "130px" }}
                         key={index}
-                        onClick={() => handleItemClick(item.title)}
+                        onClick={() => handleItemClick(item?.name, item?.image)}
                       >
                         <img
                           style={{
@@ -900,7 +965,7 @@ const UpdateProfile = () => {
                             borderRadius: "8px",
                             boxShadow: "0px 4px 4px 0px rgba(0, 0, 0, 0.25)",
                           }}
-                          src={item.image}
+                          src={item?.image}
                           alt=""
                         />
                         <h6
@@ -912,22 +977,13 @@ const UpdateProfile = () => {
                             display: "flex",
                           }}
                         >
-                          {item.title}{" "}
+                          {item.name}{" "}
                           <img
                             style={{ marginLeft: "10px" }}
                             src={vector}
                             alt=""
                           />
                         </h6>
-                        <p
-                          style={{
-                            color: "#000",
-                            fontSize: "12px",
-                            fontWeight: "400",
-                          }}
-                        >
-                          {item.description}
-                        </p>
                       </div>
                     ))
                   ) : (
@@ -1271,7 +1327,7 @@ const UpdateProfile = () => {
                       </h6>
                       <span
                         className="delete"
-                        onClick={() => handleDelete(index)}
+                        onClick={() => handleDelete(data._id)}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -1521,7 +1577,7 @@ const UpdateProfile = () => {
 
   return (
     <div>
-      <TrainerHeader/>
+      <TrainerHeader />
       <CropImage
         trigger={showProfileCropPopup}
         setTrigger={setShowProfileCropPopup}
@@ -1571,9 +1627,8 @@ const UpdateProfile = () => {
             <h3 style={{ marginLeft: "10px" }}>Back</h3>
           </div>
           <div
-            className={`updateOptions ${
-              selectedOption === 0 ? "selected" : ""
-            }`}
+            className={`updateOptions ${selectedOption === 0 ? "selected" : ""
+              }`}
             onClick={() => handleOptionClick(0)}
           >
             <div
@@ -1585,9 +1640,8 @@ const UpdateProfile = () => {
           <hr />
 
           <div
-            className={`updateOptions ${
-              selectedOption === 1 ? "selected" : ""
-            }`}
+            className={`updateOptions ${selectedOption === 1 ? "selected" : ""
+              }`}
             onClick={() => handleOptionClick(1)}
           >
             <div
@@ -1599,9 +1653,8 @@ const UpdateProfile = () => {
           <hr />
 
           <div
-            className={`updateOptions ${
-              selectedOption === 2 ? "selected" : ""
-            }`}
+            className={`updateOptions ${selectedOption === 2 ? "selected" : ""
+              }`}
             onClick={() => handleOptionClick(2)}
           >
             <div
@@ -1612,9 +1665,8 @@ const UpdateProfile = () => {
           </div>
           <hr />
           <div
-            className={`updateOptions ${
-              selectedOption === 3 ? "selected" : ""
-            }`}
+            className={`updateOptions ${selectedOption === 3 ? "selected" : ""
+              }`}
             onClick={() => handleOptionClick(3)}
           >
             <div
@@ -1625,9 +1677,8 @@ const UpdateProfile = () => {
           </div>
           <hr />
           <div
-            className={`updateOptions ${
-              selectedOption === 4 ? "selected" : ""
-            }`}
+            className={`updateOptions ${selectedOption === 4 ? "selected" : ""
+              }`}
             onClick={() => handleOptionClick(4)}
           >
             <div

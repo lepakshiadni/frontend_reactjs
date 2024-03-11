@@ -6,12 +6,13 @@ import Image15 from "../../assets/image 15.png";
 import TrainerProposalApplied from './TrainerProposalManagement/TrainerProposalApplied';
 import TrainerProposalRequest from './TrainerProposalManagement/TrainerProposalRequest'
 import { Link, useLocation } from "react-router-dom";
-import {useDispatch,useSelector} from 'react-redux'
-import {gettrainerAppliedTraining} from '../../../redux/action/trainer.action'
+import { useDispatch, useSelector } from 'react-redux'
+import { gettrainerAppliedTraining, getAllRequestTrainer } from '../../../redux/action/trainer.action'
 
 const TrainerProposalManagement = () => {
   const location = useLocation();
-  const dispatch=useDispatch()
+  const dispatch = useDispatch()
+  let trainingRequest = [];
   const getActiveOption = (pathname) => {
     if (pathname.startsWith("/trainerDashboard/proposalmanagement/applied"))
       return "Applied";
@@ -46,25 +47,52 @@ const TrainerProposalManagement = () => {
     proposer: "Kowshik",
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(gettrainerAppliedTraining())
-  },[dispatch])
-  const appliedTraining=useSelector(({trainerSignUp})=>{
+    dispatch(getAllRequestTrainer())
+  }, [dispatch])
+
+  const appliedTraining = useSelector(({ trainerSignUp }) => {
     return trainerSignUp?.gettrainerAppliedTraining?.trainingPostData;
   })
-  console.log(appliedTraining)
-  if(appliedTraining?.length>0){
-    
+  const requestTrainer = useSelector(({ trainerSignUp }) => {
+    return trainerSignUp?.getAllRequestTraining?.trainingPostData
+  })
+  // console.log("requestTraineraads", requestTrainer)
+
+
+
+  if (requestTrainer) {
+    trainingRequest = requestTrainer?.map((training) => {
+      return {
+        trainerDetails:{
+          employerId: training?.employerId || "",
+          trainerDesignation: training?.trainerDesignation || "",
+          trainerId: training?.trainerId || "",
+          trainerName:training?.trainerName || "",
+          trainerProfileImg:training?.trainerProfileImg || "",
+        },
+        trainingDetails: training?.trainingDetails?.filter(({ appliedStatus, applicationstatus }) => {
+          if(appliedStatus === false  &&  applicationstatus == 'Requested'){
+              return training
+          }
+        })
+      }
+    });
   }
 
-  
+  // console.log('requestTriner', trainingRequest);
+
+
+
   const renderComponent = () => {
     switch (activeOption) {
       case "Applied":
         return <TrainerProposalApplied training={appliedTraining} />;
       case "Proposal":
-        return <TrainerProposalRequest training={proposalData} />;
+        return <TrainerProposalRequest training={trainingRequest} />;
       default:
+
         return null;
     }
   };

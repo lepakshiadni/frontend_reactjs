@@ -1,19 +1,77 @@
-import React, { useState, useEffect } from "react";
+    import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import '../../styles/Requirements.css'
 import '../../styles/TrainerMyTrainings.css'
+import '../../styles/MyTrainings 1.css'
 import Upcoming from './TrainerMyTrainingchilds/Upcoming';
 import OngoingTraining from "./TrainerMyTrainingchilds/OnGoingTraining";
 import Completed from './TrainerMyTrainingchilds/Completed';
 import Denied from './TrainerMyTrainingchilds/Denied';
+import { useDispatch, useSelector } from 'react-redux'
+import { gettrainerAppliedTraining } from '../../../redux/action/trainer.action'
+
 
 const TrainerMyTrainings = () => {
     const location = useLocation();
     const [activeSteps] = useState([1]);
-    
+    let upcomming;
+    let completed;
+    let ongoing;
+    let denied;
+    const dispatch = useDispatch()
     useEffect(() => {
         setActiveOption(getActiveOption(location.pathname));
     }, [location.pathname]);
+    useEffect(() => {
+        dispatch(gettrainerAppliedTraining())
+    }, [dispatch])
+
+    const appliedTraining = useSelector(({ trainerSignUp }) => {
+        return trainerSignUp?.gettrainerAppliedTraining?.trainingPostData;
+    })
+    // console.log('appliedTraining',appliedTraining)
+    if (appliedTraining) {
+        upcomming = appliedTraining?.filter(({ appliedStatus, trainingPostDetails }) => {
+            if (appliedStatus) {
+                // if (trainingPostDetails?.startDate >= new Date().toISOString().slice(0, 10 &&
+                //     trainingPostDetails?.endDate >= new Date().toISOString().slice(0, 10))) {
+                //     // console.log('data',new Date().toISOString().slice(0, 10))
+                //     return trainingPostDetails
+                // }
+                return trainingPostDetails &&
+                    trainingPostDetails.startDate <= new Date().toISOString().slice(0, 10) &&
+                    trainingPostDetails.endDate >= new Date().toISOString().slice(0, 10);
+            }
+        })
+        ongoing = appliedTraining?.filter(({ appliedStatus, trainingPostDetails }) => {
+            if (appliedStatus) {
+                // if(trainingPostDetails?.startDate <  new Date().toISOString().slice(0, 10) &&
+                // trainingPostDetails?.endDate >  new Date().toISOString().slice(0, 10)
+                // ) {
+                //     return trainingPostDetails
+                // }
+                return trainingPostDetails &&
+                    trainingPostDetails.startDate <= new Date().toISOString().slice(0, 10) &&
+                    trainingPostDetails.endDate >= new Date().toISOString().slice(0, 10);
+            }
+        })
+        completed = appliedTraining?.filter(({ appliedStatus, trainingPostDetails }) => {
+            if (appliedStatus) {
+                if (trainingPostDetails?.endDate < new Date().toISOString().slice(0, 10) &&
+                    trainingPostDetails?.startDate < new Date().toISOString().slice(0, 10)) {
+                    return trainingPostDetails
+                }
+            }
+        })
+        denied = appliedTraining?.filter(({ appliedStatus,applicationstatus }) => appliedStatus === false &&  applicationstatus ==='Denied')
+
+
+
+    }
+    // console.log('upcoming',upcomming)
+    // console.log('completed',completed)
+    // console.log('ongoing', ongoing)
+    // console.log('denied',denied)
 
     const getActiveOption = (pathname) => {
         if (pathname.startsWith("/trainerDashboard/mytrainings/upcoming")) return "upComing";
@@ -34,13 +92,13 @@ const TrainerMyTrainings = () => {
     const renderComponent = () => {
         switch (activeOption) {
             case "upComing":
-                return <Upcoming activeSteps={activeSteps} calculateProgressBarWidth={calculateProgressBarWidth} />;
+                return <Upcoming activeSteps={activeSteps} upcomming={upcomming} calculateProgressBarWidth={calculateProgressBarWidth} />;
             case "onGoingtraining":
-                return <OngoingTraining activeSteps={activeSteps} calculateProgressBarWidth={calculateProgressBarWidth} />;
+                return <OngoingTraining activeSteps={activeSteps} ongoing={ongoing} calculateProgressBarWidth={calculateProgressBarWidth} />;
             case "comPleted":
-                return <Completed activeSteps={activeSteps} calculateProgressBarWidth={calculateProgressBarWidth} />;
+                return <Completed activeSteps={activeSteps} completed={completed} calculateProgressBarWidth={calculateProgressBarWidth} />;
             case "deNied":
-                return <Denied activeSteps={activeSteps} calculateProgressBarWidth={calculateProgressBarWidth} />;
+                return <Denied activeSteps={activeSteps} denied={denied} calculateProgressBarWidth={calculateProgressBarWidth} />;
             default:
                 return null;
         }

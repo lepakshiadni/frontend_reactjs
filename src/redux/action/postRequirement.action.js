@@ -8,8 +8,8 @@ export const postTrainingRequirementAction = (postTrainingDetails) => {
     const token = Cookies.get('token')
     console.log(token);
     return async (dispatch) => {
-        await Axios.post(`${baseUrl}/employerpost/postTrainingRequirement`, postTrainingDetails,{
-            headers:{
+        await Axios.post(`${baseUrl}/employerpost/postTrainingRequirement`, postTrainingDetails, {
+            headers: {
                 Authorization: `Bearer ${token}`
             }
         })
@@ -29,8 +29,14 @@ export const postTrainingRequirementAction = (postTrainingDetails) => {
 }
 
 export const getPostTrainingRequirementAction = () => {
+    const token = Cookies.get("token")
+    console.log('token', token)
     return async (dispatch) => {
-        await Axios.get(`${baseUrl}/employerpost/getpostTrainingRequirement`)
+        await Axios.get(`${baseUrl}/employerpost/getpostTrainingRequirement`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
             .then((resp) => {
                 dispatch({
                     type: 'GET_TRAININGREQUIREMENTS_SUCCESS',
@@ -40,6 +46,25 @@ export const getPostTrainingRequirementAction = () => {
             .catch((error) => {
                 dispatch({
                     type: "GET_TRAININGREQUIREMENTS_FAILURE",
+                    payload: error
+                })
+            })
+    }
+}
+
+export const getAllPostTrainingRequirementAction = () => {
+
+    return async (dispatch) => {
+        await Axios.get(`${baseUrl}/employerpost/getAllPostTrainingRequirement`)
+            .then((resp) => {
+                dispatch({
+                    type: 'GETALL_TRAININGREQUIREMENTS_SUCCESS',
+                    payload: resp.data
+                })
+            })
+            .catch((error) => {
+                dispatch({
+                    type: "GETALL_TRAININGREQUIREMENTS_FAILURE",
                     payload: error
                 })
             })
@@ -82,7 +107,26 @@ export const getPostTrainingComments = (postId) => {
             })
     }
 }
-export const addlikePostTraining = (likedBy, postId) => {
+export const deletePostTrainingComment = (postId, commentId) => {
+    console.log('delete post traiingcomments', postId, commentId)
+    return async (dispatch) => {
+        await Axios.delete(`${baseUrl}/employerpost/deletePostTrainingComment/${postId}/${commentId}`)
+            .then((resp) => {
+                dispatch({
+                    type: 'DELETE_COMMENT_SUCCESS',
+                    payload: resp.data
+                })
+            }).catch((error) => {
+                dispatch({
+                    type: 'DELETE_COMMENT_FAILURE',
+                    payload: error
+                })
+            })
+    }
+
+}
+
+export const addlikePostTraining = (postId, likedBy) => {
     console.log(likedBy, postId);
     return async (dispatch) => {
         await Axios.put(`${baseUrl}/employerpost/addLikeToTrainingPost/${postId}`, { likedBy })
@@ -95,6 +139,29 @@ export const addlikePostTraining = (likedBy, postId) => {
             .catch((error) => {
                 dispatch({
                     type: "ADD_LIKEPOSTTRAINING_FAILURE",
+                    payload: error
+                })
+            })
+    }
+}
+export const deletePostTrainingRequirement = (postId) => {
+    const token = Cookies.get('token')
+    console.log(postId)
+    return async (dispatch) => {
+        await Axios.delete(`${baseUrl}/employerpost/deletePostRequirement/${postId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then((resp) => {
+                dispatch({
+                    type: 'POSTDELETED_SUCCESS',
+                    payload: resp.data
+                })
+            })
+            .catch((error) => {
+                dispatch({
+                    type: "POSTDELETED_FAILURE",
                     payload: error
                 })
             })

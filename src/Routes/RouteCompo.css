@@ -13,7 +13,7 @@
 
 .lazy-img{
   width: auto;
-  animation: zoomInOut 7s ease-in-out,hideImage 6s forwards;
+  animation: zoomInOut 2s ease-in-out,hideImage 1s forwards;
   padding: 25px;
 }
 @keyframes dropAndSplash {

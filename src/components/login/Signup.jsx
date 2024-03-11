@@ -62,8 +62,10 @@ function Signup() {
       if (phoneNumber.length !== 10) {
         toast.error("Please enter a 10-digit number");
       }
-      dispatch(generateOtp(phoneNumber));
-      Cookies.set("phoneNumber", phoneNumber);
+      else{
+        dispatch(generateOtp(phoneNumber));
+        Cookies.set("phoneNumber", phoneNumber);
+      }
     };
   }, [dispatch, phoneNumber]);
 

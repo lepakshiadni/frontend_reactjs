@@ -6,7 +6,6 @@ import MailOutlineRoundedIcon from "@mui/icons-material/MailOutlineRounded";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SliderSignin from "../slider/SliderSignin";
-
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector, shallowEqual } from "react-redux";
 import { generateOtp } from "../../redux/action/siginup.action";
@@ -123,6 +122,7 @@ const Login = () => {
       });
       Cookies.set("token", user?.data?.token);
       localStorage.setItem("role", user?.data?.existEmployer?.role);
+      
       navigate("/employerDashboard/dashboard"); // Navigate to the next page
     }
     if (user?.message === "Invalid OTP") {
@@ -157,7 +157,7 @@ const Login = () => {
   return (
     <>
       <div>
-        {otpVerified ? (
+        {user.success ? (
           <div className="h-screen">
             <div className="relative h-[500px] flex items-center justify-center">
               <div className="absolute bouncing-image">
@@ -362,7 +362,7 @@ const Login = () => {
               <div className="Git_Email">
                 <div className="hrtag">
                   <span className="line"></span>
-                  <p>or with</p>
+                  <p>Or With</p>
                   <span className="line"></span>
                 </div>
                 <div className="GEIcons">

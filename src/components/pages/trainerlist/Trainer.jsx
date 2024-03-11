@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import ReactImg from "../../assets/react.png";
 import FigmaImg from "../../assets/figma.png";
@@ -10,11 +10,25 @@ import "../../styles/TrainersList.css";
 import LocationIcon from "../../assets/LocationIcon.svg";
 import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
+import Axios from 'axios'
 const Trainers = ({ trainerIndex }) => {
+  const baseUrl =localStorage.getItem('baseUrl')
   const navigate = useNavigate();
   const location = useLocation();
+  const { id } = useParams()
   const [selecteduser, setSelecteduser] = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [trainerDetails, setTrainerDetails] = useState([])
+  useEffect(() => {
+    Axios.get('http://192.168.1.103:4000/trainer/getAllTrainerDetails')
+      .then((resp) => {
+        setTrainerDetails(resp.data?.trainerDetails)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+  }, [])
+  // console.log('trainerDetails',trainerDetails)
   //   console.log(selecteduser)
   const trainerData = [
     {
@@ -473,11 +487,11 @@ const Trainers = ({ trainerIndex }) => {
 
   const [skillValues, setSkillValues] = useState();
 
-  const findObjectById = (trainerData, selecteduser) => {
-    return trainerData.find((obj) => obj.id === selecteduser);
+  const findObjectById = (trainerDetails, selecteduser) => {
+    return trainerDetails.find((obj) => obj.id === selecteduser);
   };
 
-  const foundObject = findObjectById(trainerData, selecteduser);
+  const foundObject = findObjectById(trainerDetails, selecteduser);
   if (foundObject) {
     console.log("Object found:", foundObject);
   } else {
@@ -506,7 +520,7 @@ const Trainers = ({ trainerIndex }) => {
   };
   const handlenavigation = () => {
     if (location.pathname === "/employerDashboard/trainerlist") {
-      navigate("/employerDashboard/trainerlist/trainerlistprofile");
+      navigate(`/employerDashboard/trainerlist/trainerlistprofile`);
     }
   };
   useEffect(() => {
@@ -520,39 +534,46 @@ const Trainers = ({ trainerIndex }) => {
       document.removeEventListener("mousedown", handler);
     };
   });
+  const seletedUserHandler = (trainer) => {
+    console.log('trainerDetails', trainer)
+    setSelecteduser(trainer)
 
+  }
+  console.log('selectedUser', selecteduser)
   return (
     <>
       <div
         className="trainers-list"
-        // onClick={handleProfile}
       >
-        {trainerData.map((trainer, index) => {
+        {trainerDetails?.map((trainer, index) => {
+          // console.log('trainer',trainer)
           return (
+
             <>
               <div>
-                <Link to="/employerDashboard/trainerlist/trainerlistprofile">
-                  <div
-                    onClick={() => {
-                      setSelecteduser(trainer.id);
-                    }}
-                    // onClick={handlenavigation}
-                  >
+                <Link to={`/employerDashboard/trainerlist/trainerlistprofile/${trainer?._id}`}>
+                  <div>
                     <div
                       key={index}
-                      className={`trainer-card ${
-                        hoveredIndex === index ? "hovered" : ""
-                      }`}
+                      className={`trainer-card ${hoveredIndex === index ? "hovered" : ""
+                        }`}
                       onMouseEnter={() => setHoveredIndex(index)}
                       onMouseLeave={() => setHoveredIndex(null)}
                     >
                       <div className="card-face card-front">
                         <div>
-                          <img
-                            src={ProfileImg}
-                            alt={`Profile of ${trainer.name}`}
-                            className="profile-img"
-                          />
+                          {
+                            trainer?.basicInfo?.profileImg ?
+                              <img
+                                src={trainer?.basicInfo?.profileImg}
+                                alt={`Profile of ${trainer?.fullName}`}
+                                className="profile-img"
+                              />
+                              :
+                              <div className="flex justify-center items-center bg-[#2676c2] w-[120px] h-[130px] rounded-[20%]">
+                                <span className="capitalize text-4xl">{trainer?.fullName[0]}</span>
+                              </div>
+                          }
                         </div>
                         <div style={{ marginTop: "5px", textAlign: "center" }}>
                           <h3
@@ -562,7 +583,7 @@ const Trainers = ({ trainerIndex }) => {
                               fontWeight: "500",
                             }}
                           >
-                            {trainer.name}
+                            {trainer?.fullName}
                           </h3>
                           <p
                             style={{
@@ -571,7 +592,7 @@ const Trainers = ({ trainerIndex }) => {
                               fontWeight: "400",
                             }}
                           >
-                            {trainer.designation}
+                            {trainer?.basicInfo?.designation}
                           </p>
                           <Stack
                             spacing={1}
@@ -597,14 +618,27 @@ const Trainers = ({ trainerIndex }) => {
                           </Stack>
                         </div>
                         <div className="image-row">
-                          {trainer.skills.map((items) => {
+                          {trainer?.skills?.slice(0,4)?.map(({name,image}) => {
+                            // console.log(items[0])
                             return (
                               <>
-                                <img
+                                {/* <img
                                   src={items.imgSrc}
                                   alt="React"
                                   title={`React: ${items.name}`}
-                                />
+                                /> */}
+                                <div className="  ">
+                                  {
+                                    image?
+                                    <img className="w-[30px] h-[30px] rounded-full " src={image} alt="" />
+                                    
+                                    :
+                                    null
+                                    // <span className="flex justify-center items-center w-[30px] h-[30px] text-black bg-slate-500 rounded-full">{name[0]}</span>
+                                    
+                                  }
+
+                                </div>
                               </>
                             );
                           })}
@@ -613,11 +647,23 @@ const Trainers = ({ trainerIndex }) => {
                       <div className="card-face card-back">
                         <div className="card-back-top">
                           <div className="card-back-image">
-                            <img
+                            {/* <img
                               src={ProfileImg}
-                              alt={`Profile of ${trainer.name}`}
+                              alt={`Profile of ${trainer?.fullName}`}
                               className="profile-img-back"
-                            />
+                            /> */}
+                            {
+                            trainer?.basicInfo?.profileImg ?
+                              <img
+                                src={trainer?.basicInfo?.profileImg}
+                                alt={`Profile of ${trainer?.fullName}`}
+                                className="profile-img-back"
+                              />
+                              :
+                              <div className="flex justify-center items-center bg-[#2676c2] h-[80px] w-[91px]  rounded-[20%]">
+                                <span className="capitalize text-4xl">{trainer?.fullName[0]}</span>
+                              </div>
+                          }
                             <div
                               style={{
                                 display: "flex",
@@ -638,17 +684,17 @@ const Trainers = ({ trainerIndex }) => {
                                 }}
                               >
                                 {" "}
-                                {trainer.location}
+                                {trainer?.basicInfo?.location}
                               </span>
                             </div>
                           </div>
                           <div className="card-back-content">
-                            <h3 className="card-back-name">{trainer.name}</h3>
+                            <h3 className="card-back-name">{trainer?.fullName}</h3>
                             <p className="card-back-domain">
-                              {trainer.designation}
+                              {trainer?.basicInfo?.designation}
                             </p>
-                            <h4 className="card-back-exp">
-                              <p>{trainer.experience}Years</p>
+                            <h4 className="card-back-exp flex justify-end items-center">
+                              <p>{trainer?.experience?.experience} Years</p>
                             </h4>
                             <Stack
                               spacing={1}
@@ -685,25 +731,12 @@ const Trainers = ({ trainerIndex }) => {
                           </div>
                         </div>
                         <div className="slider-container-parent">
-                          {trainer.skills.map((list) => {
+                          {trainer.skills?.slice(0,4)?.map(({name,image},index) => {
                             return (
                               <>
                                 <div className="slider-container-child">
-                                  {/* <label htmlFor={`react-slider-${index}`}> */}
-                                  <img
-                                    src={list.imgSrc}
-                                    alt={list.name}
-                                    className="card-slider-img"
-                                  />
-                                  {/* </label> */}
-                                  {/* <input
-                          type="range"
-                          id={`react-slider-${index}`}
-                          min="1"
-                          max="100"
-                          value={list.percentage}
-                          readOnly
-                        /> */}
+                                 {/* <span className="text-black text-sm">{image}</span> */}
+                                 <img src={image} alt="" className="w-5 h-5 rounded-full"/>
                                   <div
                                     className="w-8/12"
                                     style={{
@@ -716,7 +749,7 @@ const Trainers = ({ trainerIndex }) => {
                                       className="relative top-[-13px] rounded-[5px]"
                                       style={{
                                         width: rendered
-                                          ? `${list.percentage}%`
+                                          ? `${index+10 }%`
                                           : "0%",
                                         background: "#2676C2",
                                         height: "100%",
@@ -725,7 +758,7 @@ const Trainers = ({ trainerIndex }) => {
                                     />
                                   </div>
                                   <span className="slider-span">
-                                    {list.percentage}%
+                                    {index+10}%
                                   </span>
                                 </div>
                               </>

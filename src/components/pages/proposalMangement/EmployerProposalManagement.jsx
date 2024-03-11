@@ -3,9 +3,11 @@ import "../../styles/TrainerProposalManagement.css";
 import EmployerProposalCandidacy from "./Employerproposalmanagement/EmpProposalCandidacy";
 import EmployerProposalRequest from "./Employerproposalmanagement/EmpProposalRequest";
 import { Link, useLocation } from "react-router-dom";
+import {useDispatch,useSelector} from 'react-redux'
+import {getAllAppliedTraining,getAllCandidacy} from '../../../redux/action/employers.action'
 const EmployerProposalManagement = () => {
   const location = useLocation();
-
+  const dispatch=useDispatch()
   useEffect(() => {
     setActiveOption(getActiveOption(location.pathname));
   }, [location.pathname]);
@@ -19,12 +21,25 @@ const EmployerProposalManagement = () => {
   const [activeOption, setActiveOption] = useState(
     getActiveOption(location.pathname)
   );
+  useEffect(()=>{
+    dispatch(getAllAppliedTraining())
+    dispatch(getAllCandidacy())
+  },[dispatch])
+
+  const appliedTraining=useSelector(({employerSignUp})=>{
+    return employerSignUp?.getAllAppliedTraining?.appliedTrainingDetails
+  })
+  const getCandidacy=useSelector(({employerSignUp})=>{
+    return employerSignUp?.getAllCandidacy?.trainingPostData
+
+  })
+  // console.log("getAllCandidacy",getCandidacy);
   const renderComponent = () => {
     switch (activeOption) {
       case "Candidacy":
-        return <EmployerProposalCandidacy />;
+        return <EmployerProposalCandidacy candidacy={getCandidacy} />;
       case "Proposal":
-        return <EmployerProposalRequest />;
+        return <EmployerProposalRequest appliedTrainingDetails={appliedTraining}/>;
       default:
         return null;
     }

@@ -1,10 +1,6 @@
 import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import '../../styles/EmployerProfileEdit.css'
-import ReactImg from "../../assets/react.png";
-import AdobImg from "../../assets/adobe.png";
-import FigmaImg from "../../assets/figma.png";
 import vector from "../../assets/Vector.svg";
-import PythonImg from "../../assets/python.png";
 import EmployerBannerCrop from "./employerprofileedit/EmployerBannerCrop";
 import EmployerProfileCrop from "./employerprofileedit/EmployerProfileCrop";
 import EmployerHeader from '../../header&footer/EmployerHeader'
@@ -17,9 +13,50 @@ import {
   employerExperienceInfoUpdate,
   employerSkillsUpdate,
   employerDetails,
+  deleteEmployerExperience,
+  getSkillsData,
 } from "../../../redux/action/employers.action";
 
 const EmployerProfieEdit = () => {
+
+  let states = [
+    "Andhra Pradesh",
+    "Arunachal Pradesh",
+    "Assam",
+    "Bihar",
+    "Chhattisgarh",
+    "Goa",
+    "Gujarat",
+    "Haryana",
+    "Himachal Pradesh",
+    "Jharkhand",
+    "Karnataka",
+    "Kerala",
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Manipur",
+    "Meghalaya",
+    "Mizoram",
+    "Nagaland",
+    "Odisha",
+    "Punjab",
+    "Rajasthan",
+    "Sikkim",
+    "Tamil Nadu",
+    "Telangana",
+    "Tripura",
+    "Uttar Pradesh",
+    "Uttarakhand",
+    "West Bengal",
+    "Andaman and Nicobar Islands",
+    "Chandigarh",
+    "Dadra and Nagar Haveli and Daman and Diu",
+    "Delhi",
+    "Ladakh",
+    "Lakshadweep",
+    "Puducherry"
+  ];
+
   const [selectedOption, setSelectedOption] = useState(0);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -41,12 +78,14 @@ const EmployerProfieEdit = () => {
     return employerSignUp?.employerDetails?.employerDetails;
   });
 
-  const message = useSelector(({ employerSignUp }) => {
-    return employerSignUp?.employerDetails;
-  });
-  console.log("mesage", message?.message);
+  const message = useSelector(({ employerSignUp }) => employerSignUp?.employerDetails?.message);
+  console.log(message);
 
-  // console.log('employer', employer)
+  useEffect(() => {
+    if (message) {
+      toast.success(message);
+    }
+  }, [message]);
 
   const profileBanner = useRef(null);
   const profileImg = useRef(null);
@@ -127,42 +166,18 @@ const EmployerProfieEdit = () => {
     console.log(newImage);
   };
 
-  //sorting and maping in skills
-  const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredItems = [
-    {
-      title: "React Native",
-      image: ReactImg,
-      description: "The Rising Popularity of React Native",
-    },
-    { title: "Figma", image: FigmaImg, description: "Some Figma Description" },
-    { title: "Adobe", image: AdobImg, description: "Adobe Description" },
-    { title: "Pythone", image: PythonImg, description: "Python Description" },
-  ].filter((item) =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
-  const [firstName, setFirstName] = useState(
-    employer?.basicInfo?.firstName || ""
-  );
+  const [firstName, setFirstName] = useState(employer?.basicInfo?.firstName || "");
   const [lastName, setLastName] = useState(employer?.basicInfo?.lastName || "");
-  const [designation, setDesignation] = useState(
-    employer?.basicInfo?.designation || ""
-  );
+  const [designation, setDesignation] = useState(employer?.basicInfo?.designation || "");
   const [company, setComapany] = useState(employer?.basicInfo?.company || "");
   const [age, setAge] = useState(employer?.basicInfo?.age || "");
   const [location, setLocation] = useState(employer?.basicInfo?.location || "");
-  const [objective, setObjective] = useState(
-    employer?.basicInfo?.objective || ""
-  );
+  const [objective, setObjective] = useState(employer?.basicInfo?.objective || "");
   const [aboutYou, setAboutYou] = useState(employer?.basicInfo?.aboutYou || "");
-  const [primaryNumber, setPrimaryNumber] = useState(
-    employer?.contactInfo?.primaryNumber || ""
-  );
-  const [secondaryNumber, setSecondaryNumber] = useState(
-    employer?.contactInfo?.secondaryNumber || ""
-  );
+  const [primaryNumber, setPrimaryNumber] = useState(employer?.contactInfo?.primaryNumber || "");
+  const [secondaryNumber, setSecondaryNumber] = useState(employer?.contactInfo?.secondaryNumber || "");
   const [address, setAddress] = useState(employer?.contactInfo?.address || "");
   const [email, setEmail] = useState(employer?.contactInfo?.email || "");
   const [website, setWebsite] = useState(employer?.contactInfo?.website || "");
@@ -207,7 +222,7 @@ const EmployerProfieEdit = () => {
       setFirstName(employer?.basicInfo?.firstName);
       setLastName(employer?.basicInfo?.lastName);
       setDesignation(employer?.basicInfo?.designation);
-      setComapany(employer?.companyName);
+      setComapany(employer?.basicInfo?.company);
       setAge(employer?.basicInfo?.age);
       setLocation(employer?.basicInfo?.location);
       setObjective(employer?.basicInfo?.objective);
@@ -220,40 +235,40 @@ const EmployerProfieEdit = () => {
     }
   }, [employer]);
 
-  const handleCase0Data = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    const fileInput = profileImg.current;
-    const fileInput2 = profileBanner.current;
-    if (
-      fileInput &&
-      fileInput2 &&
-      fileInput.files.length > 0 &&
-      fileInput2.files.length > 0
-    ) {
-      const file = fileInput.files[0];
-      const file2 = fileInput2.files[0];
-      // Append form data to formData
-      formData.append("profileImg", file);
-      formData.append("profileBanner", file2);
-      formData.append("firstName", firstName);
-      formData.append("lastName", lastName);
-      formData.append("designation", designation);
-      formData.append("company", company);
-      formData.append("age", age);
-      formData.append("location", location);
-      formData.append("objective", objective);
-      formData.append("aboutYou", aboutYou);
-      formData.append("status", true);
 
-      dispatch(employerBasicInfoUpdate(formData));
-      handleOptionClick(1);
-    } else {
-      alert("No file selected");
+  useEffect(() => {
+    dispatch(getSkillsData());
+  }, [dispatch]);
+
+  const skillDataVal = useSelector(({ employerSignUp }) => {
+    return employerSignUp?.skillData;
+  });
+
+  useEffect(() => {
+    if (skillDataVal?.success) {
+      setFilteredItems(skillDataVal?.skills);
     }
-  };
+  }, [skillDataVal]);
 
-  const [clickedTitles, setClickedTitles] = useState(employer?.skills || []);
+  const [filteredItems, setFilteredItems] = useState([]);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Moved filtering logic inside a useEffect to update state with filtered items
+  useEffect(() => {
+    if (searchQuery !== "") {
+      const filtered = skillDataVal?.skills.filter((item) =>
+        item.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredItems(filtered);
+    } else {
+      setFilteredItems(skillDataVal?.skills);
+    }
+  }, [searchQuery, skillDataVal]);
+
+  console.log('filteredItems', filteredItems);
+
+  const [clickedTitles, setClickedTitles] = useState(employer?.skills?.map(({ name, image }) => { return { name, image } }) || []);
 
   useLayoutEffect(() => {
     if (employer?.skills) {
@@ -261,28 +276,35 @@ const EmployerProfieEdit = () => {
     }
   }, [employer?.skills]);
 
-  const handleItemClick = (itemName) => {
-    if (!clickedTitles.includes(itemName)) {
-      setClickedTitles((prevTitles) => [...prevTitles, itemName]);
+  const handleItemClick = (itemName, itemImage) => {
+    const newItem = { name: itemName, image: itemImage };
+    const alreadyClicked = clickedTitles.some((item) => item.name === itemName);
+
+    if (!alreadyClicked) {
+      setClickedTitles((prevTitles) => [...prevTitles, newItem]);
     } else if (
       searchQuery &&
-      !filteredItems.some(
-        (item) => item.title.toLowerCase() === searchQuery.toLowerCase()
-      )
+      !filteredItems.some((item) => item.name.toLowerCase() === searchQuery.toLowerCase())
     ) {
-      setClickedTitles((prevTitles) => [...prevTitles, searchQuery]);
+      setClickedTitles((prevTitles) => [
+        ...prevTitles,
+        { name: searchQuery, image: null },
+      ]);
     }
-    setSearchQuery(""); // Clear search query after selecting the item
+    setSearchQuery("");
   };
 
   const handleEnterKeyPressed = () => {
     if (
       searchQuery.trim() !== "" &&
       !filteredItems.some(
-        (item) => item.title.toLowerCase() === searchQuery.toLowerCase()
+        (item) => item.name.toLowerCase() === searchQuery.toLowerCase()
       )
     ) {
-      setClickedTitles((prevTitles) => [...prevTitles, searchQuery]);
+      setClickedTitles((prevTitles) => [
+        ...prevTitles,
+        { name: searchQuery, image: null },
+      ]);
       setSearchQuery("");
     }
   };
@@ -291,6 +313,37 @@ const EmployerProfieEdit = () => {
     const newTitles = [...clickedTitles];
     newTitles.splice(index, 1);
     setClickedTitles(newTitles);
+  };
+
+  const handleItemChange = (index, value) => {
+    const updatedTitles = [...clickedTitles];
+    updatedTitles[index] = value;
+    setClickedTitles(updatedTitles);
+  };
+
+  const handleCase0Data = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    const fileInput = profileImg.current;
+    const fileInput2 = profileBanner.current;
+
+    const file = fileInput.files[0];
+    const file2 = fileInput2.files[0];
+    // Append form data to formData
+    formData.append("profileImg", file);
+    formData.append("profileBanner", file2);
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("designation", designation);
+    formData.append("company", company);
+    formData.append("age", age);
+    formData.append("location", location);
+    formData.append("objective", objective);
+    formData.append("aboutYou", aboutYou);
+    formData.append("status", true);
+
+    dispatch(employerBasicInfoUpdate(formData));
+    handleOptionClick(1);
   };
 
   const handleCase1Data = () => {
@@ -323,12 +376,13 @@ const EmployerProfieEdit = () => {
     };
 
     setStoredData((prevStoredData) => [...prevStoredData, experienceDetails]);
-
+    toast.success('data added')
     handleCase2DataReset();
   };
 
   const handleSubmitExperience = () => {
     dispatch(employerExperienceInfoUpdate(storedData));
+    handleOptionClick(3)
   };
 
   const handleCase3Data = async () => {
@@ -343,16 +397,9 @@ const EmployerProfieEdit = () => {
     dispatch(employerContactInfoUpdate(contactInfo));
   };
 
-  const handleItemChange = (index, value) => {
-    const updatedTitles = [...clickedTitles];
-    updatedTitles[index] = value;
-    setClickedTitles(updatedTitles);
-  };
-
   const handleSubmitData = async (e) => {
     e.preventDefault();
     await handleCase3Data();
-    toast.success(message?.message);
   };
 
   const [isCurrentlyWorking, setIsCurrentlyWorking] = useState(false);
@@ -364,6 +411,21 @@ const EmployerProfieEdit = () => {
     } else {
       setEndDate("");
     }
+  };
+
+  const handleStartDateChange = (e) => {
+    setStartDate(e.target.value);
+    if (endDate < e.target.value) {
+      setEndDate("");
+    }
+  };
+
+  const handleEndDateChange = (e) => {
+    setEndDate(e.target.value);
+  };
+
+  const handleDelete = (_id) => {
+    dispatch(deleteEmployerExperience(_id));
   };
 
   const getContentBasedOnOption = () => {
@@ -575,7 +637,7 @@ const EmployerProfieEdit = () => {
                   <div className="mt-2">
                     <label htmlFor="">Location *</label>
                     <br />
-                    <select
+                    {/* <select
                       name="location"
                       id=""
                       value={location}
@@ -587,8 +649,17 @@ const EmployerProfieEdit = () => {
                       <option value="Banglore">Banglore</option>
                       <option value="Manglore">Manglore</option>
                       <option value="Mysore">Mysore</option>
+                    </select> */}
+                    <select name="location" id="State" value={location} onChange={(e) => setLocation(e.target.value)} required>
+                      <option value="">Select Location</option>
+                      {states.map((state, index) => (
+                        <option key={index} value={state}>
+                          {state}
+                        </option>
+                      ))}
                     </select>
                   </div>
+
                   <div className="mt-2">
                     <label htmlFor="">Objective</label>
                     <br />
@@ -664,8 +735,8 @@ const EmployerProfieEdit = () => {
               </button>
             </div>
             <div className="flex ">
-              <div className="skillScroll pe-4 border-r-2">
-                {clickedTitles.map((itemName, index) => (
+              <div className="skillScroll border-r-2">
+                {clickedTitles.map((item, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between mt-2 pt-1 pb-1 ps-2 pe-2 "
@@ -677,10 +748,10 @@ const EmployerProfieEdit = () => {
                       cursor: "pointer",
                     }}
                   >
-                    <h6 style={{ marginRight: "10%" }}>{itemName}</h6>
+                    <h6 style={{ marginRight: "10%" }}>{item.name}</h6>
                     <input
                       ref={skillRef}
-                      value={itemName}
+                      value={item.name}
                       type="text"
                       placeholder="Type your skills"
                       onChange={(e) => handleItemChange(index, e.target.value)}
@@ -707,7 +778,7 @@ const EmployerProfieEdit = () => {
                   </div>
                 ))}
               </div>
-              <div className="m-5 mt-0">
+              <div className="m-5 mt-0" style={{ width: '550px' }}>
                 <div
                   className="flex items-center"
                   style={{
@@ -775,8 +846,7 @@ const EmployerProfieEdit = () => {
                         className="mt-5 me-6"
                         style={{ width: "130px" }}
                         key={index}
-                        onClick={() => handleItemClick(item.title)}
-                      >
+                        onClick={() => handleItemClick(item.name, item.image)}                      >
                         <img
                           style={{
                             height: "147px",
@@ -796,22 +866,13 @@ const EmployerProfieEdit = () => {
                             display: "flex",
                           }}
                         >
-                          {item.title}{" "}
+                          {item.name}{" "}
                           <img
                             style={{ marginLeft: "10px" }}
                             src={vector}
                             alt=""
                           />
                         </h6>
-                        <p
-                          style={{
-                            color: "#000",
-                            fontSize: "12px",
-                            fontWeight: "400",
-                          }}
-                        >
-                          {item.description}
-                        </p>
                       </div>
                     ))
                   ) : (
@@ -881,10 +942,10 @@ const EmployerProfieEdit = () => {
                   <label htmlFor="">Start Date *</label>
                   <br />
                   <input
-                    style={{ width: "320px" }}
+                    style={{ width: "320px", cursor: "pointer" }}
                     type="date"
                     value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
+                    onChange={handleStartDateChange}
                     name="startDate"
                     required
                   />
@@ -899,6 +960,7 @@ const EmployerProfieEdit = () => {
                       marginLeft: "8rem",
                       marginRight: "0.4rem",
                       marginBottom: "0px",
+                      cursor: 'pointer'
                     }}
                     checked={isCurrentlyWorking}
                     onChange={handleCheckboxChange}
@@ -910,19 +972,20 @@ const EmployerProfieEdit = () => {
                     style={{
                       width: "320px",
                       filter: isCurrentlyWorking ? "blur(1px)" : "none",
-                      pointerEvents: isCurrentlyWorking ? "none" : "auto", // Disable pointer events when input is disabled
+                      cursor: isCurrentlyWorking ? '' : "pointer"
                     }}
                     type="date"
                     value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
+                    onChange={handleEndDateChange}
                     name="endDate"
+                    min={startDate}
                     disabled={isCurrentlyWorking}
                   />
                 </span>
               </div>
 
               <span>
-                <label htmlFor="">Role Description *</label>
+                <label htmlFor="">Role Description</label>
                 <br />
                 <textarea
                   value={roleDescription}
@@ -932,7 +995,6 @@ const EmployerProfieEdit = () => {
                   cols="67"
                   rows="3"
                   placeholder="Enter your Role Description"
-                  required
                 ></textarea>
               </span>
 
@@ -971,7 +1033,7 @@ const EmployerProfieEdit = () => {
                       >
                         Experience
                       </h3>
-                      <span className="delete">
+                      <span className="delete" onClick={() => handleDelete(exp._id)}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -1177,9 +1239,8 @@ const EmployerProfieEdit = () => {
             <h3 style={{ marginLeft: "10px" }}>Back</h3>
           </div>
           <div
-            className={`updateOptions ${
-              selectedOption === 0 ? "selected" : ""
-            }`}
+            className={`updateOptions ${selectedOption === 0 ? "selected" : ""
+              }`}
             onClick={() => handleOptionClick(0)}
           >
             <div
@@ -1191,9 +1252,8 @@ const EmployerProfieEdit = () => {
           <hr />
 
           <div
-            className={`updateOptions ${
-              selectedOption === 1 ? "selected" : ""
-            }`}
+            className={`updateOptions ${selectedOption === 1 ? "selected" : ""
+              }`}
             onClick={() => handleOptionClick(1)}
           >
             <div
@@ -1204,9 +1264,8 @@ const EmployerProfieEdit = () => {
           </div>
           <hr />
           <div
-            className={`updateOptions ${
-              selectedOption === 2 ? "selected" : ""
-            }`}
+            className={`updateOptions ${selectedOption === 2 ? "selected" : ""
+              }`}
             onClick={() => handleOptionClick(2)}
           >
             <div
@@ -1217,9 +1276,8 @@ const EmployerProfieEdit = () => {
           </div>
           <hr />
           <div
-            className={`updateOptions ${
-              selectedOption === 3 ? "selected" : ""
-            }`}
+            className={`updateOptions ${selectedOption === 3 ? "selected" : ""
+              }`}
             onClick={() => handleOptionClick(3)}
           >
             <div

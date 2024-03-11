@@ -3,14 +3,12 @@
   /* margin-top: 20px; */
   /* align-items: flex-start; */
   /* width:100%; */
-  flex-direction: row-reverse;
-  gap: 40px;
 }
 
 .feedcontentRight {
   height: calc(50vh - 1px);
   overflow-y: scroll;
-  scrollbar-color: #BFBFBF;
+  scrollbar-color: #bfbfbf;
 }
 .feedcontentRight::-webkit-scrollbar {
   border-radius: 8px;
@@ -21,18 +19,16 @@
   border-radius: 8px;
 }
 .feedcontentRight::-webkit-scrollbar-thumb {
-  background-color: #BFBFBF;
+  background-color: #bfbfbf;
   border-radius: 8px;
 }
 .centered-section {
   display: flex;
   flex-direction: column;
   margin-right: 20px;
-  margin-top: 20px;
   width: 450px;
   height: calc(70vh - 1px);
-  overflow-y: scroll;
-  scrollbar-color: #BFBFBF;
+  scrollbar-color: #bfbfbf;
 }
 .centered-section::-webkit-scrollbar {
   width: 0px;
@@ -40,7 +36,7 @@
 .centered-content {
   padding: 10px;
   height: 290px;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -55,30 +51,10 @@
   height: 100px;
 }
 
-.show-less {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-  line-height: 1.4;
-  max-height: 140px;
-  margin: 0px;
-}
-
-.show-more {
-  overflow: visible;
-  text-overflow: clip;
-  display: block;
-  margin: 0px;
-
-}
-
 .skilldata p {
   margin: 0px;
   font-size: 14px;
   color: #535353;
-
 }
 
 .skilldata h5 {
@@ -89,7 +65,6 @@
   margin-top: 5px;
   font-size: 15px;
   color: #888888;
-
 }
 
 .skillchild {
@@ -98,39 +73,19 @@
 }
 
 .skillchild2 {
-  color: #2676C2;
+  color: #2676c2;
 }
 
 .option:hover {
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
 }
 
 .centered-section2 {
   /* width: 70%; */
-  margin-top: 10px;
   padding: 20px;
   width: 650px;
   /* width:100%; */
-  border: 1px solid #EEEEEE;
-}
-
-.show-less2 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  line-height: 1.4;
-  max-height: 140px;
-  margin: 0px;
-}
-
-.show-more2 {
-  overflow: visible;
-  text-overflow: clip;
-  display: block;
-  margin: 0px;
-
+  border: 1px solid #eeeeee;
 }
 
 .inst {
@@ -162,7 +117,7 @@
   height: 400px;
   overflow-y: scroll;
   scrollbar-width: none;
-  scrollbar-color: #BFBFBF;
+  scrollbar-color: #bfbfbf;
 }
 .scroll::-webkit-scrollbar {
   width: 0px;
@@ -172,7 +127,7 @@
   border-radius: 8px;
 }
 .scroll::-webkit-scrollbar-thumb {
-  background-color: #BFBFBF;
+  background-color: #bfbfbf;
   border-radius: 8px;
 }
 
@@ -183,14 +138,14 @@
 
 .messageFooter {
   padding: 10px;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
 }
 
 .scroll {
   height: 600px;
   overflow-y: scroll;
   scrollbar-width: none;
-  scrollbar-color: #BFBFBF;
+  scrollbar-color: #bfbfbf;
 }
 .scroll::-webkit-scrollbar {
   width: 5px;
@@ -200,7 +155,7 @@
   border-radius: 8px;
 }
 .scroll::-webkit-scrollbar-thumb {
-  background-color: #BFBFBF;
+  background-color: #bfbfbf;
   border-radius: 8px;
 }
 .messageContent {
@@ -218,7 +173,7 @@
 
 .messageFooter {
   padding: 10px;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
 }
 
 .messageContent {
@@ -230,7 +185,7 @@
 
 .messageFooter {
   padding: 10px;
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
 }
 
 .no-transition {
@@ -238,23 +193,22 @@
   transform: none !important;
 }
 
-
 .scrollpopUp {
   height: 290px;
   overflow-y: scroll;
   scrollbar-width: thin;
-  scrollbar-color: #BFBFBF;
+  scrollbar-color: #bfbfbf;
   margin-left: 20px;
 }
 .scrollpopUp::-webkit-scrollbar {
   width: 6px;
   border-radius: 8px;
-} 
+}
 .scrollpopUp::-webkit-scrollbar-track {
   border-radius: 8px;
-} 
+}
 .scrollpopUp::-webkit-scrollbar-thumb {
-  background-color: #BFBFBF;
+  background-color: #bfbfbf;
   border-radius: 8px;
 }
 .popFooter {
@@ -262,29 +216,28 @@
   align-items: center;
   height: 50px;
   width: 744px;
-  box-shadow: -2px -2px 1px 1px rgba(17, 17, 17, 0.10);
+  box-shadow: -2px -2px 1px 1px rgba(17, 17, 17, 0.1);
   border: 0px;
 }
 
 .popFooter.disabled {
   background: whitesmoke;
-  color: #8D8D8D;
+  color: #8d8d8d;
 }
 
 .popFooter.enabled {
-  background: #2676C2;
-
+  background: #2676c2;
 }
 
 .close {
   padding: 4px 4px;
   border-radius: 50%;
-  color: #2676C2;
+  color: #2676c2;
   cursor: pointer;
 }
 
 .close:hover {
-  color: #2676C2;
+  color: #2676c2;
   cursor: pointer;
   background-color: rgb(38, 118, 194, 0.1);
 }
@@ -294,7 +247,7 @@
 .popupContainer {
   width: 744px;
   height: 492px;
-  border: 2px solid #EEEEEE;
+  border: 2px solid #eeeeee;
   border-radius: 8px;
   overflow: hidden;
   background: white;
@@ -305,12 +258,12 @@
 .downlod {
   padding: 10px 10px;
   border-radius: 50%;
-  color: #2676C2;
+  color: #2676c2;
   cursor: pointer;
 }
 
 .downlod:hover {
-  color: #2676C2;
+  color: #2676c2;
   cursor: pointer;
   background-color: rgb(38, 118, 194, 0.1);
 }
@@ -323,5 +276,4 @@
   height: 100vh;
   background-color: rgb(0, 0, 0, 0.5);
   z-index: 10000;
-
 }

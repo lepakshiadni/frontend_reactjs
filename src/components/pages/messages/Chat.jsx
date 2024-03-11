@@ -20,7 +20,8 @@ function Chat() {
   const [user, setUser] = useState(null);
   const [onlineUser, setOnlineUser] = useState([]);
   const [istyping, setIstyping] = useState(false);
-  console.log('typing', istyping)
+  const [notification,setNotification]=useState([]);
+  // console.log("typing", istyping);
   const fileInputRef = useRef(null);
 
   const handleButtonClick = () => {
@@ -40,8 +41,7 @@ function Chat() {
   const trainer = useSelector(({ trainerSignUp }) => {
     return trainerSignUp?.trainerDetails;
   });
-  // console.log("employer",employer)
-  // console.log("trainer",trainer)
+
   useEffect(() => {
     if (employer?.success) {
       setUser(employer?.employerDetails);
@@ -57,14 +57,26 @@ function Chat() {
   console.log("currentChat", currentChat);
 
   useEffect(() => {
-    socket.current = io(`http://192.168.1.106:4040`, {
+    socket.current = io(`http://192.168.1.103:4040`, {
       transports: ["websocket"],
       withCredentials: true,
       extraHeaders: {
         "my-custom-header": "value",
       },
     });
+    
+  }, []);
+  useEffect(() => {
+    if (user) {
+      socket.current.emit("addUser", user?._id);
+      socket.current.on("getUsers", (users) => {
+        console.log(users);
+      });
+    }
+  }, [user]);
 
+  useEffect(()=>{
+    //receive message  from server
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
@@ -73,7 +85,20 @@ function Chat() {
       });
       // console.log("data form server ", data)
     });
+    return () => {
+      socket.current.off('getMessage');
+    };
+  },[])
 
+  useEffect(() => {
+    arrivalMessage &&
+      currentChat?.members?.includes(arrivalMessage.sender) &&
+      setMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, currentChat]);
+
+  
+
+  useEffect(()=>{
     // Listen for the updateLastMessage event
     socket.current.on(
       "updateLastMessage",
@@ -90,33 +115,10 @@ function Chat() {
         );
       }
     );
-    socket.current.on("typing", ({ senderId }) => {
-      if (senderId !== user?._id) {
-        setIstyping(true);
-      }
-    });
+  },[arrivalMessage, messages])
 
-    socket.current.on("stoppedTyping", ({ senderId }) => {
-      if (senderId !== user?._id) {
-        setIstyping(false);
-      }
-    });
-  }, []);
+  
 
-  useEffect(() => {
-    arrivalMessage &&
-      currentChat?.members?.includes(arrivalMessage.sender) &&
-      setMessages((prev) => [...prev, arrivalMessage]);
-  }, [arrivalMessage, currentChat]);
-
-  useEffect(() => {
-    if (user) {
-      socket.current.emit("addUser", user?._id);
-      socket.current.on("getUsers", (users) => {
-        console.log(users);
-      });
-    }
-  }, [user]);
 
   useEffect(() => {
     if (user) {
@@ -126,7 +128,6 @@ function Chat() {
         setOnlineUser(filteredUsers);
       });
     }
-
     // Clean up the event listener when the component unmounts
     return () => {
       if (user) {
@@ -163,7 +164,7 @@ function Chat() {
         });
     };
     getmessage();
-  }, [currentChat, arrivalMessage]);
+  }, [arrivalMessage, currentChat]);
 
   const handlesubmit = async (event) => {
     event.preventDefault();

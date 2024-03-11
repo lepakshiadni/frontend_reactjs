@@ -12,9 +12,9 @@ const Requirements = () => {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getPostTrainingRequirementAction());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getPostTrainingRequirementAction());
+  // }, [dispatch]);
   const getActiveOption = (pathname) => {
     if (
       pathname.startsWith("/employerDashboard/postarequirements/post-training")

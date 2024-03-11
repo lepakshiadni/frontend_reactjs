@@ -3,6 +3,11 @@
 const initialState = {
   employerDetails: {},
   addBookMarkedPost: {},
+  getAppliedTrainingEmployer: {},
+  getAllAppliedTraining: {},
+  addApplicationRequest: {},
+  getAppCandidacy: {},
+  skillData: {},
   message: "",
   success: null,
 };
@@ -25,7 +30,7 @@ const employerReducer = (state = initialState, action) => {
     //geting trainer details after signup
     case "GET_EMPLOYEEDETAILS_FETCHED":
       console.log("handling get employer");
-      
+
       // toast.success(action.payload.message)
       return {
         ...state,
@@ -96,6 +101,31 @@ const employerReducer = (state = initialState, action) => {
         ...state,
         message: action.payload.error,
       };
+    case 'DELETE_EMPLOYER_EXPERIENCE_SUCCESS':
+      return {
+        ...state,
+        employerDetails: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case 'DELETE_EMPLOYER_EXPERIENCE_FAILURE':
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case 'GET_SKILLDATA_SUCCESS':
+      return {
+        ...state,
+        skillData: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case 'GET_SKILLDATA_FAILURE':
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+
     //add to the bookmark the trainerProfile
     case "ADD_BOOKMARKEDPOST_SUCCESS":
       console.log("handling get employer");
@@ -125,6 +155,92 @@ const employerReducer = (state = initialState, action) => {
         ...state,
         message: action.payload.error,
       };
+    case "APPLIEDTRAININGFECTED_SUCCESS":
+      console.log("handling get employer appliedTraining", action.payload);
+      return {
+        ...state,
+        getAppliedTrainingEmployer: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "APPLIEDTRAININGFECTED_FAILURE":
+      console.log("Handling failure trainer:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "ALLAPPLIEDTRAININGFECTED_SUCCESSS":
+      console.log("handling get employer appliedTraining", action.payload);
+      return {
+        ...state,
+        getAllAppliedTraining: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "ALLAPPLIEDTRAININGFECTED_FAILURE":
+      console.log("Handling failure trainer:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "UPDATEDAPPLIEDSTATUS_SUCCESSS":
+      console.log("handling update  appliedTraining", action.payload);
+      return {
+        ...state,
+        getAllAppliedTraining: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "UPDATEDAPPLIEDSTATUS_FAILURE":
+      console.log("Handling failure trainer:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "ADDFEEDBACK_SUCCESSS":
+      console.log("handling add feedback", action.payload);
+      return {
+        ...state,
+        getAllAppliedTraining: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "ADDFEEDBACK_FAILURE":
+      console.log("Handling failure add feedback:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "ADD_APPLICATIONREQUEST_SUCCESS":
+      console.log("handling add feedback", action.payload);
+      return {
+        ...state,
+        addApplicationRequest: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "ADD_APPLICATIONREQUEST_FAILURE":
+      console.log("Handling failure add feedback:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "GET_ALLCANDIDACY_SUCCESS":
+      console.log("handling add feedback", action.payload);
+      return {
+        ...state,
+        getAllCandidacy: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "GET_ALLCANDIDACY_FAILURE":
+      console.log("Handling failure add feedback:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+
+
 
     default:
       return state;

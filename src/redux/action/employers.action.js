@@ -30,7 +30,6 @@ const employerSignUpAction = (details) => {
 const employerDetails = () => {
   const token = Cookies.get("token");
   // console.log(token);
-  console.log('employerAction')
   return async (dispatch) => {
     try {
       Axios.get(`${baseUrl}/employer/getemployerProfile`, {
@@ -38,7 +37,7 @@ const employerDetails = () => {
           Authorization: `Bearer ${token}`,
         },
       }).then((resp) => {
-        console.log(resp.data)
+        // console.log(resp.data)
         dispatch({
           type: "GET_EMPLOYEEDETAILS_FETCHED",
           payload: resp.data,
@@ -155,5 +154,272 @@ export const employerExperienceInfoUpdate = (details) => {
     }
   };
 };
+
+export const deleteEmployerExperience = (_id) => {
+  const token = Cookies.get("token");
+  // console.log(token)
+  console.log("employer details action ", _id);
+  return async (dispatch) => {
+    try {
+      Axios.delete(`${baseUrl}/employer/employerExperienceInfoUpdate/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((resp) => {
+        // console.log(resp)
+        dispatch({
+          type: "DELETE_EMPLOYER_EXPERIENCE_SUCCESS",
+          payload: resp.data,
+        });
+      });
+    } catch (err) {
+      dispatch({
+        type: "DELETE_EMPLOYER_EXPERIENCE_FAILURE",
+        payload: err,
+      });
+    }
+  };
+};
+
+export const getSkillsData = () => {
+  const token = Cookies.get('token')
+  console.log('get SkillsData Action')
+  return async (dispatch) => {
+    try {
+      Axios.get(`${baseUrl}/employer/skills `, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then((resp) => {
+
+          dispatch({
+            type: 'GET_SKILLDATA_SUCCESS',
+            payload: resp.data
+          })
+        })
+    }
+    catch (err) {
+      dispatch({
+        type: "GET_SKILLDATA_FAILURE",
+        payload: err
+      })
+    }
+  }
+}
+
+export const getAppliedTrainingEmployer = () => {
+  const token = Cookies.get("token");
+  // console.log(token);
+  return async (dispatch) => {
+    try {
+      Axios.get(`${baseUrl}/employer/getAppliedTrainingEmployer`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((resp) => {
+        // console.log(resp)
+        dispatch({
+          type: "APPLIEDTRAININGFECTED_SUCCESS",
+          payload: resp.data,
+        });
+      });
+    } catch (error) {
+      dispatch({
+        type: "APPLIEDTRAININGFECTED_FAILURE",
+        payload: error,
+      });
+    }
+  };
+};
+
+export const getAllAppliedTraining = () => {
+  const token = Cookies.get("token");
+  // console.log(token);
+  return async (dispatch) => {
+    try {
+      Axios.get(`${baseUrl}/employer/getAllAppliedTraining`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((resp) => {
+        // console.log(resp)
+        dispatch({
+          type: "ALLAPPLIEDTRAININGFECTED_SUCCESSS",
+          payload: resp.data,
+        });
+      });
+    } catch (error) {
+      dispatch({
+        type: "ALLAPPLIEDTRAININGFECTED_FAILURE",
+        payload: error,
+      });
+    }
+  };
+};
+
+export const updateApplicationStatus = (trainingDetailsId, trainerId, status) => {
+  const token = Cookies.get("token");
+  // console.log(token);
+  return async (dispatch) => {
+    try {
+      Axios.put(`${baseUrl}/employer/updateAppliedStatus`, { trainingDetailsId, trainerId, status }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((resp) => {
+        // console.log(resp)
+        dispatch({
+          type: "UPDATEDAPPLIEDSTATUS_SUCCESSS",
+          payload: resp.data,
+        });
+      });
+    } catch (error) {
+      dispatch({
+        type: "UPDATEDAPPLIEDSTATUS_FAILURE",
+        payload: error,
+      });
+    }
+  };
+}
+
+export const addBookMarkePost = (postId, postDetails) => {
+  const token = Cookies.get('token')
+  console.log(postId, 'add bookmark post ', postDetails)
+  return async (dispatch) => {
+    try {
+      Axios.post(`${baseUrl}/employer/addBookMarkePost/${postId}`, postDetails, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then((resp) => {
+          // console.log(resp)
+          dispatch({
+            type: 'ADD_BOOKMARKEDPOST_SUCCESS',
+            payload: resp.data
+          })
+        })
+    }
+    catch (resp) {
+      dispatch({
+        type: "ADD_BOOKMARKEDPOSTFAILURE",
+        payload: resp.data
+      })
+    }
+  }
+
+}
+
+export const getBookMarkedPost = () => {
+  const token = Cookies.get('token')
+  console.log('get bookMarkepost Action')
+  return async (dispatch) => {
+    try {
+      Axios.get(`${baseUrl}/employer/getBookMarkedPostsByUserId `, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+        .then((resp) => {
+          // console.log(resp)
+          dispatch({
+            type: 'GET_BOOKMARKEDPOST_SUCCESS',
+            payload: resp.data
+          })
+        })
+    }
+    catch (err) {
+      dispatch({
+        type: "GET_BOOKMARKEDPOST_FAILURE",
+        payload: err
+      })
+    }
+  }
+
+}
+
+export const addFeedback = (feedBack, trainingDetailsId) => {
+  const token = Cookies.get('token');
+  return async (dispatch) => {
+    try {
+      Axios.put(`${baseUrl}/employer/addFeedback/${trainingDetailsId}`, feedBack, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((resp) => {
+        // console.log(resp)
+        dispatch({
+          type: "ADDFEEDBACK_SUCCESSS",
+          payload: resp.data,
+        });
+      });
+    } catch (error) {
+      dispatch({
+        type: "ADDFEEDBACK_FAILURE",
+        payload: error,
+      });
+    }
+  }
+}
+
+export const addApplicationRequest = (trainer, trainingDetails) => {
+  const token = Cookies.get('token')
+  console.log('Add Applicaiton Request   Action')
+  return async (dispatch) => {
+
+    Axios.post(`${baseUrl}/employer/employerTrainingRequest `, { trainer, trainingDetails }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((resp) => {
+        // console.log(resp)
+        dispatch({
+          type: 'ADD_APPLICATIONREQUEST_SUCCESS',
+          payload: resp.data
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+        dispatch({
+          type: "ADD_APPLICATIONREQUEST_FAILURE",
+          payload: error?.response?.data
+        })
+      })
+
+  }
+}
+
+export const getAllCandidacy = () => {
+  const token = Cookies.get('token')
+  console.log('Add Applicaiton Request   Action')
+  return async (dispatch) => {
+
+    Axios.get(`${baseUrl}/employer/getEmployerApplicationRequest`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then((resp) => {
+        // console.log(resp)
+        dispatch({
+          type: 'GET_ALLCANDIDACY_SUCCESS',
+          payload: resp.data
+        })
+      })
+      .catch((error) => {
+        console.log(error)
+        dispatch({
+          type: "GET_ALLCANDIDACY_FAILURE",
+          payload: error?.response?.data
+        })
+      })
+
+  }
+
+}
+
+
 
 export { employerSignUpAction, employerDetails };

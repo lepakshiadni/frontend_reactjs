@@ -3,11 +3,11 @@ import RouteCompo from "./Routes/RouteCompo";
 import { Provider } from 'react-redux'
 import store from './redux/store'
 import Axios from 'axios'
-import "./App.css"
+
 
 function App() {
   const getlocalip=async()=>{
-    await Axios.get('http://35.174.208.29/localip/')
+    await Axios.get('http://192.168.1.103:4000/localip/')
     .then((resp)=>{
       // console.log("Connected to server")
       console.log(resp.data)

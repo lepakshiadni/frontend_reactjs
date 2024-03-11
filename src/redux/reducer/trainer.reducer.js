@@ -6,6 +6,10 @@ const initialState = {
   addBookMarkedPost: {},
   trainerAppliedTraining: {},
   gettrainerAppliedTraining: {},
+  getAllRequestTraining: {},
+  skillData: {},
+  conversation: {},
+  // deleteAppliedTraining:{},
   message: "",
   success: null,
 };
@@ -84,6 +88,18 @@ const trainerReducer = (state = initialState, action) => {
         ...state,
         message: action.payload.error,
       };
+    case "DELETE_TRAINER_CERTIFICATE_SUCCESS":
+      return {
+        ...state,
+        trainerDetails: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "DELETE_TRAINER_CERTIFICATE_FAILURE":
+      return {
+        ...state,
+        message: action.payload.error,
+      };
     case "TRAINERCONTACTINFO_UPDATED_SUCCESS":
       console.log("handling get trainer");
       return {
@@ -112,6 +128,20 @@ const trainerReducer = (state = initialState, action) => {
         ...state,
         message: action.payload.error,
       };
+    case 'GET_SKILLDATA_SUCCESS':
+      return {
+        ...state,
+        skillData: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case 'GET_SKILLDATA_FAILURE':
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+
+
     //add to the bookmark the trainerProfile
     case "ADD_BOOKMARKEDPOST_SUCCESS":
       console.log("handling get trainer");
@@ -165,6 +195,76 @@ const trainerReducer = (state = initialState, action) => {
         success: action.payload.success,
       };
     case "GET_APPLIEDTRAINING_FAILURE":
+      console.log("Handling failure trainer:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "APPLIEDTRAININGDELETED_SUCCESS":
+      console.log("handling get trainer APPLIED TRAINING", action.payload);
+      return {
+        ...state,
+        gettrainerAppliedTraining: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "APPLIEDTRAININGDELETED_FAILURE":
+      console.log("Handling failure trainer:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "ADD_TRAINING_RESOURCES_SUCCESS":
+      console.log("handling add resource file action", action.payload);
+      return {
+        ...state,
+        gettrainerAppliedTraining: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "ADD_TRAINING_RESOURCES_FAILURE":
+      console.log("Handling failure trainer:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "GET_ALLREQUEST_SUCCESS":
+      console.log("handling add resource file action", action.payload);
+      return {
+        ...state,
+        getAllRequestTraining: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "GET_ALLREQUEST_FAILURE":
+      console.log("Handling failure trainer:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "CONVERSATIONCREATED_SUCCESS":
+      console.log("handling add resource file action", action.payload);
+      return {
+        ...state,
+        conversation: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "CONVERSATIONCREATED_FAILURE":
+      console.log("Handling failure trainer:", action.payload);
+      return {
+        ...state,
+        message: action.payload.error,
+      };
+    case "UPDATEDAPPLIEDSTATUS_SUCCESSS":
+      console.log("handling add resource file action", action.payload);
+      return {
+        ...state,
+        getAllRequestTraining: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case "UPDATEDAPPLIEDSTATUS_FAILURE":
       console.log("Handling failure trainer:", action.payload);
       return {
         ...state,

@@ -238,14 +238,20 @@ const EmployerHeader = () => {
           >
             <div className="profile-header">
               <div className="flex justify-start items-start">
-                {user?.basicInfo?.profileImg ? (
-                  <img className="w-[60px] h-[60px] rounded-full" src={user.basicInfo.profileImg} alt="" />
-                ) : (
-                  <img src="/images/default_avatar.png" alt="" />
-                )}
+                {
+                  user?.basicInfo?.profileImg ? <img className="w-[60px] h-[60px] rounded-full" src={user?.basicInfo?.profileImg} />
+                    :
+                    <div className="w-[60px] h-[60px] rounded-full capitalize flex justify-center items-center">
+                      <span className=" capitalize"> {user?.fullName[0]}</span>
+                    </div>
+                }
               </div>
               <div className="text-start min-w-[120px] w-[auto]">
-                <h4>{user?.fullName}</h4>
+                {/* <h4>{user?.basicInfo?.firstName + user?.basicInfo?.lastName  || user?.fullName}</h4> */}
+                {user?.basicInfo?.firstName && user?.basicInfo?.lastName
+                  ? `${user.basicInfo.firstName} ${user.basicInfo.lastName}`
+                  : user?.fullName
+                }
                 <p style={{ letterSpacing: "100%" }}>{user?.designation}</p>
               </div>
             </div>

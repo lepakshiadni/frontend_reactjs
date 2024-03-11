@@ -3,22 +3,23 @@ import '../../styles/TrainerProfile.css';
 import Banner from "../../assets/Profile Banner.png";
 import TrainerProfileImage from "../../assets/profileTrainer.png";
 import Edit from "../../assets/edit.svg";
-import ReactImg from "../../assets/react.png";
-import FigmaImg from "../../assets/figma.png";
-import AdobeImg from "../../assets/adobe.png";
-import PythonImg from "../../assets/python.png";
+import { Link } from "react-router-dom";
+import timeago from 'timesago'
 import Favi from "../../assets/favi.png";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import EmployerHeader from "../../header&footer/EmployerHeader";
+import { employerDetails, getAllAppliedTraining } from '../../../redux/action/employers.action'
+import { getPostTrainingRequirementAction } from '../../../redux/action/postRequirement.action'
+
 const EmployerProfile = () => {
   const [showAll, setShowAll] = useState(false);
   const [user, setUser] = useState(null);
+  const dispatch = useDispatch()
+
   const navigate = useNavigate();
   const location = useLocation();
-  // const user = useSelector(({ user }) => {
-  //   return user?.user
-  // })
+  let recentApplication;
   const [showAllExp, setShowAllExp] = useState(false);
   const [showAllActivities, setShowAllActivities] = useState(false);
   const [visibleApplications, setVisibleApplications] = useState(1);
@@ -42,6 +43,34 @@ const EmployerProfile = () => {
     setVisibleApplications(1);
     setShowApplication(false);
   };
+
+  useEffect(() => {
+    dispatch(employerDetails())
+    dispatch(getPostTrainingRequirementAction())
+    dispatch(getAllAppliedTraining())
+
+  }, [dispatch])
+
+  const employer = useSelector(({ employerSignUp }) => {
+    return employerSignUp?.employerDetails;
+  });
+
+  const postDetails = useSelector(({ postRequirement }) => {
+    return postRequirement?.postTrainingDetails?.postTrainingDetails
+  })
+
+  const appliedTraining = useSelector(({ employerSignUp }) => {
+    return employerSignUp?.getAllAppliedTraining?.appliedTrainingDetails
+  })
+
+  console.log(postDetails, "postDetails")
+  console.log('appliedTraining', appliedTraining)
+
+  useEffect(() => {
+    if (employer?.success) {
+      setUser(employer?.employerDetails);
+    }
+  }, [employer]);
   const experiences = [
     {
       companyName: "Zipro Technology",
@@ -228,21 +257,7 @@ const EmployerProfile = () => {
     },
   ];
 
-  const employer = useSelector(({ employerSignUp }) => {
-    return employerSignUp?.employerDetails;
-  });
-  const trainer = useSelector(({ trainerSignUp }) => {
-    return trainerSignUp?.trainerDetails;
-  });
 
-  useEffect(() => {
-    if (employer?.success) {
-      setUser(employer?.employerDetails);
-    }
-    if (trainer?.success) {
-      setUser(trainer?.trainerDetails);
-    }
-  }, [employer, trainer]);
   console.log("user", user);
   const notificationMessages = [
     {
@@ -293,14 +308,7 @@ const EmployerProfile = () => {
   const handleToggle = () => {
     setShowAll((prevShowAll) => !prevShowAll);
   };
-  // const routingProfileEdit = () => {
-  //   if (location.pathname.startsWith("/trainerprofile") ) {
-  //     return (("/trainerprofile/trainerProfileEdit") && (
-  //       <UpdateProfile />
-  //     ));
-  //   }
-  //   return "/trainerprofile/trainerProfileEdit"; // Return a default path if needed
-  // };
+
 
   const handleEditProfile = async () => {
     // const profileEditPath = routingProfileEdit();
@@ -348,17 +356,32 @@ const EmployerProfile = () => {
       <div className="w-full relative">
         <div className="w-100% relative ml-[80px] mr-[80px] h-auto flex">
           <div className="leftsideTrainerProfile w-8/12 mr-[23.67px]">
-            <div className="min-h-[1086px] h-[auto] flex flex-col border">
+            <div className="min-h-[900px] h-[auto] flex flex-col border">
               <div className="h-[195px] ">
-                <img className="h-[235.41px]" src={Banner} alt="img" />
+                {
+                  user?.basicInfo?.profileBanner ?
+
+                    <img className="h-[235.41px] w-full" src={user?.basicInfo?.profileBanner} alt="img" />
+                    :
+                    <div className="flex justify-center items-center bg-slate-300 w-full">
+                      <span className="capitalize text-black">{user?.fullName[0]}</span>
+                    </div>
+                }
               </div>
               <div className="">
                 <div className="relative flex justify-center items-center flex-col">
-                  <img
-                    className="relative top-[-5px] w-[100px] h-[100px] rounded-full"
-                    src={TrainerProfileImage}
-                    alt=""
-                  />
+                  {
+                    user?.basicInfo.profileImg ?
+                      <img
+                        className="relative top-[-5px] w-[100px] h-[100px] rounded-full"
+                        src={user?.basicInfo.profileImg}
+                        alt=""
+                      />
+                      :
+                      <div className="relative top-[-5px] w-[100px] h-[100px] rounded-full bg-slate-300">
+                        <span className="text-3xl capitalize">{user?.fullName[0]}</span>
+                      </div>
+                  }
                   <img
                     onClick={handleEditProfile}
                     className="absolute right-[30.33px] cursor-pointer"
@@ -366,13 +389,15 @@ const EmployerProfile = () => {
                     alt=""
                   />
                   <div className="relative flex justify-center items-center flex-col">
-                    <div className="text-[#263238] text-[20px] font-[500] font-['Poppins']">
-                      {user?.fullName?.charAt(0)?.toUpperCase() +
-                        user?.fullName?.slice(1)}
+                    <div className="text-[#263238] text-[20px] font-[500] font-['Poppins'] capitalize">
+                      {/* {user?.fullName?.charAt(0)?.toUpperCase() +
+                        user?.fullName?.slice(1)} */}
+                      {`${user?.basicInfo?.firstName} ${user?.basicInfo?.lastName} ` || `${user?.fullName}`}
                     </div>
-                    <div className="text-[#232323] text-base font-normal font-['Poppins']">
-                      {user?.designation?.charAt(0)?.toUpperCase() +
-                        user?.designation?.slice(1) || ""}
+                    <div className="text-[#232323] text-base font-normal font-['Poppins'] capitalize">
+                      {/* {user?.designation?.charAt(0)?.toUpperCase() +
+                        user?.designation?.slice(1) || ""} */}
+                      {user?.designation}
                     </div>
                     <h4
                       className="font-[500] text-[#2676C2] text-[16px] font-[Poppins] cursor-pointer"
@@ -381,26 +406,22 @@ const EmployerProfile = () => {
                       500+ connections
                     </h4>
                   </div>
-                  <div className="relative text-center text-[#6A6A6A] text-[14px] font-[400] font-['Poppins']">
-                    {/* Figma | Illustrator | Photoshop | Adobe XD |<br />
-                    Coreldraw | Balsamiq | Wifrframe | Prototyping */}
-                    {user?.skills?.slice(0, 7).map((skill, { value }) => {
+                  <div className="relative text-center text-[#6A6A6A] text-[14px] font-[400] font-['Poppins'] capitalize">
+                    {user?.skills?.slice(0, 7).map(({name}) => {
                       return (
                         <>
                           <span>
-                            {skill}
-                            {value} |{" "}
+                            {name}| {" "}
                           </span>
                         </>
                       );
                     })}
                     <br />
-                    {user?.skills?.slice(7, 10).map((skill, { value }) => {
+                    {user?.skills?.slice(7, 10).map(({name}) => {
                       return (
                         <>
                           <span>
-                            {skill}
-                            {value} |{" "}
+                            {name}| {" "}
                           </span>
                         </>
                       );
@@ -419,16 +440,18 @@ const EmployerProfile = () => {
                 <div className="mt-[17px] mb-[17px] w-9/12 h-[0px] border border-neutral-200"></div>
               </div>
               <div className="pl-[30px] pr-[30px]">
-                <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins']">
-                  UI/UX Trainer & Developer | Passionate about Crafting Seamless
-                  Experiences
+                <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins'] capitalize">
+                  {/* UI/UX Trainer & Developer | Passionate about Crafting Seamless
+                  Experiences */}
+                  {user?.basicInfo?.objective}
                 </div>
                 <div className="text-[#535353] text-[16px] mt-[10px] font-[400px] font-['Poppins']">
-                  I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a
+                  {/* I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a
                   keen eye for design and a <br />
                   commitment to education, I'm on a mission to share my
                   expertise with aspiring <br />
-                  designers.
+                  designers. */}
+                  {user?.basicInfo?.aboutYou}
                 </div>
               </div>
               <div className="flex justify-center items-center flex-col mt-[30px] mr-[10px] ml-[10px]">
@@ -438,7 +461,8 @@ const EmployerProfile = () => {
                 <h3 className="text-[#232323] text-[18px] font-[500] font-['Poppins']">
                   Experience
                 </h3>
-                {experiences
+                {user?.experience
+
                   .slice(0, showAllExp ? experiences.length : 3)
                   .map((experience, index) => (
                     <div key={index}>
@@ -456,7 +480,7 @@ const EmployerProfile = () => {
                           Designation:{" "}
                         </span>
                         <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
-                          {experience.designation}
+                          {experience.designation2}
                         </span>
                       </h3>
                       <h3 className="mt-[10px]">
@@ -468,12 +492,12 @@ const EmployerProfile = () => {
                         </span>
                       </h3>
                       <p className="mt-[20px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                        {experience.description}
+                        {experience.roleDescription}
                       </p>
                     </div>
                   ))}
               </div>
-              {experiences.length > 3 && (
+              {user?.experience.length > 3 && (
                 <div className="mt-[10px] ml-[28px] mb-[13px]">
                   <p
                     className="text-[#2676C2] text-[16px] font-[400] font-['Poppins'] cursor-pointer"
@@ -490,20 +514,22 @@ const EmployerProfile = () => {
                   <div className="text-[#535353] text-[18px] font-[500] font-['Poppins']">
                     Recent Activities
                   </div>
-                  {/* <div className="text-[#2676C2] text-[16px] font-[500] font-['Poppins'] rounded-[8px] border border-[#2676C2] pl-[15px] pr-[15px] pt-[3px] pb-[3px] hover:bg-[#2676C2] hover:text-[#fff]">
-                    Create post
-                  </div> */}
+                  <div className="text-[#2676C2] text-[16px] font-[500] font-['Poppins'] rounded-[8px] border border-[#2676C2] pl-[15px] pr-[15px] pt-[3px] pb-[3px] hover:bg-[#2676C2] hover:text-[#fff]">
+                    <Link to='/employerDashboard/postarequirements/post-training'>Create post</Link>
+                  </div>
                 </div>
                 <div>
-                  {activities
-                    .slice(0, showAllActivities ? activities.length : 3)
-                    .map((activity, index) => (
+                  {postDetails
+                    ?.slice(0, showAllActivities ? activities.length : 3)
+                    ?.map((activity, index) => (
                       <div key={index}>
                         <div className="mt-[20px] text-[#9F9F9F] text-[14px] font-[400] font-['Poppins']">
-                          {activity.posted} ago
+                          {/* {activity.posted} ago */}
+                          {timeago(activity.createdAt)}
                         </div>
                         <div className="mt-[10px] text-[#535353] text-[18px] font-[500] font-['Poppins']">
-                          {activity.title}
+                          {activity?.trainingName}
+
                         </div>
                         <div className="mt-[10px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
                           {activity.description}
@@ -527,7 +553,7 @@ const EmployerProfile = () => {
                             </svg>
                           </div>
                           <div className="pl-[6px] pr-[7px] text-[#2676C2] text-[18px] font-[500] font-['Poppins']">
-                            {activity.MinRate}
+                            {activity?.minBudget}
                           </div>
                           <span className="pr-[7px] text-[#2676C2]">-</span>
                           <div>
@@ -545,15 +571,15 @@ const EmployerProfile = () => {
                             </svg>
                           </div>
                           <div className="pl-[6px] text-[#2676C2] text-[18px] font-[500] font-['Poppins']">
-                            {activity.MaxRate}
+                            {activity?.maxBudget}
                           </div>
                         </div>
                         <div className="mt-[10px] mb-[20px] flex">
-                          <div className="mr-[13px] text-[#888] text-[18px] font-[400] font-['Poppins']">
+                          <div className="mr-[13px] text-[#888] text-[18px] font-[400] font-['Poppins'] capitalize">
                             Mode of Training -
                           </div>
-                          <div className="text-[#2676C2] text-[18px] font-[400] font-['Poppins']">
-                            {activity.trainingMode}
+                          <div className="text-[#2676C2] text-[18px] font-[400] font-['Poppins'] capitalize">
+                            {activity?.modeOfTraining}
                           </div>
                         </div>
                         <hr />

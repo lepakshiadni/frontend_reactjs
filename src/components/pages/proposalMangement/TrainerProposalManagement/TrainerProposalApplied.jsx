@@ -16,31 +16,10 @@ const TrainerProposalApplied = ({ training }) => {
                                     <h3 className='Blue_H2'>{trainingPostDetails?.trainingName}</h3>
                                     <p>Training Topics & Subjects</p>
 
-                                    <div className="flex   gap-2">
-
-                                        {
-                                            trainingPostDetails?.topics?.slice(0, 5)?.map((topic) => {
-                                                return (
-                                                    // <p className="flex">{topic}</p>
-                                                    <div className="">
-                                                        <h2 className="capitalize text-[#535353] text-sm">{topic}</h2>
-                                                    </div>
-                                                )
-                                            })
-                                        }
-
-                                    </div>
-                                    <div className="flex gap-2">
-                                        {
-                                            trainingPostDetails?.topics?.slice(5,10)?.map((topic) => {
-                                                return (
-
-                                                    <div className="">
-                                                        <h2 className="capitalize text-[#535353] text-sm">{topic}</h2>
-                                                    </div>
-                                                )
-                                            })
-                                        }
+                                    <div className="flex space-x-5 capitalize">
+                                        <div>{trainingPostDetails?.topics?.slice(0, 5)?.map((items) => <h2>{items}</h2>)}</div>
+                                        <div className="bg-[#8888] w-[1px]"></div>
+                                        <div>{trainingPostDetails?.topics?.slice(5, 10)?.map((items) => <h2>{items}</h2>)}</div>
                                     </div>
                                     <p>Type Of Training</p>
                                     <h2>{trainingPostDetails?.typeOfTraining}</h2>
@@ -71,27 +50,31 @@ const TrainerProposalApplied = ({ training }) => {
                                             margin: '0'
                                         }}>Posted By</h1>
                                         <div className='PBB capitalize' style={{ background: '#FFF' }}>
-                                            <img src={trainingPostDetails?.postedByImage} alt="" style={{ borderRadius: '100%', width: '4rem', height: '4rem' }} />
+                                            {/* <img src={trainingPostDetails?.postedByImg} alt="" style={{ borderRadius: '100%', width: '4rem', height: '4rem' }} /> */}
+                                            {
+                                                trainingPostDetails?.postedByImg ? <img src={trainingPostDetails?.postedByImg} alt={trainingPostDetails?.postedByName[0]} style={{ borderRadius: '100%', width: '4rem', height: '4rem' }} />
+                                                    : <div style={{ borderRadius: '100%', width: '4rem', height: '4rem' }}>{trainingPostDetails?.postedByName[0]}</div>
+                                            }
                                             <span><h2>{trainingPostDetails?.postedByName}</h2><p>{trainingPostDetails?.postedByCompanyName}</p></span>
                                         </div>
                                     </div>
-                                    <div className='B'><h2>Budget</h2><h1>${trainingPostDetails?.maxBudget} - ${trainingPostDetails?.minBudget}</h1></div>
+                                    <div className='B'><h2>Budget</h2><h1>${trainingPostDetails?.maxBudget}/<span className='capitalize'>{trainingPostDetails?.durationType?.slice(0, 3)}</span> - ${trainingPostDetails?.minBudget}/<span className='capitalize'>{trainingPostDetails?.durationType?.slice(0, 3)}</span></h1></div>
                                     <div className='B capitalize'><h2>Mode Of Training</h2><h1>{trainingPostDetails?.modeOfTraining}</h1></div>
                                 </div>
                                 <div className='Statuss'>
-                                    <h3>You're interested in this trainer profile, and the request has been successfully submitted! Now, we're awaiting the outcome.</h3>
+                                    <h3>You're interested in this training, and the request has been successfully submitted! Now, we're awaiting the outcome.</h3>
                                     <br />
                                     <div className="stepper">
-                                        <div className="" style={appliedStatus===true?{ visibility: "hidden" }:null} >
+                                        <div className="" style={appliedStatus === true ? { visibility: "hidden" } : null} >
                                             <div className="step-label">
                                                 <h2>Applied</h2>
-                                                <p>You Just Sent a <br />Request  for Trainer</p>
+                                                <p>You Just Sent a <br />Request  for Employer</p>
                                             </div>
                                         </div>
-                                        <div className="" style={appliedStatus===false?{ visibility: "hidden" }:null}>
+                                        <div className="" style={appliedStatus === false ? { visibility: "hidden" } : null}>
                                             <div className="step-label">
                                                 <h2>Accepted</h2>
-                                                <p>Trainer Accepted Your <br /> Request</p>
+                                                <p>Employer Accepted Your <br /> Request</p>
                                             </div>
                                         </div>
                                     </div>

@@ -70,7 +70,9 @@
 
 .Trainer_Info {
   width: 30%;
-  height: 25rem;
+  height:auto;
+  min-height: 28rem;
+
   /* border: #88888857 0.3px solid; */
   border-radius: 10px 0 0 10px;
 }
@@ -364,8 +366,11 @@
 }
 
 .Trainer_Infoo {
-  width: 28%;
-  height: 25rem;
+  /* width: 28%; */
+  min-width: 28%;
+  width: auto;
+  min-height: 25rem;
+  height: auto;
   border: #88888857 0.3px solid;
   border-radius: 10px 0 0 10px;
   display: flex;
@@ -375,8 +380,11 @@
 }
 
 .Program_Info {
-  width: 71%;
-  height: 25rem;
+  /* width: 71%; */
+  min-width: 71%;
+  width: auto;
+  min-height: 25rem;
+  height: auto;
   border: #88888857 0.3px solid;
   border-radius: 0 10px 10px 0;
   display: flex;
@@ -392,7 +400,7 @@
 .Total_Partt h2 {
   color: #535353;
   font-family: Poppins;
-  font-size: 1rem;
+  font-size: 14px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -402,7 +410,7 @@
 .Blue_H22 {
   color: #2676c2;
   font-family: Poppins;
-  font-size: 1rem;
+  font-size: 14px ;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -436,7 +444,7 @@
 .P205 h1 {
   color: #2676c2;
   font-family: Poppins;
-  font-size: 1.875rem;
+  font-size: 26px ;
   font-style: normal;
   font-weight: 500;
   line-height: normal;

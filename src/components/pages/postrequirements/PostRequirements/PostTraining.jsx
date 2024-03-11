@@ -9,9 +9,9 @@ import '../../../styles/Requirements.css';
 
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
-// import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
-import { postTrainingRequirementAction, getPostTrainingRequirementAction } from "../../../../redux/action/postRequirement.action";
+import { postTrainingRequirementAction } from "../../../../redux/action/postRequirement.action";
 const PostTrainingSection = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -30,25 +30,42 @@ const PostTrainingSection = () => {
     const [contentt,] = useState("")
     const [experience, setExperience] = React.useState(0);
     const [, setTocContent] = useState(null);
-    
+    const [toastShown, setToastShown] = useState(false);
     const [isDragging, setIsDragging] = React.useState(false);
     const employer = useSelector(({ employerSignUp }) => {
         return employerSignUp?.employerDetails?.employerDetails
     })
+    const dispatch = useDispatch()
     const postRequiement = useSelector(({ postRequirement }) => {
         return postRequirement;
     })
-    console.log("postRequiement", postRequiement)
+    // console.log("postRequiement", postRequiement)
 
-    const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(getPostTrainingRequirementAction())
-    }, [dispatch])
+        if (postRequiement?.success) {
+            toast.success('Your Training is posted successfully!', {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            setToastShown(true); // Set toastShown to true to prevent further toasts
+        } else if (!postRequiement?.success && postRequiement?.message) {
+            toast.error(postRequiement?.message);
+        }
+    }, [postRequiement, toastShown]);
+
+    // useEffect(() => {
+    //     dispatch(getPostTrainingRequirementAction())
+    // }, [dispatch])
 
     const handleExperienceChange = (event) => {
         setExperience(event.target.value);
     };
-    
+
     const startDatePickerRef = useRef(null);
     const endDatePickerRef = useRef(null);
 
@@ -61,21 +78,21 @@ const PostTrainingSection = () => {
     const handleDragStart = () => {
         setIsDragging(true);
     };
-   
+
 
     const handleDragEnd = () => {
         setIsDragging(false);
     };
-    
+
     const showValueLabel = isDragging || (experience > 0 && !isDragging);
-    
+
 
     const trackBackground = {
         background: `linear-gradient(to right, #2676C2 0%, #2676C2 ${(experience / 50) * 100}%, #d3d3d3 ${(experience / 50) * 100}%, #d3d3d3 100%)`,
     };
-   
 
-    
+
+
     useEffect(() => {
         adjustHeight();
     }, [content, contentt]);
@@ -83,7 +100,7 @@ const PostTrainingSection = () => {
     const handleChange = (event) => {
         setContent(event.target.value);
     };
-    
+
     const handleStartDateChange = (date) => {
         setStartDate(date);
     };
@@ -166,7 +183,7 @@ const PostTrainingSection = () => {
         { value: 'django', label: 'Django' },
         { value: 'express', label: 'Express' }
     ]
-    
+
 
 
     const handleTrainingModeChange = (mode) => {
@@ -185,8 +202,6 @@ const PostTrainingSection = () => {
     const location = useRef()
     const tocFile = useRef()
 
-    console.log('toc', tocFile)
-   
 
 
 
@@ -220,8 +235,8 @@ const PostTrainingSection = () => {
             console.log('emplooyer', employer?.fullName)
             // Append file to FormData
             if (tocFile.current && tocFile.current.files.length > 0) {
-                console.log("tocFile",tocFile.current.files[0])
-                
+                console.log("tocFile", tocFile.current.files[0])
+
                 // formData.append("tocFile", tocFile.current.files[0],tocFile.current?.files[0]?.name);
                 formData.append("tocFile", tocFile.current.files[0], tocFile.current?.files[0]?.name);
             }
@@ -252,18 +267,18 @@ const PostTrainingSection = () => {
         setSelectedTopics(selectedOptions);
     };
 
-   
-    
-    
-    
+
+
+
+
 
     const description2 = useRef()
     const description3 = useRef()
-    
 
-   
 
-   
+
+
+
 
 
     const handleKeyDown = (event) => {
@@ -275,559 +290,558 @@ const PostTrainingSection = () => {
             }
         }
     }
-  return (
-    <div className="Requirements">
-        <div className="Buttons_Content">
-                    {activeOption === "postTraining" && (
-                        <div className="Post_Training_content">
-                            <div div className="Company">
-                                <div className="Training_Name">Training Name</div>
-                                <input
-                                    type="text" style={{ padding: '0 10px', color: '#333333', }}
-                                    placeholder="Training Name"
-                                    ref={trainingName}
-                                    name="trainingName"
-                                    onKeyDown={handleKeyDown}
-                                />
-                            </div>
-                            <div className="Training_Description">
-                                <label for="description" className="text-[#333333] font-['Poppins'] mb-[10px]">Description</label>
-                                <textarea
-                                    ref={description}
-                                    name="description"
-                                    className="h-auto"
-                                    onChange={handleChange}
-                                    id="description"
-                                    placeholder="Enter your description here..."
-                                    style={{ borderRadius: '0.4rem', minHeight: "2.4rem" }}
-                                />
-                            </div>
+    return (
+        <div className="Requirements">
+            <div className="Buttons_Content">
+                {activeOption === "postTraining" && (
+                    <div className="Post_Training_content">
+                        <div div className="Company">
+                            <div className="Training_Name">Training Name</div>
+                            <input
+                                type="text" style={{ padding: '0 10px', color: '#333333', }}
+                                placeholder="Training Name"
+                                ref={trainingName}
+                                name="trainingName"
+                                onKeyDown={handleKeyDown}
+                            />
+                        </div>
+                        <div className="Training_Description">
+                            <label for="description" className="text-[#333333] font-['Poppins'] mb-[10px]">Description</label>
+                            <textarea
+                                ref={description}
+                                name="description"
+                                className="h-auto"
+                                onChange={handleChange}
+                                id="description"
+                                placeholder="Enter your description here..."
+                                style={{ borderRadius: '0.4rem', minHeight: "2.4rem" }}
+                            />
+                        </div>
 
-                            <div className="Content_Title" style={{ width: '41.3rem', marginBottom: '10px' }}>
-                                <p>Technology (Training Topics)</p>
-                                <div className="mt-[10px] mb-[20px]">
-                                    <Select
-                                        defaultValue={[]}
-                                        isMulti
-                                        name="colors"
-                                        options={topTopics}
-                                        className="Multiselector"
-                                        placeholder="select Training Topics"
-                                        styles={{
-                                            placeholder: (provided) => ({
-                                                ...provided,
-                                                color: '#888',
-                                            }),
-                                        }}
-                                        ref={topics}
-                                        value={selectedTopics}
-                                        onChange={handleTopicChange}
-                                    /></div>
-                            </div>
-                            <div className="Type_Of_Training ">
-                                <div className="text-[#333333] font-['Poppins']">Type Of Training</div>
-                                <div className="RadioTOT">
-                                    <label className={`LLLabel ${trainingType === "Corporate Training" ? "active" : ""}`}>
-                                        <input
-                                            type="radio"
-                                            name="trainingType"
-                                            value="Corporate Training"
-                                            checked={trainingType === "Corporate Training"}
-                                            onChange={() => handleTrainingTypeChange("Corporate Training")}
-                                        />
-                                        <h2>Corporate Training</h2>
-                                    </label>
-                                    <label className={`LLLabel ${trainingType === "College Training" ? "active" : ""}`}>
-                                        <input
-                                            type="radio"
-                                            name="trainingType"
-                                            value="College Training"
-                                            checked={trainingType === "College Training"}
-                                            onChange={() => handleTrainingTypeChange("College Training")}
-                                        />
-                                        <h2>College Training</h2>
-                                    </label>
-                                    <label className={`LLLabel ${trainingType === "Individual" ? "active" : ""}`}>
-                                        <input
-                                            type="radio"
-                                            name="trainingType"
-                                            value="Individual"
-                                            checked={trainingType === "Individual"}
-                                            onChange={() => handleTrainingTypeChange("Individual")}
-                                        />
-                                        <h2>Individual</h2>
-                                    </label>
-                                </div>
-                                {trainingType === "Corporate Training" && (
-                                    <div className="ParticipantCount">
-                                        <h5 className="mt-[5px] mb-[0px] text-[#535353] font-['Poppins']">Select No Of Participents</h5>
-                                        <div className="RadioTOT_Count">
-                                            <button
-                                                onClick={() => setParticipantCount(Math.max(participantCount - 1, 0))}
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                className="TOT_Input"
-                                                value={participantCount}
-                                                onChange={(e) => setParticipantCount(Math.max(parseInt(e.target.value) || 0, 0))}
-                                                style={{ width: `${Math.min((participantCount.toString().length * 8), maxCount)}px` }}
-
-                                            />
-
-                                            <button
-                                                onClick={() => setParticipantCount(participantCount + 1)}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                                {trainingType === "College Training" && (
-                                    <div className="ParticipantCount">
-                                        <h5 className="mt-[5px] mb-[0px] text-[#535353] font-['Poppins']">Select No Of Participents</h5>
-                                        <div className="RadioTOT_Count">
-                                            <button
-                                                onClick={() => setParticipantCount(Math.max(participantCount - 1, 0))}
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                className="TOT_Input"
-                                                value={participantCount}
-                                                onChange={(e) => setParticipantCount(Math.max(parseInt(e.target.value) || 0, 0))}
-                                                style={{ width: `${Math.min((participantCount.toString().length * 8), maxCount)}px` }}
-
-                                            />
-                                            <button
-                                                onClick={() => setParticipantCount(Math.min(participantCount + 1,))}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                                {trainingType === "Individual" && (
-                                    <div className="ParticipantCount">
-                                        <h5 className="mt-[5px] mb-[0px]">Select No Of Participents</h5>
-                                        <div className="RadioTOT_Count">
-                                            <button
-                                                onClick={() => setParticipantCount(Math.max(participantCount - 1, 0))}
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                className="TOT_Input"
-                                                value={participantCount}
-                                                onChange={(e) => setParticipantCount(Math.max(parseInt(e.target.value) || 0, 0))}
-                                                style={{ width: `${Math.min((participantCount.toString().length * 8), maxCount)}px` }}
-
-                                            />
-                                            <button
-                                                onClick={() => setParticipantCount(participantCount + 1)}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="Mode_Of_Training">
-                                <div className="text-[#333333] font-['Poppins']">Mode of Training</div>
-                                <div className="Radio_MOT">
-                                    <label className={`LLLabel font-['Poppins'] ${trainingMode === "online" ? "active" : ""}`}>
-                                        <input
-                                            type="radio"
-                                            name="trainingMode"
-                                            value="online"
-                                            checked={trainingMode === "online"}
-                                            onChange={() => handleTrainingModeChange("online")}
-                                        />
-                                        Online
-                                    </label>
-                                    <label className={`LLLabel font-['Poppins'] ${trainingMode === "offline" ? "active" : ""}`}>
-                                        <input
-                                            type="radio"
-                                            name="trainingMode"
-                                            value="offline"
-                                            checked={trainingMode === "offline"}
-                                            onChange={() => handleTrainingModeChange("offline")}
-                                        />
-                                        Offline
-                                    </label>
-                                </div>
-                                {trainingMode === "offline" && (
-                                    <div className="SelectLocation">
-                                        <label className="LLLabel">
-                                            <h5 className="mt-[10px] mb-[10px] text-[#535353] font-['Poppins']">Your Location</h5>
-                                        </label>
-                                        <select
-                                            ref={location}
-                                        >
-                                            <option value="">Location</option>
-                                            <option value="usa">United States</option>
-                                            <option value="canada">Canada</option>
-                                            <option value="uk">United Kingdom</option>
-                                            <option value="australia">Australia</option>
-                                        </select>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="Select_Experience">
-                                <p className="mt-[5px] mb-[5px]">Select Experience</p>
-                                <h5 className="mt-[5px] mb-[5px]">Slide To Set Your Experience</h5>
-                                <div
-                                    style={{
-                                        width: '40rem',
-                                        marginTop: '10px',
-                                        position: 'relative',
-                                        marginBottom: '15px',
+                        <div className="Content_Title" style={{ width: '41.3rem', marginBottom: '10px' }}>
+                            <p>Technology (Training Topics)</p>
+                            <div className="mt-[10px] mb-[20px]">
+                                <Select
+                                    defaultValue={[]}
+                                    isMulti
+                                    name="colors"
+                                    options={topTopics}
+                                    className="Multiselector"
+                                    placeholder="select Training Topics"
+                                    styles={{
+                                        placeholder: (provided) => ({
+                                            ...provided,
+                                            color: '#888',
+                                        }),
                                     }}
-                                >
+                                    ref={topics}
+                                    value={selectedTopics}
+                                    onChange={handleTopicChange}
+                                /></div>
+                        </div>
+                        <div className="Type_Of_Training ">
+                            <div className="text-[#333333] font-['Poppins']">Type Of Training</div>
+                            <div className="RadioTOT">
+                                <label className={`LLLabel ${trainingType === "Corporate Training" ? "active" : ""}`}>
                                     <input
-                                        type="range"
-                                        value={experience}
-                                        onChange={handleExperienceChange}
-                                        onMouseDown={handleDragStart}
-                                        onMouseUp={handleDragEnd}
-                                        onTouchStart={handleDragStart}
-                                        onTouchEnd={handleDragEnd}
-                                        min={0}
-                                        max={50}
-                                        aria-label="Experience Range (Post Training)"
-                                        step={1}
-                                        style={{
-                                            width: '100%',
-                                            height: '5px',
-                                            cursor: 'pointer',
-                                            appearance: 'none',
-                                            outline: 'none',
-                                            borderRadius: '5px',
-                                            zIndex: 1,
-                                            ...trackBackground,
-                                        }}
+                                        type="radio"
+                                        name="trainingType"
+                                        value="Corporate Training"
+                                        checked={trainingType === "Corporate Training"}
+                                        onChange={() => handleTrainingTypeChange("Corporate Training")}
                                     />
-                                    {showValueLabel && (
-                                        <div
-                                            style={{
-                                                position: 'absolute',
-                                                top: '20px',
-                                                left: `calc(${(experience / 50) * 100}%)`,
-                                                transform: 'translateX(-50%)',
-                                                textAlign: 'center',
-                                                color: '#2676C2',
-                                                fontFamily: 'Poppins',
-                                                fontSize: '0.855rem',
-                                                fontStyle: 'normal',
-                                                fontWeight: 'bold',
-                                                paddingLeft: '3.1rem',
-                                                paddingTop: '0.5rem',
-                                            }}
+                                    <h2>Corporate Training</h2>
+                                </label>
+                                <label className={`LLLabel ${trainingType === "College Training" ? "active" : ""}`}>
+                                    <input
+                                        type="radio"
+                                        name="trainingType"
+                                        value="College Training"
+                                        checked={trainingType === "College Training"}
+                                        onChange={() => handleTrainingTypeChange("College Training")}
+                                    />
+                                    <h2>College Training</h2>
+                                </label>
+                                <label className={`LLLabel ${trainingType === "Individual" ? "active" : ""}`}>
+                                    <input
+                                        type="radio"
+                                        name="trainingType"
+                                        value="Individual"
+                                        checked={trainingType === "Individual"}
+                                        onChange={() => handleTrainingTypeChange("Individual")}
+                                    />
+                                    <h2>Individual</h2>
+                                </label>
+                            </div>
+                            {trainingType === "Corporate Training" && (
+                                <div className="ParticipantCount">
+                                    <h5 className="mt-[5px] mb-[0px] text-[#535353] font-['Poppins']">Select No Of Participents</h5>
+                                    <div className="RadioTOT_Count">
+                                        <button
+                                            onClick={() => setParticipantCount(Math.max(participantCount - 1, 0))}
                                         >
-                                            {experience} years
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="Duration_Of_Time">
-                                <div className=" font-['Poppins']">Duration Of Training</div>
-                                <div className="Radio_Duration">
-                                    <label className={`LLLabel font-['Poppins'] ${durationType === "hour" ? "active" : ""}`}>
+                                            -
+                                        </button>
                                         <input
-                                            type="radio"
-                                            name="durationType"
-                                            value="hour"
-                                            checked={durationType === "hour"}
-                                            onChange={() => handleDurationTypeChange("hour")}
-                                        />
-                                        Hourly
-                                    </label>
-                                    <label className={`LLLabel font-['Poppins'] ${durationType === "day" ? "active" : ""}`}>
-                                        <input
-                                            type="radio"
-                                            name="durationType"
-                                            value="day"
-                                            checked={durationType === "day"}
-                                            onChange={() => handleDurationTypeChange("day")}
-                                        />
-                                        Day
-                                    </label>
-                                    <label className={`LLLabel font-['Poppins'] ${durationType === "month" ? "active" : ""}`}>
-                                        <input
-                                            type="radio"
-                                            name="durationType"
-                                            value="month"
-                                            checked={durationType === "month"}
-                                            onChange={() => handleDurationTypeChange("month")}
-                                        />
-                                        Month
-                                    </label>
-                                </div>
-                                {durationType === "hour" && (
-                                    <div className="DurationCount">
-                                        <h5 className="mt-[10px] mb-[10px] text-[#535353] font-['Poppins']">Select No Of Hours</h5>
-                                        <div className="Radio_Duration_Count">
-                                            <button
-                                                onClick={() => setDurationCount(Math.max(durationCount - 1, 0))}
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                className="Duration_Input"
-                                                value={durationCount}
-                                                onChange={(e) => setDurationCount(Math.max(parseInt(e.target.value) || 0, 0))}
-                                                style={{ width: `${Math.min((durationCount.toString().length * 8), maxCount)}px` }}
-                                            />
-                                            <button
-                                                onClick={() => setDurationCount(durationCount + 1)}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {durationType === "day" && (
-                                    <div className="DurationCount">
-                                        <h5 className="mt-[10px] mb-[10px] text-[#535353] font-['Poppins']">Select No Of Days</h5>
-                                        <div className="Radio_Duration_Count">
-                                            <button
-                                                onClick={() => setDurationCount(Math.max(durationCount - 1, 0))}
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                className="Duration_Input"
-                                                value={durationCount}
-                                                onChange={(e) => setDurationCount(Math.max(parseInt(e.target.value) || 0, 0))}
-                                                style={{ width: `${Math.min((durationCount.toString().length * 8), maxCount)}px` }}
-                                            />
-
-                                            <button
-                                                onClick={() => setDurationCount(durationCount + 1)}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                                {durationType === "month" && (
-                                    <div className="DurationCount">
-                                        <h5 className="mt-[10px] mb-[10px] text-[#535353] font-['Poppins']">Select No Of Months</h5>
-                                        <div className="Radio_Duration_Count">
-                                            <button
-                                                onClick={() => setDurationCount(Math.max(durationCount - 1, 0))}
-                                            >
-                                                -
-                                            </button>
-                                            <input
-                                                className="Duration_Input"
-                                                value={durationCount}
-                                                onChange={(e) => setDurationCount(Math.max(parseInt(e.target.value) || 0, 0))}
-                                                style={{ width: `${Math.min((durationCount.toString().length * 8), maxCount)}px` }}
-                                            />
-
-                                            <button
-                                                onClick={() => setDurationCount(durationCount + 1)}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="Budgets">
-                                <p className="text-lg font-[500] font-['Poppins']">Budgets</p>
-                                <span className="Budget_MM">
-                                    <select
-                                        className=""
-                                        style={{
-                                            borderRadius: '0.5rem',
-                                            paddingLeft: '0.3rem',
-                                            color: '#2676C2',
-                                            fontFamily: 'Poppins',
-                                            fontSize: '0.875rem',
-                                            fontStyle: 'normal',
-                                            fontWeight: 400,
-                                            lineHeight: 'normal'
-                                        }}
-                                        onChange={handleCountryChange}
-                                        value={selectedCountry}
-                                        placeholder="select country"
-                                    >
-                                        <option value="IND" >IND</option>
-                                        <option value="USA">USA</option>
-
-                                    </select>
-                                    <span>
-                                        <input
-                                            className=""
-                                            style={{
-                                                border: ' 1.5px #DADADA solid ',
-                                                borderRadius: '0.5rem 0 0 0.5rem',
-                                                width: '6rem',
-                                                borderRight: '0.7px #DADADA solid',
-                                            }}
-                                            type="text"
-                                            placeholder={`Ex: 1000`}
-                                            maxLength={10000}
-                                            value={formatCurrencyValue(minBudget)}
-                                            onChange={(e) => setMinBudget(e.target.value)}
-                                        />
-                                        <input
-                                            className=""
-                                            style={{
-                                                border: ' 1.5px #DADADA solid',
-                                                borderRadius: '0 0.5rem 0.5rem 0 ',
-                                                width: '6rem',
-                                                borderLeft: '0.7px #DADADA solid',
-                                            }}
-                                            type="text"
-                                            placeholder={`Ex: 10000`}
-                                            maxLength={10000}
-                                            value={formatCurrencyValue(maxBudget)}
-                                            onChange={(e) => setMaxBudget(e.target.value)}
-                                        />
-                                    </span>
-                                </span>
-                            </div>
-                            <div className="TOC">
-                                <p >TOC (Table of content)</p>
-
-                                <div className="TOC_Radio">
-                                    <label className={`font-['Poppins'] ${availability === "available" ? "active" : ""}`}>
-                                        <input
-                                            type="radio"
-                                            value="available"
-                                            checked={availability === "available"}
-                                            onChange={handleAvailabilityChange}
-                                            style={{ borderRadius: '0' }}
-                                        />
-                                        Available
-                                    </label>
-
-                                    <label className={`font-['Poppins'] ${availability === "unavailable" ? "active" : ""}`}>
-                                        <input
-                                            type="radio"
-                                            value="unavailable"
-                                            checked={availability === "unavailable"}
-                                            onChange={handleAvailabilityChange}
-                                        />
-                                        Unavailable
-                                    </label>
-                                </div>
-                                {availability === "available" && (
-                                    <div className="UPLOADFILE">
-                                        <span className="For_Align_Upload">
-                                            <h4 >Select File</h4>
-                                            <FileUploadOutlinedIcon
-                                                sx={{ color: "#2676C2", fontSize: "1.3rem" }}
-                                            />
-                                        </span>
-                                        <input type="file" ref={tocFile} onChange={(e) => {
-                                            if (e.target.files[0] !== undefined) {
-                                                let file = e.target.files[0];
-                                                // setTocFileName(file.name);
-                                                // const reader = new FileReader();
-                                                // reader.onloadend = () => {
-                                                //     setTocContent(reader.result);
-                                                // }
-                                                // reader.readAsDataURL(file);
-                                                setTocContent(file)
-
-                                            }
-                                        }} />
-                                    </div>
-                                )}
-                            </div>
-                            <div className="Training_Dates">
-                                <p className=" font-['Poppins']">Training Dates</p>
-                            </div>
-                            <div className="Training_Dates" style={{ display: 'flex', gap: '1rem' }}>
-                                <div className="date-picker">
-                                    <p>Start Date</p>
-                                    <div style={{ width: '16rem', display: 'flex', }}>
-                                        <DatePicker
-                                            className="end"
-                                            selected={startDate}
-                                            onChange={handleStartDateChange}
-                                            selectsStart
-                                            startDate={startDate}
-                                            endDate={endDate}
-                                            isClearable={true}
-                                            style={{ border: '1px Solid #333 ' }}
-                                            dateFormat="dd/MM/yyyy"
-                                            placeholderText="DD/MM/YYYY"
-                                            ref={startDatePickerRef}
+                                            className="TOT_Input"
+                                            value={participantCount}
+                                            onChange={(e) => setParticipantCount(Math.max(parseInt(e.target.value) || 0, 0))}
+                                            style={{ width: `${Math.min((participantCount.toString().length * 8), maxCount)}px` }}
 
                                         />
-                                        <div className="CalenderIcon" onClick={() => handleCalendarIconClick(startDatePickerRef)}>
-                                            <CalendarMonthOutlinedIcon color="#333" sx={{ cursor: 'pointer' }} />
-                                        </div>
+
+                                        <button
+                                            onClick={() => setParticipantCount(participantCount + 1)}
+                                        >
+                                            +
+                                        </button>
                                     </div>
                                 </div>
-                                < div className="date-picker">
-                                    <p>End Date</p>
-                                    <div style={{ width: '16rem', display: 'flex' }}>
-                                        <DatePicker
-                                            className="end"
-                                            selected={endDate}
-                                            onChange={handleEndDateChange}
-                                            selectsEnd
-                                            startDate={startDate}
-                                            endDate={endDate}
-                                            minDate={startDate}
-                                            isClearable={true}
-                                            dateFormat="dd/MM/yyyy"
-                                            placeholderText="DD/MM/YYYY"
-                                            ref={endDatePickerRef}
+                            )}
+                            {trainingType === "College Training" && (
+                                <div className="ParticipantCount">
+                                    <h5 className="mt-[5px] mb-[0px] text-[#535353] font-['Poppins']">Select No Of Participents</h5>
+                                    <div className="RadioTOT_Count">
+                                        <button
+                                            onClick={() => setParticipantCount(Math.max(participantCount - 1, 0))}
+                                        >
+                                            -
+                                        </button>
+                                        <input
+                                            className="TOT_Input"
+                                            value={participantCount}
+                                            onChange={(e) => setParticipantCount(Math.max(parseInt(e.target.value) || 0, 0))}
+                                            style={{ width: `${Math.min((participantCount.toString().length * 8), maxCount)}px` }}
 
                                         />
-                                        <div className="CalenderIcon" onClick={() => handleCalendarIconClick(endDatePickerRef)}>
-                                            <CalendarMonthOutlinedIcon color="#333" sx={{ cursor: 'pointer' }} />
-                                        </div>
+                                        <button
+                                            onClick={() => setParticipantCount(Math.min(participantCount + 1,))}
+                                        >
+                                            +
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                            <div>
-                                <Box sx={{ mt: '10px', mb: '10px' }}>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={urgentlyNeedTrainer}
-                                                onChange={handleCheckboxChange}
-                                                name="urgentlyNeedTrainer"
-                                                color="primary" // You can customize the color
-                                            />
-                                        }
-                                        label="If you urgently need a trainer"
-                                        className="custom-label"
-                                    />
+                            )}
+                            {trainingType === "Individual" && (
+                                <div className="ParticipantCount">
+                                    <h5 className="mt-[5px] mb-[0px]">Select No Of Participents</h5>
+                                    <div className="RadioTOT_Count">
+                                        <button
+                                            onClick={() => setParticipantCount(Math.max(participantCount - 1, 0))}
+                                        >
+                                            -
+                                        </button>
+                                        <input
+                                            className="TOT_Input"
+                                            value={participantCount}
+                                            onChange={(e) => setParticipantCount(Math.max(parseInt(e.target.value) || 0, 0))}
+                                            style={{ width: `${Math.min((participantCount.toString().length * 8), maxCount)}px` }}
 
-                                </Box>
-                            </div>
-                            {activeOption === "postTraining" && (
-                                <div className="Post_Button mb-[20px]">
-                                    <button
-                                        style={{ borderRadius: "5px" }}
-                                        className="Reset_Btn flex justify-center items-center"
-                                    >
-                                        <span onClick={handleResetPostTraining}>Reset</span>
-                                    </button>
-                                    <button
-                                        style={{ borderRadius: "5px" }} onClick={handlePostTrainingSubmit} className="Submit_Btn flex justify-center items-center">
-                                        <span>SUBMIT</span>
-                                    </button>
+                                        />
+                                        <button
+                                            onClick={() => setParticipantCount(participantCount + 1)}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
                             )}
                         </div>
-                    )}
+
+                        <div className="Mode_Of_Training">
+                            <div className="text-[#333333] font-['Poppins']">Mode of Training</div>
+                            <div className="Radio_MOT">
+                                <label className={`LLLabel font-['Poppins'] ${trainingMode === "online" ? "active" : ""}`}>
+                                    <input
+                                        type="radio"
+                                        name="trainingMode"
+                                        value="online"
+                                        checked={trainingMode === "online"}
+                                        onChange={() => handleTrainingModeChange("online")}
+                                    />
+                                    Online
+                                </label>
+                                <label className={`LLLabel font-['Poppins'] ${trainingMode === "offline" ? "active" : ""}`}>
+                                    <input
+                                        type="radio"
+                                        name="trainingMode"
+                                        value="offline"
+                                        checked={trainingMode === "offline"}
+                                        onChange={() => handleTrainingModeChange("offline")}
+                                    />
+                                    Offline
+                                </label>
+                            </div>
+                            {trainingMode === "offline" && (
+                                <div className="SelectLocation">
+                                    <label className="LLLabel">
+                                        <h5 className="mt-[10px] mb-[10px] text-[#535353] font-['Poppins']">Your Location</h5>
+                                    </label>
+                                    <select
+                                        ref={location}
+                                    >
+                                        <option value="">Location</option>
+                                        <option value="usa">United States</option>
+                                        <option value="canada">Canada</option>
+                                        <option value="uk">United Kingdom</option>
+                                        <option value="australia">Australia</option>
+                                    </select>
+                                </div>
+                            )}
+                        </div>
+                        <div className="Select_Experience">
+                            <p className="mt-[5px] mb-[5px]">Select Experience</p>
+                            <h5 className="mt-[5px] mb-[5px]">Slide To Set Your Experience</h5>
+                            <div
+                                style={{
+                                    width: '40rem',
+                                    marginTop: '10px',
+                                    position: 'relative',
+                                    marginBottom: '15px',
+                                }}
+                            >
+                                <input
+                                    type="range"
+                                    value={experience}
+                                    onChange={handleExperienceChange}
+                                    onMouseDown={handleDragStart}
+                                    onMouseUp={handleDragEnd}
+                                    onTouchStart={handleDragStart}
+                                    onTouchEnd={handleDragEnd}
+                                    min={0}
+                                    max={50}
+                                    aria-label="Experience Range (Post Training)"
+                                    step={1}
+                                    style={{
+                                        width: '100%',
+                                        height: '5px',
+                                        cursor: 'pointer',
+                                        appearance: 'none',
+                                        outline: 'none',
+                                        borderRadius: '5px',
+                                        zIndex: 1,
+                                        ...trackBackground,
+                                    }}
+                                />
+                                {showValueLabel && (
+                                    <div
+                                        style={{
+                                            position: 'absolute',
+                                            top: '20px',
+                                            left: `calc(${(experience / 50) * 100}%)`,
+                                            transform: 'translateX(-50%)',
+                                            textAlign: 'center',
+                                            color: '#2676C2',
+                                            fontFamily: 'Poppins',
+                                            fontSize: '0.855rem',
+                                            fontStyle: 'normal',
+                                            fontWeight: 'bold',
+                                            paddingLeft: '3.1rem',
+                                            paddingTop: '0.5rem',
+                                        }}
+                                    >
+                                        {experience} years
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                        <div className="Duration_Of_Time">
+                            <div className=" font-['Poppins']">Duration Of Training</div>
+                            <div className="Radio_Duration">
+                                <label className={`LLLabel font-['Poppins'] ${durationType === "hour" ? "active" : ""}`}>
+                                    <input
+                                        type="radio"
+                                        name="durationType"
+                                        value="hour"
+                                        checked={durationType === "hour"}
+                                        onChange={() => handleDurationTypeChange("hour")}
+                                    />
+                                    Hourly
+                                </label>
+                                <label className={`LLLabel font-['Poppins'] ${durationType === "day" ? "active" : ""}`}>
+                                    <input
+                                        type="radio"
+                                        name="durationType"
+                                        value="day"
+                                        checked={durationType === "day"}
+                                        onChange={() => handleDurationTypeChange("day")}
+                                    />
+                                    Day
+                                </label>
+                                <label className={`LLLabel font-['Poppins'] ${durationType === "month" ? "active" : ""}`}>
+                                    <input
+                                        type="radio"
+                                        name="durationType"
+                                        value="month"
+                                        checked={durationType === "month"}
+                                        onChange={() => handleDurationTypeChange("month")}
+                                    />
+                                    Month
+                                </label>
+                            </div>
+                            {durationType === "hour" && (
+                                <div className="DurationCount">
+                                    <h5 className="mt-[10px] mb-[10px] text-[#535353] font-['Poppins']">Select No Of Hours</h5>
+                                    <div className="Radio_Duration_Count">
+                                        <button
+                                            onClick={() => setDurationCount(Math.max(durationCount - 1, 0))}
+                                        >
+                                            -
+                                        </button>
+                                        <input
+                                            className="Duration_Input"
+                                            value={durationCount}
+                                            onChange={(e) => setDurationCount(Math.max(parseInt(e.target.value) || 0, 0))}
+                                            style={{ width: `${Math.min((durationCount.toString().length * 8), maxCount)}px` }}
+                                        />
+                                        <button
+                                            onClick={() => setDurationCount(durationCount + 1)}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
+                            {durationType === "day" && (
+                                <div className="DurationCount">
+                                    <h5 className="mt-[10px] mb-[10px] text-[#535353] font-['Poppins']">Select No Of Days</h5>
+                                    <div className="Radio_Duration_Count">
+                                        <button
+                                            onClick={() => setDurationCount(Math.max(durationCount - 1, 0))}
+                                        >
+                                            -
+                                        </button>
+                                        <input
+                                            className="Duration_Input"
+                                            value={durationCount}
+                                            onChange={(e) => setDurationCount(Math.max(parseInt(e.target.value) || 0, 0))}
+                                            style={{ width: `${Math.min((durationCount.toString().length * 8), maxCount)}px` }}
+                                        />
+
+                                        <button
+                                            onClick={() => setDurationCount(durationCount + 1)}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                            {durationType === "month" && (
+                                <div className="DurationCount">
+                                    <h5 className="mt-[10px] mb-[10px] text-[#535353] font-['Poppins']">Select No Of Months</h5>
+                                    <div className="Radio_Duration_Count">
+                                        <button
+                                            onClick={() => setDurationCount(Math.max(durationCount - 1, 0))}
+                                        >
+                                            -
+                                        </button>
+                                        <input
+                                            className="Duration_Input"
+                                            value={durationCount}
+                                            onChange={(e) => setDurationCount(Math.max(parseInt(e.target.value) || 0, 0))}
+                                            style={{ width: `${Math.min((durationCount.toString().length * 8), maxCount)}px` }}
+                                        />
+
+                                        <button
+                                            onClick={() => setDurationCount(durationCount + 1)}
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        <div className="Budgets">
+                            <p className="text-lg font-[500] font-['Poppins']">Budgets</p>
+                            <span className="Budget_MM">
+                                <select
+                                    className=""
+                                    style={{
+                                        borderRadius: '0.5rem',
+                                        paddingLeft: '0.3rem',
+                                        color: '#2676C2',
+                                        fontFamily: 'Poppins',
+                                        fontSize: '0.875rem',
+                                        fontStyle: 'normal',
+                                        fontWeight: 400,
+                                        lineHeight: 'normal'
+                                    }}
+                                    onChange={handleCountryChange}
+                                    value={selectedCountry}
+                                    placeholder="select country"
+                                >
+                                    <option value="IND" >IND</option>
+                                    <option value="USA">USA</option>
+
+                                </select>
+                                <span>
+                                    <input
+                                        className=""
+                                        style={{
+                                            border: ' 1.5px #DADADA solid ',
+                                            borderRadius: '0.5rem 0 0 0.5rem',
+                                            width: '6rem',
+                                            borderRight: '0.7px #DADADA solid',
+                                        }}
+                                        type="text"
+                                        placeholder={`Ex: 1000`}
+                                        maxLength={10000}
+                                        value={formatCurrencyValue(minBudget)}
+                                        onChange={(e) => setMinBudget(e.target.value)}
+                                    />
+                                    <input
+                                        className=""
+                                        style={{
+                                            border: ' 1.5px #DADADA solid',
+                                            borderRadius: '0 0.5rem 0.5rem 0 ',
+                                            width: '6rem',
+                                            borderLeft: '0.7px #DADADA solid',
+                                        }}
+                                        type="text"
+                                        placeholder={`Ex: 10000`}
+                                        maxLength={10000}
+                                        value={formatCurrencyValue(maxBudget)}
+                                        onChange={(e) => setMaxBudget(e.target.value)}
+                                    />
+                                </span>
+                            </span>
+                        </div>
+                        <div className="TOC">
+                            <p >TOC (Table of content)</p>
+
+                            <div className="TOC_Radio">
+                                <label className={`font-['Poppins'] ${availability === "available" ? "active" : ""}`}>
+                                    <input
+                                        type="radio"
+                                        value="available"
+                                        checked={availability === "available"}
+                                        onChange={handleAvailabilityChange}
+                                        style={{ borderRadius: '0' }}
+                                    />
+                                    Available
+                                </label>
+
+                                <label className={`font-['Poppins'] ${availability === "unavailable" ? "active" : ""}`}>
+                                    <input
+                                        type="radio"
+                                        value="unavailable"
+                                        checked={availability === "unavailable"}
+                                        onChange={handleAvailabilityChange}
+                                    />
+                                    Unavailable
+                                </label>
+                            </div>
+                            {availability === "available" && (
+                                <div className="UPLOADFILE">
+                                    <span className="For_Align_Upload">
+                                        <h4 >Select File</h4>
+                                        <FileUploadOutlinedIcon
+                                            sx={{ color: "#2676C2", fontSize: "1.3rem" }}
+                                        />
+                                    </span>
+                                    <input type="file" ref={tocFile} onChange={(e) => {
+                                        if (e.target.files[0] !== undefined) {
+                                            let file = e.target.files[0];
+                                            // setTocFileName(file.name);
+                                            // const reader = new FileReader();
+                                            // reader.onloadend = () => {
+                                            //     setTocContent(reader.result);
+                                            // }
+                                            // reader.readAsDataURL(file);
+                                            setTocContent(file)
+
+                                        }
+                                    }} />
+                                </div>
+                            )}
+                        </div>
+                        <div className="Training_Dates">
+                            <p className=" font-['Poppins']">Training Dates</p>
+                        </div>
+                        <div className="Training_Dates" style={{ display: 'flex', gap: '1rem' }}>
+                            <div className="date-picker">
+                                <p>Start Date</p>
+                                <div style={{ width: '16rem', display: 'flex', }}>
+                                    <DatePicker
+                                        className="end"
+                                        selected={startDate}
+                                        onChange={handleStartDateChange}
+                                        selectsStart
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        isClearable={true}
+                                        style={{ border: '1px Solid #333 ' }}
+                                        dateFormat="dd/MM/yyyy"
+                                        placeholderText="DD/MM/YYYY"
+                                        ref={startDatePickerRef}
+
+                                    />
+                                    <div className="CalenderIcon" onClick={() => handleCalendarIconClick(startDatePickerRef)}>
+                                        <CalendarMonthOutlinedIcon color="#333" sx={{ cursor: 'pointer' }} />
+                                    </div>
+                                </div>
+                            </div>
+                            < div className="date-picker">
+                                <p>End Date</p>
+                                <div style={{ width: '16rem', display: 'flex' }}>
+                                    <DatePicker
+                                        className="end"
+                                        selected={endDate}
+                                        onChange={handleEndDateChange}
+                                        selectsEnd
+                                        startDate={startDate}
+                                        endDate={endDate}
+                                        minDate={startDate}
+                                        isClearable={true}
+                                        dateFormat="dd/MM/yyyy"
+                                        placeholderText="DD/MM/YYYY"
+                                        ref={endDatePickerRef}
+
+                                    />
+                                    <div className="CalenderIcon" onClick={() => handleCalendarIconClick(endDatePickerRef)}>
+                                        <CalendarMonthOutlinedIcon color="#333" sx={{ cursor: 'pointer' }} />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <Box sx={{ mt: '10px', mb: '10px' }}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={urgentlyNeedTrainer}
+                                            onChange={handleCheckboxChange}
+                                            name="urgentlyNeedTrainer"
+                                            color="primary" // You can customize the color
+                                        />
+                                    }
+                                    label="If you urgently need a trainer"
+                                    className="custom-label"
+                                />
+
+                            </Box>
+                        </div>
+                        {activeOption === "postTraining" && (
+                            <div className="Post_Button mb-[20px]">
+                                <button
+                                    style={{ borderRadius: "5px" }}
+                                    className="Reset_Btn flex justify-center items-center"
+                                >
+                                    <span onClick={handleResetPostTraining}>Reset</span>
+                                </button>
+                                <button
+                                    style={{ borderRadius: "5px" }} onClick={handlePostTrainingSubmit} className="Submit_Btn flex justify-center items-center">
+                                    <span>SUBMIT</span>
+                                </button>
+                            </div>
+                        )}
                     </div>
-    </div>
-  )
+                )}
+            </div>
+        </div>
+    )
 }
 
 export default PostTrainingSection;
-   
-       
+

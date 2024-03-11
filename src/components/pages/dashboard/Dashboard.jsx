@@ -13,7 +13,7 @@ import Trainers from "../trainerlist/Trainer";
 import TrainerListProfile from "./../trainerlist/TrainerListProfile";
 import Requirements from "../postrequirements/Requirements";
 import Chat from "../messages/Chat";
-import TrainerSettings from "../settings/TrainerSettings";
+import EmployerSettings from "../settings/EmployerSettings";
 import TrainingResources from "../trainingresourecs/TrainingResources";
 import PostJobSection from "../postrequirements/PostRequirements/PostJob";
 import PostTrainingSection from "../postrequirements/PostRequirements/PostTraining";
@@ -339,12 +339,12 @@ const DashboardApp = () => {
                 </div>
               </div>
             </div>
-            <div className="content pr-[20px]">
+            <div className="content p-[10px]">
               <Routes>
                 <Route path="dashboard" element={<DashboardData />} />
                 <Route path="trainerlist/*" element={<Trainers />} />
                 <Route
-                  path="trainerlist/trainerlistprofile"
+                  path="trainerlist/trainerlistprofile/:id"
                   element={<TrainerListProfile />}
                 />
 
@@ -378,7 +378,7 @@ const DashboardApp = () => {
                     element={<EmployerProposalRequest />}
                   />
                 </Route>
-                <Route path="settings" element={<TrainerSettings />} />
+                <Route path="settings" element={<EmployerSettings />} />
                 <Route
                   path="trainingresource"
                   element={<TrainingResources />}
