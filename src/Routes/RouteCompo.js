@@ -37,13 +37,13 @@ function RouteCompo() {
         }
       >
         <Routes>
+          <Route path="/" element={<Signup />} />
+          <Route path="/otpverify" element={<Login />} />
           <Route element={<PrivateRoute />}>
           {/* <Route path='/chat' element={<Chat />} /> */}
           <Route path="/employerDashboard/*" element={<Dashboard />} />
           <Route path="/trainersignup" element={<TrainerSiginUp />} />
           <Route path="/selectrole" element={<RoleSelection />} />
-          <Route path="/" element={<Signup />} />
-          <Route path="/otpverify" element={<Login />} />
           <Route path="/employersignup" element={<Employee />} />
           <Route path="/trainerDashboard/*" element={<TrainerDashboard />} />
           <Route path="/trainerprofile" element={<TrainerProfile />} />
