@@ -11,7 +11,7 @@ function App() {
     .then((resp)=>{
       // console.log("Connected to server")
       console.log(resp.data)
-      localStorage.setItem('baseUrl',`http://${35.174.208.29}:4000`)
+      localStorage.setItem('baseUrl',`http://35.174.208.29:4000`)
     })
     .catch((error)=>{
       console.log(error)
