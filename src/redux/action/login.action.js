@@ -11,7 +11,7 @@ export const verifyOtp = (phoneNumber, otp) => {
     // } catch (error) {
     //   dispatch(verifyOtpFailure());
     // }
-    await Axios.post(`${baseUrl}/user/verifyotp`, { phoneNumber, otp })
+    await Axios.post(`http://35.174.208.29//user/verifyotp`, { phoneNumber, otp })
     .then((resp)=>{
         console.log('resp',resp.data)
         dispatch(verifyOtpSuccess(resp.data));
