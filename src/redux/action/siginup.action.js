@@ -1,5 +1,5 @@
 import Axios from "axios";
-const baseUrl=localStorage.getItem('baseUrl')
+const baseUrl=localStorage.getItem('http://35.174.208.29')
 console.log(baseUrl)
 
 
