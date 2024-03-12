@@ -5,7 +5,7 @@ const baseUrl = localStorage.getItem("baseUrl");
 const employerSignUpAction = (details) => {
   return async (dispatch) => {
     try {
-      await Axios.post(`${baseUrl}/employer/employerSignUp`, details)
+      await Axios.post(`http://35.174.208.29/employer/employerSignUp`, details)
         .then((resp) => {
           dispatch({
             type: "EMPLOYER_SIGNUP_SUCCESS",
@@ -32,7 +32,7 @@ const employerDetails = () => {
   // console.log(token);
   return async (dispatch) => {
     try {
-      Axios.get(`${baseUrl}/employer/getemployerProfile`, {
+      Axios.get(`http://35.174.208.29/employer/getemployerProfile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -58,7 +58,7 @@ export const employerBasicInfoUpdate = (details) => {
   console.log("employer details action ", details);
   return async (dispatch) => {
     try {
-      Axios.put(`${baseUrl}/employer/employerBasicInfoUpdate`, details, {
+      Axios.put(`http://35.174.208.29/employer/employerBasicInfoUpdate`, details, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -83,7 +83,7 @@ export const employerSkillsUpdate = (details) => {
   console.log("employer details action ", details);
   return async (dispatch) => {
     try {
-      Axios.put(`${baseUrl}/employer/employerSkillsUpdate`, details, {
+      Axios.put(`http://35.174.208.29/employer/employerSkillsUpdate`, details, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -109,7 +109,7 @@ export const employerContactInfoUpdate = (details) => {
   console.log("employer details action ", details);
   return async (dispatch) => {
     try {
-      Axios.put(`${baseUrl}/employer/employerContactInfoUpdate`, details, {
+      Axios.put(`http://35.174.208.29/employer/employerContactInfoUpdate`, details, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -135,7 +135,7 @@ export const employerExperienceInfoUpdate = (details) => {
   console.log("employer details action ", details);
   return async (dispatch) => {
     try {
-      Axios.put(`${baseUrl}/employer/employerExperienceInfoUpdate`, details, {
+      Axios.put(`http://35.174.208.29/employer/employerExperienceInfoUpdate`, details, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -161,7 +161,7 @@ export const deleteEmployerExperience = (_id) => {
   console.log("employer details action ", _id);
   return async (dispatch) => {
     try {
-      Axios.delete(`${baseUrl}/employer/employerExperienceInfoUpdate/${_id}`, {
+      Axios.delete(`http://35.174.208.29/employer/employerExperienceInfoUpdate/${_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -186,7 +186,7 @@ export const getSkillsData = () => {
   console.log('get SkillsData Action')
   return async (dispatch) => {
     try {
-      Axios.get(`${baseUrl}/employer/skills `, {
+      Axios.get(`http://35.174.208.29/employer/skills `, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -213,7 +213,7 @@ export const getAppliedTrainingEmployer = () => {
   // console.log(token);
   return async (dispatch) => {
     try {
-      Axios.get(`${baseUrl}/employer/getAppliedTrainingEmployer`, {
+      Axios.get(`http://35.174.208.29/employer/getAppliedTrainingEmployer`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -238,7 +238,7 @@ export const getAllAppliedTraining = () => {
   // console.log(token);
   return async (dispatch) => {
     try {
-      Axios.get(`${baseUrl}/employer/getAllAppliedTraining`, {
+      Axios.get(`http://35.174.208.29/employer/getAllAppliedTraining`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -263,7 +263,7 @@ export const updateApplicationStatus = (trainingDetailsId, trainerId, status) =>
   // console.log(token);
   return async (dispatch) => {
     try {
-      Axios.put(`${baseUrl}/employer/updateAppliedStatus`, { trainingDetailsId, trainerId, status }, {
+      Axios.put(`http://35.174.208.29/employer/updateAppliedStatus`, { trainingDetailsId, trainerId, status }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -288,7 +288,7 @@ export const addBookMarkePost = (postId, postDetails) => {
   console.log(postId, 'add bookmark post ', postDetails)
   return async (dispatch) => {
     try {
-      Axios.post(`${baseUrl}/employer/addBookMarkePost/${postId}`, postDetails, {
+      Axios.post(`http://35.174.208.29/employer/addBookMarkePost/${postId}`, postDetails, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -316,7 +316,7 @@ export const getBookMarkedPost = () => {
   console.log('get bookMarkepost Action')
   return async (dispatch) => {
     try {
-      Axios.get(`${baseUrl}/employer/getBookMarkedPostsByUserId `, {
+      Axios.get(`http://35.174.208.29/employer/getBookMarkedPostsByUserId `, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -343,7 +343,7 @@ export const addFeedback = (feedBack, trainingDetailsId) => {
   const token = Cookies.get('token');
   return async (dispatch) => {
     try {
-      Axios.put(`${baseUrl}/employer/addFeedback/${trainingDetailsId}`, feedBack, {
+      Axios.put(`http://35.174.208.29/employer/addFeedback/${trainingDetailsId}`, feedBack, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -368,7 +368,7 @@ export const addApplicationRequest = (trainer, trainingDetails) => {
   console.log('Add Applicaiton Request   Action')
   return async (dispatch) => {
 
-    Axios.post(`${baseUrl}/employer/employerTrainingRequest `, { trainer, trainingDetails }, {
+    Axios.post(`http://35.174.208.29/employer/employerTrainingRequest `, { trainer, trainingDetails }, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -396,7 +396,7 @@ export const getAllCandidacy = () => {
   console.log('Add Applicaiton Request   Action')
   return async (dispatch) => {
 
-    Axios.get(`${baseUrl}/employer/getEmployerApplicationRequest`, {
+    Axios.get(`http://35.174.208.29/employer/getEmployerApplicationRequest`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
