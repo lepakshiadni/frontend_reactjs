@@ -7,7 +7,7 @@ import Axios from 'axios'
 
 function App() {
   const getlocalip=async()=>{
-    await Axios.get('http://35.174.208.29:4000/localip/')
+    await Axios.get('http://192.168.1.41:4000/localip/')
     .then((resp)=>{
       // console.log("Connected to server")
       console.log(resp.data)
