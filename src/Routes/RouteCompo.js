@@ -37,7 +37,7 @@ function RouteCompo() {
         }
       >
         <Routes>
-          <Route element={<PrivateRoute />}></Route>
+          <Route element={<PrivateRoute />}>
           {/* <Route path='/chat' element={<Chat />} /> */}
           <Route path="/employerDashboard/*" element={<Dashboard />} />
           <Route path="/trainersignup" element={<TrainerSiginUp />} />
@@ -57,6 +57,7 @@ function RouteCompo() {
             path="/employerprofile/profileupdate"
             element={<EmployerProfileEdit />}
           />
+          </Route>
         </Routes>
       </Suspense>
     </BrowserRouter>
