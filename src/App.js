@@ -18,7 +18,7 @@ function App() {
     //   console.log(error)
     //   // alert("Server is not running, Please start the server."
     // })
-      localStorage.setItem('baseUrl',`http://44.211.80.23/:4000`)
+      localStorage.setItem('baseUrl',`http://44.211.80.23:4000`)
   }
   React.useEffect(()=>{
     getlocalip()
