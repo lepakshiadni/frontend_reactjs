@@ -7,11 +7,13 @@ import Axios from 'axios'
 
 function App() {
   const getlocalip=async()=>{
-    await Axios.get('http://192.168.1.103:4000/localip/')
+    await Axios.get('http://44.211.80.23/:4000/localip/')
     .then((resp)=>{
       // console.log("Connected to server")
       console.log(resp.data)
-      localStorage.setItem('baseUrl',`http://${resp?.data?.localIp}:4000`)
+      // localStorage.setItem('baseUrl',`http://${resp?.data?.localIp}:4000`)
+      localStorage.setItem('baseUrl',`http://44.211.80.23/:4000`)
+
     })
     .catch((error)=>{
       console.log(error)
