@@ -6,18 +6,18 @@ import Axios from 'axios'
 
 
 function App() {
-const getlocalip = async () => {
-  try {
-    const response = await Axios.get('http://35.174.208.29:4000/localip/');
-    console.log("Connected to server");
-    console.log(response.data);
-    localStorage.setItem('baseUrl', `http://${response.data.localIp}:4000`);
-  } catch (error) {
-    console.error("Error fetching local IP:", error);
-    // Handle error gracefully, e.g., show a message to the user
+  const getlocalip=async()=>{
+    await Axios.get('http://192.168.1.103:4000/localip/')
+    .then((resp)=>{
+      // console.log("Connected to server")
+      console.log(resp.data)
+      localStorage.setItem('baseUrl',`http://${resp?.data?.localIp}:4000`)
+    })
+    .catch((error)=>{
+      console.log(error)
+      // alert("Server is not running, Please start the server."
+    })
   }
-}
-
   React.useEffect(()=>{
     getlocalip()
   },[])

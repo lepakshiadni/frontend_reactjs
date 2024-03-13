@@ -1,12 +1,12 @@
 import Axios from "axios";
-const baseUrl=localStorage.getItem('http://35.174.208.29')
+const baseUrl=localStorage.getItem('baseUrl')
 console.log(baseUrl)
 
 
 export const generateOtp = (number) => {
     return async (dispatch) => {
       try {
-        const response = await Axios.post(`http://35.174.208.29:4000/user/generateotp`, { number });
+        const response = await Axios.post(`${baseUrl}/user/generateotp`, { number });
         dispatch(generateOTPSuccess(response.data.success));
       } catch (error) {
         dispatch(generateOTPFailure('Error generating OTP'));
