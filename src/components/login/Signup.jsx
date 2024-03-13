@@ -44,6 +44,7 @@ function Signup() {
     return generateOTP;
   });
   console.log(message)
+  console.log('')
 
   const validatePhoneNumber = (input) => {
     const numericValue = input.replace(/\D/g, '');
