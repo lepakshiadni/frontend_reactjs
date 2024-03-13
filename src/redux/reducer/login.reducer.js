@@ -9,6 +9,7 @@ const initialState = {
   const verifyOTPReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'VERIFY_OTP_SUCCESS':
+        console.log('Verify OTP success', action);
         return {
           ...state,
           type: action.type,

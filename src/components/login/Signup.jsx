@@ -43,7 +43,7 @@ function Signup() {
   const message = useSelector(({ generateOTP }) => {
     return generateOTP;
   });
-  console.log(message.message)
+  console.log(message)
 
   const validatePhoneNumber = (input) => {
     const numericValue = input.replace(/\D/g, '');
