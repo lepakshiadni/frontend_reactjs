@@ -141,9 +141,9 @@ const RoleSelection = () => {
       <div className="RSRole">
         <div className="Select_Role">
           <h2>
-            Trailblazer or Voyager,
-            <br />
             Select Your Role!
+            <br />
+           for Targeted Interactions,
           </h2>
           <div className="Unlock SvgHover"
             onClick={() => { setSelected('employer') }}
