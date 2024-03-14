@@ -224,7 +224,7 @@ const TrainerProfile = () => {
                 user?.basicInfo?.status === true ?
                   <div className="pl-[30px] pr-[30px]">
                     <h3 className="text-[#232323] text-[18px] font-[500] font-['Poppins']">
-                      Profile Details
+                      Profile 
                     </h3>
                     <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins'] capitalize">
                       {user?.basicInfo?.objective}
