@@ -7,7 +7,7 @@ export const generateOtp = (number) => {
     return async (dispatch) => {
       try {
         const response = await Axios.post(`${baseUrl}/user/generateotp`, { number });
-        dispatch(generateOTPSuccess(response.data.success));
+        dispatch(generateOTPSuccess(response.data));
       } catch (error) {
         dispatch(generateOTPFailure('Error generating OTP'));
       }

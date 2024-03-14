@@ -182,9 +182,9 @@ const TrainersList = () => {
       available: "10 dec",
     },
   ];
- 
+
   const [hoveredIndex, setHoveredIndex] = useState(null);
- 
+
   return (
     <div className="trainers-list">
       {data.map((trainer, index) => (
@@ -403,12 +403,13 @@ const TrainersList = () => {
               </div>
             </div>
             <p className="trainer-available">
-              <span>Avail On {trainer.available}</span></p>
+              <span>Avail On {trainer.available}</span>
+            </p>
           </div>
         </div>
       ))}
     </div>
   );
 };
- 
+
 export default TrainersList;

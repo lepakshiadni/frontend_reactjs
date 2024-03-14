@@ -1,5 +1,6 @@
 import '../../../styles/HelpPage.css'
 import { useState } from 'react'
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 const HelpPage5 = (props) => {
     const setOpen5 = props.setOpen5
@@ -95,7 +96,7 @@ const HelpPage5 = (props) => {
                             <div className='helpDiv' style={{ height: "60px", width: "7px" }}></div>
                             <div className='divMenu'>
                                 <h3 className='textHelp'>Is Sissoo available for both iOS and Android devices?</h3>
-                                <h3 style={{ fontSize: '22px', marginLeft: '420px', position: 'absolute' }}>🡪</h3>
+                                <h3 style={{ fontSize: '22px', marginLeft: '420px', position: 'absolute' }}><ArrowForwardIosIcon /></h3>
                             </div>
                         </div>
                         <hr />
@@ -104,7 +105,7 @@ const HelpPage5 = (props) => {
                             <div className='helpDiv' style={{ height: "60px", width: "7px" }}></div>
                             <div className='divMenu'>
                                 <h3 className='textHelp'>Is Sissoo available for both iOS and Android devices?</h3>
-                                <h3 style={{ fontSize: '22px', marginLeft: '420px', position: 'absolute' }}>🡪</h3>
+                                <h3 style={{ fontSize: '22px', marginLeft: '420px', position: 'absolute' }}><ArrowForwardIosIcon /></h3>
                             </div>
                         </div>
                         <hr />
@@ -113,7 +114,7 @@ const HelpPage5 = (props) => {
                             <div className='helpDiv' style={{ height: "60px", width: "7px" }}></div>
                             <div className='divMenu'>
                                 <h3 className='textHelp'>Is Sissoo available for both iOS and Android devices?</h3>
-                                <h3 style={{ fontSize: '22px', marginLeft: '420px', position: 'absolute' }}>🡪</h3>
+                                <h3 style={{ fontSize: '22px', marginLeft: '420px', position: 'absolute' }}><ArrowForwardIosIcon /></h3>
                             </div>
                         </div>
                     </div>

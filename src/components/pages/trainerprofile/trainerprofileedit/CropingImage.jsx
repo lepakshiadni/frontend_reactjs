@@ -1,59 +1,107 @@
-import Avatar from "react-avatar-edit";
-import { useState } from "react";
+import React, { useState, useRef } from "react";
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
 
-const CropImage = (props) => {
-    const [preview, setPreview] = useState(null);
+const SquareCropImg = (props) => {
+    const [image, setImage] = useState(false);
+    const [cropData, setCropData] = useState(null);
+    const [fileName, setFileName] = useState(null);
+    const cropperRef = useRef(null);
 
-
-    const onCrop = (view) => {
-        setPreview(view);
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setImage(reader.result);
+                setFileName(file.name); // Store selected filename
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
-    const handleUpdate = () => {
-        props.handleUpdateProfileImage(preview);
-        setPreview(null)
+    const handleCrop = () => {
+        if (cropperRef.current) {
+            const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas();
+            const croppedImageBase64 = croppedCanvas.toDataURL();
+            setCropData(croppedImageBase64);
+            props.handleUpdateProfileImage(croppedImageBase64, fileName); // Pass filename along with cropped image data
+        }
+        setImage(null);
+        setFileName(null);
+        setCropData(null);
     };
+
+
     const handleClosePopUp = () => {
+        setImage(null);
+        setFileName(null);
         props.setTrigger(false)
-        setPreview(null)
     }
+    const handleCropChange = () => {
+        if (cropperRef.current) {
+            const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas();
+            const croppedImageBase64 = croppedCanvas.toDataURL();
+            setCropData(croppedImageBase64);
+        }
+    };
 
     return (props.trigger) ? (
         <div className="CropImgpopup">
-
             <div className="CropContainer">
                 <div>
-                    <span >
-                        <svg className=" Popclose  cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 34 34" fill="none" onClick={handleClosePopUp}>
+                    <span>
+                        <svg className=" Popclose cursor-pointer" xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 34 34" fill="none" onClick={handleClosePopUp}>
                             <path d="M8.48542 8.48528L16.9707 16.9706M16.9707 16.9706L25.456 25.4558M16.9707 16.9706L8.48542 25.4558M16.9707 16.9706L25.456 8.48528" stroke="#2676C2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                     </span>
                 </div>
-                <div className="flex justify-between  items-start p-5">
-                    <div className="ps-5">
-                        <Avatar
-                            type='file'
-                            width={300}
-                            height={200}
-                            onCrop={onCrop}
-                            onChange={(e) => props.handleFileInputChange(e, 'profile')}
-                            imageHeight={200}
-                            imageWidth={300}
-                            borderRadius={0}
+
+                <div className="flex justify-between  items-start p-10">
+                    <div className="flex items-center" style={{ border: '2px Dotted black', height: '200px', width: "300px", borderRadius: '10px' }}>
+
+                        <Cropper
+                            ref={cropperRef}
+                            zoomTo={0.5}
+                            initialAspectRatio={1}
+                            preview=".img-preview"
+                            src={image}
+                            viewMode={1}
+                            minCropBoxHeight={1}
+                            minCropBoxWidth={1}
+                            background={false}
+                            responsive={true}
+                            autoCropArea={1}
+                            checkOrientation={false}
+                            guides={true}
+                            crop={handleCropChange}
                         />
+
+                        {!fileName && (
+                            <input className="cursor-pointer " type="file" onChange={handleFileChange} />
+                        )}
+
                     </div>
-                    <div className="ms-5">
+                    <div>
                         <div>
-                            <img width='123px' height='123px' className="mb-10 ms-7" src={preview} alt="" />
+                            <img
+                                style={{ borderRadius: '50%', border: '1px solid gray' }}
+                                width="123px"
+                                height="123px"
+                                className="mb-10 ms-16"
+                                src={cropData}
+                                alt=""
+                            />
                         </div>
-                        <button style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white", }} onClick={handleUpdate}>Replace</button>
+                        <button style={{ padding: '8px 70px', backgroundColor: '#2676C2', borderRadius: "10px", color: "white",marginLeft:'30px' }} onClick={handleCrop}>Replace</button>
                     </div>
 
                 </div>
 
             </div>
         </div>
-    ) : "";
-};
+    ) : ""
 
-export default CropImage;
+}
+
+export default SquareCropImg;

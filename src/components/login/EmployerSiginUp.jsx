@@ -71,7 +71,7 @@ const Employee = () => {
     if(employerSignUp?.success){
       Cookies.set('token',employerSignUp?.token)
       toast.success(employerSignUp?.message)
-      navigate('/dashboard')
+      navigate('/employerDashboard/dashboard')
     }
 
     else{

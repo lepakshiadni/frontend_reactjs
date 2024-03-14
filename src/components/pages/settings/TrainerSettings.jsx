@@ -1,20 +1,18 @@
 import React, { useState } from "react";
-import '../../styles/TrainerSettings.css'
-import ArrowBackIcon  from "@mui/icons-material/ArrowBack";
+import "../../styles/TrainerSettings.css";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Stack } from "@mui/material";
-import {useNavigate} from 'react-router-dom'
-
+import { useLocation, useNavigate } from "react-router-dom";
 import { ArrowForwardIos } from "@mui/icons-material";
 
-
 function TrainerSettings() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [activeOption, setActiveOption] = useState("Account Preference");
   const [model, setModel] = useState(0);
   const [modell, setModell] = useState(0);
   const [modelv, setModelv] = useState(0);
   const [modeln, setModeln] = useState(0);
-
-
 
   const handleOptionClick = (option) => {
     setActiveOption(option);
@@ -33,68 +31,132 @@ function TrainerSettings() {
   const [selectedValueva, setSelectedValueva] = useState(null);
   const [selectedValueasc, setSelectedValueasc] = useState(null);
   const [selectedValueasp, setSelectedValueasp] = useState(null);
-  const navigate=useNavigate()
-  const handleLanguage = (e) => {
-    setModel(0);
-    setModell(0);
-    setModelv(0);
-    setModeln(0);
-    setSelectLanguage(e.target.value);
-    // console.log(e.target.value)
+
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const handleChange = (event) => {
+    // Remove any non-numeric characters from the input
+    const formattedInput = event.target.value.replace(/\D/g, "");
+    setPhoneNumber(formattedInput);
   };
 
+  const handleGetOTP = (event) => {
+    event.preventDefault();
+    // Generate OTP logic
+    const otp = generateOTP();
+    console.log("OTP:", otp);
+  };
+
+  const generateOTP = () => {
+    // Generate a random 6-digit OTP
+    return Math.floor(100000 + Math.random() * 900000);
+  };
+
+  const handleLanguage = (e) => {
+    setModel(0);
+    // setModell(0);
+    // setModelv(0);
+    // setModeln(0);
+    setSelectLanguage(e.target.value);
+  };
 
   const handleRadioAccountProfile = (value) => {
     setModel(0);
-    setModell(0);
-    setModelv(0);
-    setModeln(0);
+
     setSelectedValueasp(value);
-    // setRadios1(!radios1);
-    //  setRadios2(false);
-    //  setRadios3(false)
+
+    // Log boolean values based on the selected radio button
+
+    let profileVisiility = {
+      noOne: value === "No one",
+      yourFriends: value === "Your Friends",
+      allSissoMembers: value === "All sisso members",
+    };
+    console.log("profileVisiility:", profileVisiility);
   };
   const handleRadioAccountContact = (value) => {
     setModel(0);
-    setModell(0);
-    setModelv(0);
-    setModeln(0);
+
     setSelectedValueasc(value);
+
+    let ShowConatctTo = {
+      noOne: value === "No one",
+      yourFriends: value === "Your Friends",
+      allSissoMembers: value === "All sisso members",
+    };
+    console.log("ShowConatctTo:", ShowConatctTo);
   };
+
   const handleRadioMode = (value) => {
-    setModel(0);
-    setModell(0);
     setModelv(0);
-    setModeln(0);
+
     setSelectedValuevm(value);
+    let ModeOfColour = {
+      dark: value === "Dark",
+      light: value === "Light",
+      normal: value === "Normal",
+    };
+    console.log("ModeOfColour:", ModeOfColour);
   };
   const handleRadioProfile = (e) => {
     setModelv(0);
-    setSelectedValuevp(e.target.value);
-    // setSelectedValuevp(e.target.checked);
-  };
-  const handleRadioBannerImage = (value) => {
-    setModel(0);
-    setModell(0);
-    setModelv(0);
-    setModeln(0);
-    setSelectedValuevb(value);
-  };
-  const handleRadioCertificationInformation = (value) => {
-    setModel(0);
-    setModell(0);
-    setModelv(0);
-    setModeln(0);
-    setSelectedValuevc(value);
-  };
-  const handleRadioAvailableDates = (value) => {
-    setModel(0);
-    setModell(0);
-    setModelv(0);
-    setModeln(0);
-    setSelectedValueva(value);
+    const value = e.target.value;
+    setSelectedValuevp(value);
+
+    let profilePic = {
+      noOne: value === "No one",
+      yourFriends: value === "Your Friends",
+      allSissoMembers: value === "All sisso members",
+    };
+    console.log("profilePic:", profilePic);
   };
 
+  const handleRadioBannerImage = (value) => {
+    setModelv(0);
+    setSelectedValuevb(value);
+
+    let BannerShow = {
+      noOne: value === "No one",
+      yourFriends: value === "Your Friends",
+      allSissoMembers: value === "All sisso members",
+    };
+    console.log("BannerShow:", BannerShow);
+  };
+  const handleRadioCertificationInformation = (value) => {
+    setModelv(0);
+
+    setSelectedValuevc(value);
+
+    let CertificateInfo = {
+      noOne: value === "No one",
+      yourFriends: value === "Your Friends",
+      allSissoMembers: value === "All sisso members",
+    };
+    console.log("CertificateInfo:", CertificateInfo);
+  };
+  const handleRadioAvailableDates = (value) => {
+    setModelv(0);
+
+    setSelectedValueva(value);
+
+    let AvailableDates = {
+      noOne: value === "No one",
+      yourFriends: value === "Your Friends",
+      allSissoMembers: value === "All sisso members",
+    };
+    console.log("AvailableDates:", AvailableDates);
+  };
+  const handdleProfileNavigate = () => {
+    if (location.pathname.startsWith("/employerDashboard/settings")) {
+      navigate("/employerprofile")
+    }
+    else if (location.pathname.startsWith("/trainerDashboard/settings")) {
+      navigate("/trainerprofile")
+    }
+    else {
+      return null
+    }
+  }
   return (
     <div className="trainer-settings">
       <div className="main-setting">
@@ -140,10 +202,7 @@ function TrainerSettings() {
                     >
                       Profile Information
                     </h4>
-                    <div
-                      className="settings-para"
-                      onClick={()=>{navigate('/trainerProfileEdit')}}
-                    >
+                    <div onClick={handdleProfileNavigate} className="settings-para">
                       <p
                         style={{
                           display: "flex",
@@ -171,11 +230,7 @@ function TrainerSettings() {
                     >
                       General Preference
                     </h4>
-                    <div
-                      // style={{ paddingLeft: "20px", paddingRight: '12px' }}
-                      className="settings-para"
-                    >
-                      {/* <div> */}
+                    <div className="settings-para">
                       <p
                         onClick={() => {
                           setModel(1);
@@ -204,16 +259,11 @@ function TrainerSettings() {
                           </div>
                         </span>
                       </p>
-                      {/* </div> */}
                     </div>
 
                     <hr />
-                    <div
-                      className="settings-para"
-                      // style={{ padding: "10px", paddingLeft: "20px" }}
-                    >
+                    <div className="settings-para">
                       <p
-                        // className="settings-para"
                         onClick={() => {
                           setModel(2);
                         }}
@@ -256,7 +306,6 @@ function TrainerSettings() {
                           alignItems: "center",
                           paddingLeft: "20px",
                           paddingRight: "10px",
-                          // gap:"10px"
                         }}
                       >
                         <p>Show contact Information</p>
@@ -293,9 +342,7 @@ function TrainerSettings() {
                       >
                         Account Access
                       </h4>
-                      <div
-                        className="settings-para"
-                      >
+                      <div className="settings-para">
                         <div>
                           <p
                             onClick={() => {
@@ -326,9 +373,7 @@ function TrainerSettings() {
                         </div>
                       </div>
                       <hr />
-                      <div
-                        className="settings-para"
-                      >
+                      <div className="settings-para">
                         <p
                           onClick={() => {
                             setModell(2);
@@ -356,10 +401,7 @@ function TrainerSettings() {
                         </p>
                       </div>
                       <hr />
-                      <div
-                        className="settings-para"
-                        // style={{ padding: "10px", paddingLeft: "20px" }}
-                      >
+                      <div className="settings-para">
                         <p
                           onClick={() => {
                             setModell(3);
@@ -403,7 +445,6 @@ function TrainerSettings() {
                             alignItems: "center",
                             paddingLeft: "20px",
                             paddingRight: "10px",
-                            // paddingRight: '10px'
                           }}
                         >
                           <div> Mode </div>
@@ -430,7 +471,6 @@ function TrainerSettings() {
                               alignItems: "center ",
                               paddingLeft: "20px",
                               paddingRight: "10px",
-                              // paddingRight: '10px'
                             }}
                           >
                             <div>Profile Image</div>
@@ -442,10 +482,7 @@ function TrainerSettings() {
                         </div>
                       </div>
                       <hr />
-                      <div
-                        className="settings-para"
-                        //  style={{ padding: "10px", paddingLeft: "20px" }}
-                      >
+                      <div className="settings-para">
                         {" "}
                         <p
                           onClick={() => setModelv(3)}
@@ -467,10 +504,7 @@ function TrainerSettings() {
                         </p>
                       </div>
                       <hr />
-                      <div
-                        className="settings-para"
-                        // style={{ padding: "10px", paddingLeft: "20px" }}
-                      >
+                      <div className="settings-para">
                         <p
                           onClick={() => setModelv(4)}
                           style={{
@@ -490,10 +524,7 @@ function TrainerSettings() {
                         </p>
                       </div>
                       <hr />
-                      <div
-                        className="settings-para"
-                        // style={{ padding: "10px", paddingLeft: "20px" }}
-                      >
+                      <div className="settings-para">
                         {" "}
                         <p
                           onClick={() => setModelv(5)}
@@ -538,18 +569,13 @@ function TrainerSettings() {
                             alignItems: "center ",
                             paddingLeft: "20px",
                             paddingRight: "10px",
-                            // paddingRight: '13px'
-                            // padding:"10px"
                           }}
                         >
                           Messages <ArrowForwardIos sx={{ color: "#b6b6b6" }} />
                         </p>
                       </div>
                       <hr />
-                      <div
-                        className="settings-para"
-                        //  style={{ padding: "10px", paddingLeft: "20px" }}
-                      >
+                      <div className="settings-para">
                         {" "}
                         <p
                           onClick={() => setModeln(2)}
@@ -569,12 +595,8 @@ function TrainerSettings() {
                         </p>
                       </div>
                       <hr />
-                      <div
-                        className="settings-para"
-                        //  style={{ padding: "10px", paddingLeft: "20px" }}
-                      >
+                      <div className="settings-para">
                         <p
-                          // className="settings-para"
                           onClick={() => setModeln(3)}
                           style={{
                             display: "flex",
@@ -590,13 +612,9 @@ function TrainerSettings() {
                         </p>
                       </div>
                       <hr />
-                      <div
-                        className="settings-para"
-                        // style={{ padding: "10px", paddingLeft: "20px" }}
-                      >
+                      <div className="settings-para">
                         {" "}
                         <p
-                          // className="settings-para"
                           onClick={() => setModeln(4)}
                           style={{
                             display: "flex",
@@ -633,7 +651,7 @@ function TrainerSettings() {
                 setModel(0);
               }}
             >
-              <ArrowBackIcon  />
+              <ArrowBackIcon />
               Back{" "}
             </button>{" "}
             <Stack spacing={1} sx={{ position: "relative", left: "5px" }}>
@@ -642,7 +660,7 @@ function TrainerSettings() {
               </p>
 
               <div className="pb-[10px]">
-                <select className="trainerSettingsselect"
+                <select
                   onChange={handleLanguage}
                   name=""
                   id=""
@@ -665,9 +683,7 @@ function TrainerSettings() {
               </div>
             </Stack>
           </Stack>
-        ) : (
-          ""
-        )}
+        ) : null}
         {model === 2 ? (
           <div className="right-settings">
             <button
@@ -684,76 +700,67 @@ function TrainerSettings() {
                 gap: "10px",
               }}
             >
-              <ArrowBackIcon  />
+              <ArrowBackIcon />
               Back
             </button>
             <h4 style={{ color: "#535353", marginBottom: "10px" }}>
               Show your profile
             </h4>
-            <Stack
-              direction={"column"}
-              spacing={""}
-              sx={{ marginBottom: "20px" }}
-            >
-              <label
-                // className={`${radio1 ? " text-[#2676c2] text-base font-normal font-['Poppins']" : " text-zinc-500 text-base font-normal font-['Poppins']"}`}
-                htmlFor="No one"
-                className={`radios ${
-                  selectedValueasp === "No one" ? "selected" : ""
-                }`}
-              >
-                <input
-                  // onChange={() => { setRadio1(!radio1); setRadio2(false); }} checked={radio1}
-                  type="radio"
-                  name="selectone"
-                  id="No one"
-                  value="No one"
-                  onChange={() => handleRadioAccountProfile("No one")}
-                  checked={selectedValueasp === "No one"}
-                />
-                No one
-              </label>
+            <Stack direction={""} spacing={""} sx={{ marginBottom: "20px" }}>
+              <form>
+                {/* <label htmlFor="profileVisiility"> */}
+                <label
+                  htmlFor="No one"
+                  className={`radios ${selectedValueasp === "No one" ? "selected" : ""
+                    }`}
+                >
+                  <input
+                    type="radio"
+                    name="profileVisiility"
+                    id="No one"
+                    value="No one"
+                    onChange={() => handleRadioAccountProfile("No one")}
+                    checked={selectedValueasp === "No one"}
+                  />
+                  No one
+                </label>
 
-              <label
-                htmlFor="Your Friends"
-                className={`radios ${
-                  selectedValueasp === "Your Friends" ? "selected" : ""
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="selectone"
-                  id="Your Friends"
-                  value="Your Friends"
-                  onChange={() => handleRadioAccountProfile("Your Friends")}
-                  checked={selectedValueasp === "Your Friends"}
-                />
-                Your Friends
-              </label>
-
-              <label
-                htmlFor="All sisso members"
-                className={`radios ${
-                  selectedValueasp === "All sisso members" ? "selected" : ""
-                }`}
-              >
-                <input
-                  type="radio"
-                  name="selectone"
-                  value="All sisso members"
-                  id="All sisso members"
-                  onChange={() =>
-                    handleRadioAccountProfile("All sisso members")
-                  }
-                  checked={selectedValueasp === "All sisso members"}
-                />
-                All sisso members
-              </label>
+                <label
+                  htmlFor="Your Friends"
+                  className={`radios ${selectedValueasp === "Your Friends" ? "selected" : ""
+                    }`}
+                >
+                  <input
+                    type="radio"
+                    name="profileVisiility"
+                    id="Your Friends"
+                    value="Your Friends"
+                    onChange={() => handleRadioAccountProfile("Your Friends")}
+                    checked={selectedValueasp === "Your Friends"}
+                  />
+                  Your Friends
+                </label>
+                <label
+                  htmlFor="All sisso members"
+                  className={`radios ${selectedValueasp === "All sisso members" ? "selected" : ""
+                    }`}
+                >
+                  <input
+                    type="radio"
+                    name="profileVisiility"
+                    value="All sisso members"
+                    id="All sisso members"
+                    onChange={() =>
+                      handleRadioAccountProfile("All sisso members")
+                    }
+                    checked={selectedValueasp === "All sisso members"}
+                  />
+                  All sisso members
+                </label>
+              </form>
             </Stack>
           </div>
-        ) : (
-          ""
-        )}
+        ) : null}
         {model === 3 ? (
           <div className="right-settings">
             <button
@@ -770,7 +777,7 @@ function TrainerSettings() {
                 gap: "10px",
               }}
             >
-              <ArrowBackIcon  />
+              <ArrowBackIcon />
               Back
             </button>
             {/* <br /> */}
@@ -785,13 +792,12 @@ function TrainerSettings() {
             >
               <label
                 htmlFor="No one"
-                className={`radios ${
-                  selectedValueasc === "No one" ? "selected" : ""
-                }`}
+                className={`radios ${selectedValueasc === "No one" ? "selected" : ""
+                  }`}
               >
                 <input
                   type="radio"
-                  name="selectone"
+                  name="ShowContactTo"
                   value="No one"
                   id="No one"
                   onChange={() => handleRadioAccountContact("No one")}
@@ -802,13 +808,12 @@ function TrainerSettings() {
 
               <label
                 htmlFor="Your Friends"
-                className={`radios ${
-                  selectedValueasc === "Your Friends" ? "selected" : ""
-                }`}
+                className={`radios ${selectedValueasc === "Your Friends" ? "selected" : ""
+                  }`}
               >
                 <input
                   type="radio"
-                  name="selectone"
+                  name="ShowContactTo"
                   value="Your Friends"
                   id="Your Friends"
                   onChange={() => handleRadioAccountContact("Your Friends")}
@@ -819,13 +824,12 @@ function TrainerSettings() {
 
               <label
                 htmlFor="All sisso members"
-                className={`radios ${
-                  selectedValueasc === "All sisso members" ? "selected" : ""
-                }`}
+                className={`radios ${selectedValueasc === "All sisso members" ? "selected" : ""
+                  }`}
               >
                 <input
                   type="radio"
-                  name="selectone"
+                  name="ShowContactTo"
                   value="All sisso members"
                   id="All sisso members"
                   onChange={() =>
@@ -837,9 +841,7 @@ function TrainerSettings() {
               </label>
             </Stack>
           </div>
-        ) : (
-          ""
-        )}
+        ) : null}
       </div>
 
       {modell === 1 ? (
@@ -858,10 +860,10 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back{" "}
           </button>{" "}
-          <form action="">
+          <form action="" onSubmit={handleGetOTP}>
             <Stack
               direction={"column"}
               spacing={1}
@@ -886,29 +888,34 @@ function TrainerSettings() {
                 New Number
               </h4>
               <div style={{ display: "flex", alignItems: "center" }}>
-                <input
-                  type="text"
-                  placeholder="Enter Mobile number"
-                  style={{
-                    width: "25rem",
-                    height: "2.5rem",
-                    flexShrink: 0,
-                    border: "1px solid rgba(185, 185, 185, 1)",
-                    outline: "none",
-                    padding: "15px",
-                  }}
-                />
-                <span
-                  style={{
-                    fontWeight: 500,
-                    color: "#2676c2",
-                    position: "relative",
-                    right: "70px",
-                    fontSize: "14px",
-                  }}
-                >
-                  Get otp
-                </span>
+                <form action="">
+                  <input
+                    type="tel"
+                    value={phoneNumber}
+                    onChange={handleChange}
+                    placeholder="Enter Mobile number"
+                    style={{
+                      width: "25rem",
+                      height: "2.5rem",
+                      flexShrink: 0,
+                      border: "1px solid rgba(185, 185, 185, 1)",
+                      outline: "none",
+                      padding: "15px",
+                    }}
+                    maxLength={10}
+                  />
+                  <span
+                    style={{
+                      fontWeight: 500,
+                      color: "#2676c2",
+                      position: "relative",
+                      right: "70px",
+                      fontSize: "14px",
+                    }}
+                  >
+                    <button type="submit"> Get otp</button>
+                  </span>
+                </form>
               </div>
             </Stack>
           </form>
@@ -932,7 +939,7 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back
           </button>
           <Stack sx={{ marginBottom: "20px" }}>
@@ -1000,7 +1007,7 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back{" "}
           </button>
           <h4 style={{ marginBottom: "10px" }}>Close account</h4>
@@ -1011,11 +1018,11 @@ function TrainerSettings() {
             direction={"row"}
             spacing={2}
             sx={{ marginBottom: "20px" }}
-            // style={{
-            //   display: "flex",
-            //   justifyContent: "space-around",
-            //   alignItems: "flex-start",
-            // }}
+          // style={{
+          //   display: "flex",
+          //   justifyContent: "space-around",
+          //   alignItems: "flex-start",
+          // }}
           >
             <button className="button1">Sign Out</button>
             <button className="button2">Cancel</button>
@@ -1042,7 +1049,7 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back{" "}
           </button>
           <h4 style={{ marginBottom: "10px" }}>
@@ -1055,13 +1062,12 @@ function TrainerSettings() {
           >
             <label
               htmlFor="Dark"
-              className={`radios ${
-                selectedValuevm === "Dark" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValuevm === "Dark" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="ModeOfColour"
                 value="Dark"
                 id="Dark"
                 onChange={() => handleRadioMode("Dark")}
@@ -1072,13 +1078,12 @@ function TrainerSettings() {
 
             <label
               htmlFor="Light"
-              className={`radios ${
-                selectedValuevm === "Light" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValuevm === "Light" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="ModeOfColour"
                 value="Light"
                 id="Light"
                 onChange={() => handleRadioMode("Light")}
@@ -1089,13 +1094,12 @@ function TrainerSettings() {
 
             <label
               htmlFor="Normal"
-              className={`radios ${
-                selectedValuevm === "Normal" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValuevm === "Normal" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="ModeOfColour"
                 value="Normal"
                 id="Normal"
                 onChange={() => handleRadioMode("Normal")}
@@ -1124,7 +1128,7 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back{" "}
           </button>
           <h4 style={{ marginBottom: "10px" }}>Profile picture privacy</h4>
@@ -1136,30 +1140,28 @@ function TrainerSettings() {
             >
               <label
                 htmlFor="No one"
-                className={`radios ${
-                  selectedValuevp === "No one" ? "selected" : ""
-                }`}
+                className={`radios ${selectedValuevp === "No one" ? "selected" : ""
+                  }`}
               >
                 <input
                   type="radio"
-                  name="profilepic"
+                  name="profilePic"
                   value="No one"
                   id="No one"
                   checked={selectedValuevp === "No one"}
-                  // checked= {`selectedValuevp == "No one" ? ${true} : ${false}`}
+                // checked= {`selectedValuevp == "No one" ? ${true} : ${false}`}
                 />
                 No one
               </label>
 
               <label
                 htmlFor="Your Friends"
-                className={`radios ${
-                  selectedValuevp === "Your Friends" ? "selected" : ""
-                }`}
+                className={`radios ${selectedValuevp === "Your Friends" ? "selected" : ""
+                  }`}
               >
                 <input
                   type="radio"
-                  name="profilepic"
+                  name="profilePic"
                   value="Your Friends"
                   id="Your Friends"
                   // checked= {`selectedValuevp == "Your Friends" ? ${true} : ${false}`}
@@ -1170,17 +1172,16 @@ function TrainerSettings() {
 
               <label
                 htmlFor="All sisso members"
-                className={`radios ${
-                  selectedValuevp === "All sisso members" ? "selected" : ""
-                }`}
+                className={`radios ${selectedValuevp === "All sisso members" ? "selected" : ""
+                  }`}
               >
                 <input
                   type="radio"
-                  name="profilepic"
+                  name="profilePic"
                   value="All sisso members"
                   id="All sisso members"
                   checked={selectedValuevp === "All sisso members"}
-                  // checked= {`selectedValuevp == "All sisso member" ? ${true} :  ${false}`}
+                // checked= {`selectedValuevp == "All sisso member" ? ${true} :  ${false}`}
                 />
                 All sisso members
               </label>
@@ -1206,10 +1207,9 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back{" "}
           </button>{" "}
-          {/* <br /> */}
           <h4 style={{ marginBottom: "10px" }}>Banner images</h4>
           <Stack
             direction={"column"}
@@ -1218,13 +1218,12 @@ function TrainerSettings() {
           >
             <label
               htmlFor="No one"
-              className={`radios ${
-                selectedValuevb === "No one" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValuevb === "No one" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="BannerShow"
                 value="No one"
                 id="No one"
                 onChange={() => handleRadioBannerImage("No one")}
@@ -1235,13 +1234,12 @@ function TrainerSettings() {
 
             <label
               htmlFor="Your Friends"
-              className={`radios ${
-                selectedValuevb === "Your Friends" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValuevb === "Your Friends" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="BannerShow"
                 value="Your Friends"
                 id="Your Friends"
                 onChange={() => handleRadioBannerImage("Your Friends")}
@@ -1252,13 +1250,12 @@ function TrainerSettings() {
 
             <label
               htmlFor=""
-              className={`radios ${
-                selectedValuevb === "All sisso members" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValuevb === "All sisso members" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="BannerShow"
                 value="All sisso members"
                 id="All sisso members"
                 onChange={() => handleRadioBannerImage("All sisso members")}
@@ -1287,7 +1284,7 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back{" "}
           </button>
 
@@ -1301,13 +1298,12 @@ function TrainerSettings() {
           >
             <label
               htmlFor="No one"
-              className={`radios ${
-                selectedValuevc === "No one" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValuevc === "No one" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="CertificateInfo"
                 value="No one"
                 id="No one"
                 onChange={() => handleRadioCertificationInformation("No one")}
@@ -1318,13 +1314,12 @@ function TrainerSettings() {
 
             <label
               htmlFor="Your Friends"
-              className={`radios ${
-                selectedValuevc === "Your Friends" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValuevc === "Your Friends" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="CertificateInfo"
                 value="Your Friends"
                 id="Your Friends"
                 onChange={() =>
@@ -1337,13 +1332,12 @@ function TrainerSettings() {
 
             <label
               htmlFor="All sisso members"
-              className={`radios ${
-                selectedValuevc === "All sisso members" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValuevc === "All sisso members" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="CertificateInfo"
                 value="All sisso members"
                 id="All sisso members"
                 onChange={() =>
@@ -1374,7 +1368,7 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back{" "}
           </button>
           <h4 style={{ marginBottom: "10px" }}>
@@ -1387,13 +1381,12 @@ function TrainerSettings() {
           >
             <label
               htmlFor="No one"
-              className={`radios ${
-                selectedValueva === "No one" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValueva === "No one" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="AvailableDates"
                 value="No one"
                 id="No one"
                 onChange={() => handleRadioAvailableDates("No one")}
@@ -1404,13 +1397,12 @@ function TrainerSettings() {
 
             <label
               htmlFor="Your Friends"
-              className={`radios ${
-                selectedValueva === "Your Friends" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValueva === "Your Friends" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="AvailableDates"
                 value="Your Friends"
                 id="Your Friends"
                 onChange={() => handleRadioAvailableDates("Your Friends")}
@@ -1421,13 +1413,12 @@ function TrainerSettings() {
 
             <label
               htmlFor="All sisso members"
-              className={`radios ${
-                selectedValueva === "All sisso members" ? "selected" : ""
-              }`}
+              className={`radios ${selectedValueva === "All sisso members" ? "selected" : ""
+                }`}
             >
               <input
                 type="radio"
-                name="selectone"
+                name="AvailableDates"
                 value="All sisso members"
                 id="All sisso members"
                 onChange={() => handleRadioAvailableDates("All sisso members")}
@@ -1457,22 +1448,13 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back
           </button>
           <h4 style={{ marginBottom: "10px" }}>
             If you want change message notification
           </h4>
-          <Stack
-            direction={"row"}
-            spacing={2}
-            sx={{ marginBottom: "20px" }}
-            // style={{
-            //   display: "flex",
-            //   justifyContent: "space-around",
-            //   alignItems: "flex-start",
-            // }}
-          >
+          <Stack direction={"row"} spacing={2} sx={{ marginBottom: "20px" }}>
             <button className="button1">Don't Shown</button>
             <button className="button2">Shown</button>
           </Stack>
@@ -1497,7 +1479,7 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back
           </button>
 
@@ -1528,7 +1510,7 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back
           </button>
 
@@ -1559,7 +1541,7 @@ function TrainerSettings() {
               gap: "10px",
             }}
           >
-            <ArrowBackIcon  />
+            <ArrowBackIcon />
             Back
           </button>
           <p style={{ marginBottom: "10px" }}>

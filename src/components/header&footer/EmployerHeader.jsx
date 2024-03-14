@@ -1,36 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import HeaderImage from "../assets/LOGO.png";
 import "../styles/Header.css";
 import Favi from "../assets/favi.png";
-import { Link, useNavigate } from 'react-router-dom'
-// import Chat from "../pages/messages/Chat";
-import { useSelector } from "react-redux";
-const Header = () => {
-  const navigate = useNavigate()
+import { Link, useNavigate } from "react-router-dom";
+import UserAvatar from '../assets/UserAvatar.png';
+
+import { useSelector, useDispatch } from "react-redux";
+import { employerDetails } from "../../redux/action/employers.action";
+const EmployerHeader = () => {
+  // State for search bar dropdown
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isDropdownActive, setDropdownActive] = useState(false);
-  const [showNotificationDropdown, setShowNotificationDropdown] = useState(false);
+  const [showNotificationDropdown, setShowNotificationDropdown] =
+    useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const [user, setUser] = useState(null)
-
-  const employer = useSelector(({ employerSignUp }) => {
-    return employerSignUp?.employerDetails
-  })
-  const trainer = useSelector(({ trainerSignUp }) => {
-    return trainerSignUp?.trainerDetails;
-  })
-  console.log("employer",employer)
-  console.log("trainer",trainer)
+  const notificationRef = useRef(null);
+  const profileRef = useRef(null);
+  const dispatch = useDispatch();
+  const user = useSelector(({ employerSignUp }) => {
+    return employerSignUp?.employerDetails?.employerDetails;
+  });
   useEffect(() => {
-    if (employer?.success) {
-      setUser(employer?.employerDetails);
-    }
-    if (trainer?.success) {
-      setUser(trainer?.trainerDetails);
-    }
-  }, [employer, trainer]);
+    dispatch(employerDetails());
+  }, [dispatch]);
 
-  console.log("user", user)
+  // console.log("user", user);
   const handleInputChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -39,6 +34,26 @@ const Header = () => {
     setDropdownActive(!isDropdownActive);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setShowNotificationDropdown(false);
+      }
+
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   //notification
   const handleNotification = () => {
     setShowNotificationDropdown(!showNotificationDropdown);
@@ -84,7 +99,6 @@ const Header = () => {
   // Sample data for profile dropdown
 
   return (
-
     <div className="header">
       {/* Company Logo */}
       <div className="w-[210px] ml-[40px]">
@@ -105,23 +119,24 @@ const Header = () => {
               onFocus={toggleDropdown}
               onBlur={toggleDropdown}
             />
-            {/* <SearchIcon " /> */}
-            <svg
-              className="search-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="26"
-              height="26"
-              viewBox="0 0 26 26"
-              fill="none"
-            >
-              <path
-                d="M17 17L25 25M10.3333 19.6667C5.17868 19.6667 1 15.488 1 10.3333C1 5.17868 5.17868 1 10.3333 1C15.488 1 19.6667 5.17868 19.6667 10.3333C19.6667 15.488 15.488 19.6667 10.3333 19.6667Z"
-                stroke="#888888"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            {searchTerm.trim() === "" ? (
+              <svg
+                className="search-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 26 26"
+                fill="none"
+              >
+                <path
+                  d="M17 17L25 25M10.3333 19.6667C5.17868 19.6667 1 15.488 1 10.3333C1 5.17868 5.17868 1 10.3333 1C15.488 1 19.6667 5.17868 19.6667 10.3333C19.6667 15.488 15.488 19.6667 10.3333 19.6667Z"
+                  stroke="#888888"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            ) : null}
             <div
               className={`dropdown-search ${isDropdownActive ? "active" : ""}`}
             >
@@ -134,22 +149,27 @@ const Header = () => {
             </div>
           </div>
         </div>
+
         <div className="flex items-center ">
           {/* Notification Icon */}
-          <div className=" relative cursor-pointer" onClick={handleNotification}>
+          <div
+            className=" relative cursor-pointer"
+            onClick={handleNotification}
+            ref={notificationRef}
+          >
             <div className="ml-[10px]">
-              <div className="Ellipse17 w-5 h-5 ml-1 text-white bg-sky-600 rounded-full">
-                <div className=" text-white text-sm font-normal font-['Poppins'] ml-[5px] mb-[1px]">
+              <div className="Ellipse17 w-4 h-4 ml-[-1px] text-white bg-sky-600 rounded-full">
+                <div className=" text-white text-[11px] font-normal font-['Poppins'] ml-[4px]">
                   5
                 </div>
               </div>
             </div>
-            <div className="notification-icon absolute top-[-8px] z-[-1]" >
+            <div className="notification-icon absolute top-[-8px] z-[-1]">
               <span>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="26"
+                  width="20"
+                  height="20"
                   viewBox="0 0 24 26"
                   fill="none"
                 >
@@ -212,29 +232,45 @@ const Header = () => {
           </div>
 
           {/* Profile Dropdown */}
-          <div className="profile" onClick={handleprofile}>
+          <div
+            className="profile cursor-pointer min-w-[180px] w-[100%]"
+            onClick={handleprofile}
+            ref={profileRef}
+          >
             <div className="profile-header">
-              <img src={Favi} alt="" style={{ float: "left", clear: "both" }} />
-              <div>
-                <h4>{user?.fullName?.charAt(0)?.toUpperCase() + user?.fullName?.slice(1)}</h4>
-                <p>{user?.companyName?.charAt(0)?.toUpperCase() + user?.companyName?.slice(1) || 'N/A'}</p>
+              <div className="flex justify-start items-start">
+                {
+                  user?.basicInfo?.profileImg ? <img className="w-[60px] h-[60px] rounded-full" src={user?.basicInfo?.profileImg} />
+                    :
+                    <div className="w-[60px] h-[60px] rounded-full capitalize flex justify-center items-center bg-slate-400">
+                      {/* <span className=" capitalize"> {user?.fullName[0]}</span> */}
+                      <img src={UserAvatar} alt=""/>
+                    </div>
+                }
+              </div>
+              <div className="text-start min-w-[120px] w-[auto]">
+                {/* <h4>{user?.basicInfo?.firstName + user?.basicInfo?.lastName  || user?.fullName}</h4> */}
+                {user?.basicInfo?.firstName && user?.basicInfo?.lastName
+                  ? `${user.basicInfo.firstName} ${user.basicInfo.lastName}`
+                  : user?.fullName
+                }
+                <p style={{ letterSpacing: "100%" }}>{user?.designation}</p>
               </div>
             </div>
             {showProfileDropdown && (
-              <div className="absolute right-[0] w-[234px] h-[133px] bg-white border-2 border-zinc-300">
-                <div className="bg-white font-['Poppins']">
-                  <div onClick={()=>{navigate('/trainerProfile')}} className="viewprofile text-neutral-700 flex justify-center items-center w-[100%] h-[43px] text-lg font-normal font-['Poppins']">
-                    {/* <Link to="/trainerDashboard/trainerProfile"> View Profile</Link> */}
-                    View Profile
-                    <div className="triangle2"></div>
-                  </div>
-                  <div className="text-neutral-700 w-[100%] flex justify-center items-center h-[43px] text-lg font-normal font-['Poppins'] hover:bg-[#E3E3E3]">
-                    <Link to="/trainerDashboard/messages"> Send Messages</Link>
-                  </div>
-                  <div className="text-neutral-700 w-[100%] flex justify-center items-center h-[43px] text-lg font-normal font-['Poppins'] hover:bg-[#E3E3E3]">
-                    <Link to="/trainerDashboard/settings">Settings</Link>
-                  </div>
+              <div className="profile-dropdown w-[100%] min-w-[180px] h-[133px] bg-white border-2 border-zinc-300">
+                <div className="viewprofile text-neutral-700 flex justify-center items-center w-[100%] h-[43px] text-lg font-normal font-['Poppins'] ">
+                  <Link to="/employerprofile"> View Profile</Link>
+                  <div className="triangle2"></div>
                 </div>
+                <div className="viewmessage text-neutral-700 w-[100%] flex justify-center items-center h-[43px] text-lg font-normal font-['Poppins'] hover:bg-[#E3E3E3]">
+                  <Link to="/employerDashboard/messages"> Send Messages</Link>
+                </div>
+                <div className="text-neutral-700 w-[100%] flex justify-center items-center h-[43px] text-lg font-normal font-['Poppins'] hover:bg-[#E3E3E3]">
+                  <Link to="/employerDashboard/settings">Settings</Link>
+                </div>
+                {/* <div className="bg-white font-['Poppins']">
+                </div> */}
               </div>
             )}
           </div>
@@ -244,5 +280,4 @@ const Header = () => {
   );
 };
 
-export default Header;
-
+export default EmployerHeader;

@@ -6,11 +6,6 @@
   z-index: 1;
 }
 
-.updatedatas2 {
-  border: 0.5px solid rgba(227, 227, 227, 0.5);
-  padding: 20px;
-}
-
 .updateOptions {
   display: flex;
   align-items: center;
@@ -32,11 +27,11 @@
 
 .updateOptions.selected {
   background-color: rgb(38, 118, 194, 0.1);
-  color: #2676C2;
+  color: #2676c2;
 }
 
 .updateOptions.selected .updateDiv {
-  background-color: #2676C2;
+  background-color: #2676c2;
 }
 
 .updateOptions.selected .textHelp {
@@ -47,7 +42,7 @@
 .updatepage {
   display: flex;
   margin-left: 50px;
-  margin-top: 100px;
+  margin-top: 120px;
   height: 536px;
   width: 1260px;
 }
@@ -62,7 +57,6 @@
   width: 206px;
   border-right-width: 2px;
   margin-left: 6px;
-
 }
 
 .updateLabel {
@@ -77,7 +71,7 @@
 
 .updateLabel input {
   height: 30px;
-  border: 1px solid #CECECE;
+  border: 1px solid #cecece;
   border-radius: 2px;
   outline: none;
   width: 239px;
@@ -85,20 +79,14 @@
   font-weight: 400;
   font-size: 14px;
   padding-left: 10px;
-
 }
 
 .updateLabel input::placeholder {
   color: #888888;
-
-}
-
-.updateLabel textarea::placeholder {
-  color: #888888;
 }
 
 .updateLabel textarea {
-  border: 1px solid #CECECE;
+  border: 1px solid #cecece;
   border-radius: 2px;
   outline: none;
   padding: 10px;
@@ -108,27 +96,29 @@
   height: 147px;
   width: 508px;
   resize: none;
+}
 
-  &::-webkit-scrollbar {
-    width: 5px;
-    border-radius: 8px;
-  }
+.updateLabel textarea::placeholder {
+  color: #888888;
+}
 
-  &::-webkit-scrollbar-track {
-    border-radius: 8px;
+.updateLabel textarea::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 8px;
+}
 
-  }
+.updateLabel textarea::-webkit-scrollbar-track {
+  border-radius: 8px;
+}
 
-  &::-webkit-scrollbar-thumb {
-    background-color: #BFBFBF;
-    border-radius: 8px;
-  }
-
+.updateLabel textarea::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 8px;
 }
 
 .updateLabel select {
   height: 30px;
-  border: 1px solid #CECECE;
+  border: 1px solid #cecece;
   border-radius: 2px;
   outline: none;
   width: 239px;
@@ -138,16 +128,19 @@
   padding-left: 10px;
 }
 
+.updateLabel select::placeholder {
+  color: #888888;
+}
+
 .certificateData label {
   font-size: 14px;
   font-weight: 400;
   color: #535353;
-
 }
 
 .certificateData input {
   height: 40px;
-  border: 1px solid #CECECE;
+  border: 1px solid #cecece;
   border-radius: 5px;
   outline: none;
   width: 810px;
@@ -160,17 +153,11 @@
 
 .certificateData input::placeholder {
   color: #888888;
-
-}
-
-.certificateData textarea::placeholder {
-  color: #888888;
-
 }
 
 .certificateData textarea {
   height: 120px;
-  border: 1px solid #CECECE;
+  border: 1px solid #cecece;
   border-radius: 5px;
   outline: none;
   width: 810px;
@@ -180,34 +167,35 @@
   font-size: 14px;
   padding: 10px;
   resize: none;
+}
 
-  &::-webkit-scrollbar {
-    width: 5px;
-    border-radius: 8px;
-  }
+.certificateData textarea ::placeholder {
+  color: #888888;
+}
 
-  &::-webkit-scrollbar-track {
-    border-radius: 8px;
+.certificateData textarea::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 8px;
+}
 
-  }
+.certificateData textarea::-webkit-scrollbar-track {
+  border-radius: 8px;
+}
 
-  &::-webkit-scrollbar-thumb {
-    background-color: #BFBFBF;
-    border-radius: 8px;
-  }
-
+.certificateData textarea::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 8px;
 }
 
 .contactInfo label {
   font-size: 14px;
   font-weight: 400;
   color: #535353;
-
 }
 
 .contactInfo input {
   height: 40px;
-  border: 1px solid #CECECE;
+  border: 1px solid #cecece;
   border-radius: 2px;
   outline: none;
   width: 320px;
@@ -216,64 +204,29 @@
   font-size: 14px;
   padding-left: 10px;
 }
-
 .contactInfo input::placeholder {
   color: #888888;
-
 }
-
-.contactInfo2 label {
-  font-size: 14px;
-  font-weight: 400;
-  color: #535353;
-
-}
-
-.contactInfo2 input {
-  height: 40px;
-  border: 1px solid #CECECE;
-  border-radius: 2px;
-  outline: none;
-  width: 320px;
-  margin-top: 5px;
-  font-weight: 400;
-  font-size: 14px;
-  padding-left: 10px;
-}
-
-.contactInfo2 input::placeholder {
-  color: #888888;
-
-}
-
 
 .certificateData {
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
   padding: 0px 20px;
 }
 
 .contactInfo {
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
   padding: 0px 20px;
   padding-bottom: 20px;
-
-}
-
-.contactInfo2 {
-  border: 1px solid #EEEEEE;
-  padding: 0px 20px;
-  padding-bottom: 20px;
-  width: 740px;
 }
 
 .updatedatas {
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
   padding: 0px 20px;
 }
 
 .hoverItems:hover {
   text-decoration: underline;
-  color: #2676C2;
+  color: #2676c2;
   cursor: pointer;
 }
 
@@ -289,45 +242,43 @@
 }
 
 .previewCertifyData {
-  height: 310PX;
+  height: 310px;
   width: 810px;
-  border: 1px solid #CECECE;
+  border: 1px solid #cecece;
   overflow-y: scroll;
+}
 
-  &::-webkit-scrollbar {
-    width: 5px;
-    border-radius: 8px;
-  }
+.previewCertifyData::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 8px;
+}
 
-  &::-webkit-scrollbar-track {
-    border-radius: 8px;
+.previewCertifyData::-webkit-scrollbar-track {
+  border-radius: 8px;
+}
 
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #BFBFBF;
-    border-radius: 8px;
-  }
+.previewCertifyData::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 8px;
 }
 
 .skillData {
-  height: 310PX;
+  height: 310px;
   overflow-y: scroll;
+}
 
-  &::-webkit-scrollbar {
-    width: 5px;
-    border-radius: 8px;
-  }
+.skillData::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 8px;
+}
 
-  &::-webkit-scrollbar-track {
-    border-radius: 8px;
+.skillData::-webkit-scrollbar-track {
+  border-radius: 8px;
+}
 
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #BFBFBF;
-    border-radius: 8px;
-  }
+.skillData::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 8px;
 }
 
 .CropImgpopup {
@@ -344,12 +295,11 @@
 .CropContainer {
   width: 600px;
   height: 350px;
-  border: 2px solid #EEEEEE;
+  border: 2px solid #eeeeee;
   border-radius: 8px;
   overflow: hidden;
   background: white;
   margin: 130px 380px;
-
 }
 
 .Popclose {
@@ -365,22 +315,21 @@
 }
 
 .skillScroll {
-  height: 430PX;
+  height: 430px;
   overflow-y: scroll;
-  width: 234px;
+  width: 200px;
+}
 
-  &::-webkit-scrollbar {
-    width: 5px;
-    border-radius: 8px;
-  }
+.skillScroll::-webkit-scrollbar {
+  width: 5px;
+  border-radius: 8px;
+}
 
-  &::-webkit-scrollbar-track {
-    border-radius: 8px;
+.skillScroll::-webkit-scrollbar-track {
+  border-radius: 8px;
+}
 
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #BFBFBF;
-    border-radius: 8px;
-  }
+.skillScroll::-webkit-scrollbar-thumb {
+  background-color: #bfbfbf;
+  border-radius: 8px;
 }
