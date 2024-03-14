@@ -356,17 +356,11 @@ export const deleteAppliedTraining = (trainingPostId) => {
 }
 
 export const getSkillsData = () => {
-    const token = Cookies.get('token')
-    console.log('get SkillsData Action')
+    // console.log('get SkillsData Action')
     return async (dispatch) => {
         try {
-            Axios.get(`${baseUrl}/trainer/skills `, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
+            Axios.get(`${baseUrl}/trainer/skills `)
                 .then((resp) => {
-
                     dispatch({
                         type: 'GET_SKILLDATA_SUCCESS',
                         payload: resp.data

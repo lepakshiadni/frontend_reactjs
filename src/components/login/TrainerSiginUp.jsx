@@ -4,15 +4,16 @@ import "../styles/RoleSelection.css";
 import "../styles/Employee.css";
 import "../styles/SkillSet.css"
 import LOGO from "../assets/Header_Logo_RS.png";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector,useDispatch } from 'react-redux'
-import {trainerSignUpAction} from '../../redux/action/trainer.action'
+import {trainerSignUpAction,getSkillsData} from '../../redux/action/trainer.action'
 import Select from 'react-select';
 import Cookies from 'js-cookie'
 import { toast } from "react-toastify";
 
 const SkillsSet = () => {
+  const dispatch=useDispatch()
   const [fullName, setFullName] = useState("");
   const [experience, setExperience] = useState("");
   const [selected, setSelected] = useState("");
@@ -20,12 +21,18 @@ const SkillsSet = () => {
   const [open, setOpen] = useState(false);
   const countries = ["French", "Spanish", "German", "Italian", "Chinese"];
   const phoneNumber = Cookies.get("phoneNumber")
-
+  useEffect(()=>{
+    dispatch(getSkillsData())
+  },[dispatch])
   const roleSelection=useSelector(({roleSelection})=>{
     return roleSelection
   })
+
   const trainerSignUp=useSelector(({trainerSignUp})=>{
     return trainerSignUp?.trainerDetails
+  })
+  const skillsTopics=useSelector(({trainerSignUp})=>{
+    return trainerSignUp?.skillData?.skills;
   })
   const trainerDetails={
     fullName: '',
@@ -35,24 +42,24 @@ const SkillsSet = () => {
     role:localStorage.getItem('role')
   }
   const navigate = useNavigate();
-  const dispatch=useDispatch()
   console.log('Trainer',trainerSignUp)
-  console.log('role',roleSelection)
-  const skillsTopics = [
-    { value: 'python', label: 'Python' },
-    { value: 'java', label: 'Java' },
-    { value: 'c', label: 'c' },
-    { value: 'c++', label: 'C++' },
-    { value: 'react', label: 'React' },
-    { value: 'html', label: 'HTML' },
-    { value: 'css', label: 'CSS' },
-    { value: 'django', label: 'Django' },
-    { value: 'django', label: 'Django' },
-    { value: 'ango', label: 'ango' },
-    { value: 'djao', label: 'Djgo' },
-    { value: 'djago', label: 'Djago' },
-    { value: 'express', label: 'Express' }
-  ]
+  // console.log('role',roleSelection)
+  console.log("skillsTopics",selectedSkills)
+  // const skillsTopics = [
+  //   { value: 'python', label: 'Python' },
+  //   { value: 'java', label: 'Java' },
+  //   { value: 'c', label: 'c' },
+  //   { value: 'c++', label: 'C++' },
+  //   { value: 'react', label: 'React' },
+  //   { value: 'html', label: 'HTML' },
+  //   { value: 'css', label: 'CSS' },
+  //   { value: 'django', label: 'Django' },
+  //   { value: 'django', label: 'Django' },
+  //   { value: 'ango', label: 'ango' },
+  //   { value: 'djao', label: 'Djgo' },
+  //   { value: 'djago', label: 'Djago' },
+  //   { value: 'express', label: 'Express' }
+  // ]
   
   const handleEnter = (e) => {
     if (e.key === 'Enter') {
@@ -71,7 +78,7 @@ const SkillsSet = () => {
     // Handle sign-in logic here
     trainerDetails.fullName=fullName;
     trainerDetails.experience=experience;
-    trainerDetails.skills=selectedSkills?.map(({value})=>value);
+    trainerDetails.skills=selectedSkills?.map(({name,image})=>({name,image}));
     // console.log(trainerDetails)
     setFullName("")
     setExperience("")
@@ -233,15 +240,24 @@ const SkillsSet = () => {
                   // type='text'
                   value={selectedSkills}
                   required
-                  onChange={(selectedOptions) => setSelectedSkills(selectedOptions)}
-
-                  // onChange={(e) => (setSkillSet(e.target.value))}
+                  onChange={(selectedOptions) => setSelectedSkills(selectedOptions.map(({name,image,value,label})=>({name,image,label,value})))}
                   placeholder='Enter Your skills'
-                  // onKeyDown={(e) => handleEnter(e)}
                   defaultValue={[]}
                   isMulti
                   name="Qualifications"
-                  options={skillsTopics}
+                  // options={skillsTopics}
+                  options={skillsTopics?.map(skill => ({
+                    value: skill.name, 
+                    label: skill.name,
+                    name:skill.name,
+                    image:skill.image
+                  }))}
+                  // onInputChange={(inputValue, { action }) => {
+                  //   if (action === 'input-change') {
+                  //     // User is typing a custom value
+                  //     setSelectedSkills([{ name: inputValue, image: inputValue,label:inputValue }]);
+                  //   }
+                  // }}
                   className="Multiselector"
                   styles={{
 
@@ -271,8 +287,7 @@ const SkillsSet = () => {
                       fontWeight: 500,
                       lineHeight: 'normal',
                       background: 'rgba(255, 255, 255, 0.20)',
-                      // background:"red",
-                      // padding: '0 15px', // Uncomment this line if needed
+                      
                       outline: 'none',
                       display: 'flex',
                       alignItems: 'center'

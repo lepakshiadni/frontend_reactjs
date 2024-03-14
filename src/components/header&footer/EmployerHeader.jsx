@@ -3,6 +3,7 @@ import HeaderImage from "../assets/LOGO.png";
 import "../styles/Header.css";
 import Favi from "../assets/favi.png";
 import { Link, useNavigate } from "react-router-dom";
+import UserAvatar from '../assets/UserAvatar.png';
 
 import { useSelector, useDispatch } from "react-redux";
 import { employerDetails } from "../../redux/action/employers.action";
@@ -241,8 +242,9 @@ const EmployerHeader = () => {
                 {
                   user?.basicInfo?.profileImg ? <img className="w-[60px] h-[60px] rounded-full" src={user?.basicInfo?.profileImg} />
                     :
-                    <div className="w-[60px] h-[60px] rounded-full capitalize flex justify-center items-center">
-                      <span className=" capitalize"> {user?.fullName[0]}</span>
+                    <div className="w-[60px] h-[60px] rounded-full capitalize flex justify-center items-center bg-slate-400">
+                      {/* <span className=" capitalize"> {user?.fullName[0]}</span> */}
+                      <img src={UserAvatar} alt=""/>
                     </div>
                 }
               </div>

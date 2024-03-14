@@ -6,6 +6,7 @@ import { MdOutlineMessage } from "react-icons/md";
 import { BsCardChecklist } from "react-icons/bs";
 import { BiHelpCircle } from "react-icons/bi";
 import { SlSettings } from "react-icons/sl";
+import { GoChecklist } from "react-icons/go";
 import { TbBrandGoogleAnalytics } from "react-icons/tb";
 import { TbLockSquare } from "react-icons/tb";
 export const option = [
@@ -42,17 +43,13 @@ export const option = [
   {
     name: "Proposal Management",
     icon: (
-      <MdOutlineMessage style={{ fontSize: "25px", marginRight: "10px" }} />
+      <GoChecklist style={{ fontSize: "25px", marginRight: "10px" }} />
     ),
   },
   {
     name: "Settings",
     icon: <SlSettings style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
-  // {
-  //   name: "Billing & Payments",
-  //   icon: <SlSettings style={{ fontSize: "25px", marginRight: "10px" }} />,
-  // },
   {
     name: "Training Resource",
     icon: <GridViewIcon style={{ fontSize: "25px", marginRight: "10px" }} />,

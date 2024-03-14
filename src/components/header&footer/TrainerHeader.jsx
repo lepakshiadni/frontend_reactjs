@@ -3,6 +3,8 @@ import HeaderImage from "../assets/LOGO.png";
 import "../styles/Header.css";
 import Favi from "../assets/favi.png";
 import { Link, useNavigate } from "react-router-dom";
+import UserAvatar from '../assets/UserAvatar.png';
+
 import Chat from "../pages/messages/Chat";
 import { useSelector } from "react-redux";
 const TrainerHeader = () => {
@@ -237,7 +239,8 @@ const TrainerHeader = () => {
                   user?.basicInfo?.profileImg ? <img className="w-[60px] h-[60px] rounded-full" src={user?.basicInfo?.profileImg} />
                     :
                     <div className="w-[60px] h-[60px] rounded-full capitalize flex justify-center items-center">
-                     <span className=" capitalize"> {user?.fullName[0]}</span>
+                     {/* <span className=" capitalize"> {user?.fullName[0]}</span> */}
+                     <img alt="" src={UserAvatar}/>
                     </div>
                 }
               </div>

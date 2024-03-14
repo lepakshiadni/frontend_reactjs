@@ -6,7 +6,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import TrainerHeader from "../../header&footer/TrainerHeader";
 import { trainerDetails } from '../../../redux/action/trainer.action'
-import { getTrainerCreatePost } from '../../../redux/action/trainercreatepost.action'
+import { getTrainerCreatePostById } from '../../../redux/action/trainercreatepost.action'
+import UserAvatar from '../../assets/UserAvatar.png'
 import timesago from "timesago";
 const TrainerProfile = () => {
   const dispatch = useDispatch()
@@ -14,19 +15,19 @@ const TrainerProfile = () => {
   const [showAllCert, setShowAllCert] = useState(false);
   const [showAllActivities, setShowAllActivities] = useState(false);
 
-  // const [user, setUser] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   useEffect(() => {
     dispatch(trainerDetails())
-    dispatch(getTrainerCreatePost())
+    dispatch(getTrainerCreatePostById())
   }, [dispatch]);
+
   const user = useSelector(({ trainerSignUp }) => {
     return trainerSignUp?.trainerDetails?.trainerDetails;
   });
 
   const trainerCreatePostDetails = useSelector(({ trainerCreatePost }) => {
-    return trainerCreatePost?.trainerCreatePostDetails
+    return trainerCreatePost?.trainerPostDetails?.trainercreatePost
   })
 
   console.log('trainercreatePostDetails', trainerCreatePostDetails)
@@ -136,16 +137,14 @@ const TrainerProfile = () => {
       <div className="w-full relative">
         <div className="w-100% relative ml-[80px] mr-[80px] h-auto flex">
           <div className="leftsideTrainerProfile w-8/12 mr-[23.67px]">
-            <div className="min-h-[1086px] h-[auto] flex flex-col border">
+            <div className="h-[auto] flex flex-col border">
               <div className="h-[195px] ">
                 {
                   user?.basicInfo?.profileBanner ?
 
                     <img className="h-[235.41px] w-full" src={user?.basicInfo?.profileBanner} alt="img" />
                     :
-                    <div className="flex justify-center items-center bg-slate-300 w-full">
-                      <span className="capitalize text-black">{user?.fullName[0]}</span>
-                    </div>
+                    <div className="flex justify-center items-center h-[235.42px] bg-slate-300 w-full" />
                 }
               </div>
               <div className="">
@@ -160,7 +159,8 @@ const TrainerProfile = () => {
                       />
                       :
                       <div className="relative top-[-5px] w-[100px] h-[100px] rounded-full bg-slate-300">
-                        <span className="text-3xl capitalize">{user?.fullName[0]}</span>
+                        {/* <span className="text-3xl capitalize">{user?.fullName[0]}</span> */}
+                        <img alt="" src={UserAvatar} />
                       </div>
                   }
                   <img
@@ -171,19 +171,21 @@ const TrainerProfile = () => {
                   />
                   <div className="relative flex justify-center items-center flex-col">
                     <div className="text-[#263238] text-[20px] font-[500] font-['Poppins'] capitalize">
-
-                      {`${user?.basicInfo?.firstName} ${user?.basicInfo?.lastName} ` || `${user?.fullName}`}
+                      {user?.basicInfo?.firstName && user?.basicInfo?.lastName
+                        ? `${user.basicInfo.firstName} ${user.basicInfo.lastName}`
+                        : user?.fullName
+                      }
                     </div>
                     <div className="text-[#232323] text-base font-normal font-['Poppins'] capitalize">
 
                       {user?.designation}
                     </div>
-                    <h4
+                    {/* <h4
                       className="font-[500] text-[#2676C2] text-[16px] font-[Poppins] cursor-pointer"
                       onClick={goToConnections}
                     >
                       500+ connections
-                    </h4>
+                    </h4> */}
                   </div>
                   <div className="relative text-center text-[#6A6A6A] text-[14px] font-[400] font-['Poppins'] capitalize">
                     {user?.skills?.slice(0, 7).map(({ name }) => {
@@ -218,21 +220,27 @@ const TrainerProfile = () => {
               <div className="flex justify-center items-center flex-col">
                 <div className="mt-[17px] mb-[17px] w-9/12 h-[0px] border border-neutral-200"></div>
               </div>
-              <div className="pl-[30px] pr-[30px]">
-                <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins'] capitalize">
-                  {/* UI/UX Trainer & Developer | Passionate about Crafting Seamless
-                  Experiences */}
-                  {user?.basicInfo?.objective}
-                </div>
-                <div className="text-[#535353] text-[16px] mt-[10px] font-[400px] font-['Poppins']">
-                  {/* I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a
-                  keen eye for design and a <br />
-                  commitment to education, I'm on a mission to share my
-                  expertise with aspiring <br />
-                  designers. */}
-                  {user?.basicInfo?.aboutYou}
-                </div>
-              </div>
+              {
+                user?.basicInfo?.status === true ?
+                  <div className="pl-[30px] pr-[30px]">
+                    <h3 className="text-[#232323] text-[18px] font-[500] font-['Poppins']">
+                      Profile Details
+                    </h3>
+                    <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins'] capitalize">
+                      {user?.basicInfo?.objective}
+                    </div>
+                    <div className="text-[#535353] text-[16px] mt-[10px] font-[400px] font-['Poppins']">
+                      {user?.basicInfo?.aboutYou}
+                    </div>
+                  </div>
+                  :
+                  <div onClick={handleEditProfile} className="flex justify-center items-center animate-bounce">
+                    <span className=" hover:underline cursor-pointer text-[#2676c2]">
+                      Please Complete the Basic Details Profile !
+                    </span>
+                  </div>
+              }
+
               <div className="flex justify-center items-center flex-col mt-[30px] mr-[10px] ml-[10px]">
                 <div className="w-full h-[0px] border border-neutral-200"></div>
               </div>
@@ -241,39 +249,50 @@ const TrainerProfile = () => {
                 <h3 className="text-[#232323] text-[18px] font-[500] font-['Poppins']">
                   Certifications
                 </h3>
-                {
-                  user?.certificateDetails
-                    .slice(0, showAllCert ? user?.certificateDetails.length : 1)
-                    .map(({ certificateHead, certificateUrl, certificationDescription, institution }) => {
-                      return <>
-                        <div>
-                          <h3 className="mt-[10px]">
-                            <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
-                              {/* Certified UI/UX Professional:{" "} */}
-                              {certificateHead}:{" "}
-                            </span>
-                            <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
-                              {/* Stanford university */}
-                              {institution}
-                            </span>
-                          </h3>
-                        </div>
-                        <p className="mt-[10px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                          {certificationDescription}
-                        </p>
-                        {/* <iframe className="mt-[20px]" src={certificateUrl} alt="" /> */}
-                        {certificateUrl.toLowerCase().endsWith('.pdf') ? (
-                          <iframe
-                            style={{ width: '100%', height: '417px' }}
-                            className="mt-[20px] max-w-[756px] h-auto" src={certificateUrl} alt="PDF Certificate" />
-                        ) : (
-                          <img className="mt-[20px]" src={certificateUrl} alt="Image Certificate" />
-                        )}
-                        <br />
-                      </>
-                    })
 
+                {
+                  user?.certificateDetails?.length > 0 ?
+                    <>
+
+                      {
+                        user?.certificateDetails
+                          ?.slice(0, showAllCert ? user?.certificateDetails.length : 1)
+                          ?.map(({ certificateHead, certificateUrl, certificationDescription, institution }) => {
+                            return <>
+                              <div>
+                                <h3 className="mt-[10px]">
+                                  <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
+                                    {certificateHead}:{" "}
+                                  </span>
+                                  <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
+                                    {institution}
+                                  </span>
+                                </h3>
+                              </div>
+                              <p className="mt-[10px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                                {certificationDescription}
+                              </p>
+                              {certificateUrl.toLowerCase().endsWith('.pdf') ? (
+                                <iframe
+                                  style={{ width: '100%', height: '417px' }}
+                                  className="mt-[20px] max-w-[756px] h-auto" src={certificateUrl} alt="PDF Certificate" />
+                              ) : (
+                                <img className="mt-[20px]" src={certificateUrl} alt="Image Certificate" />
+                              )}
+                              <br />
+                            </>
+                          })
+
+                      }
+                    </>
+                    :
+                    <div onClick={handleEditProfile} className="flex justify-center items-center animate-bounce">
+                      <span className=" hover:underline cursor-pointer text-[#2676c2]">
+                        Please Complete the Certificate Details Profile !
+                      </span>
+                    </div>
                 }
+
 
               </div>
               {
@@ -335,40 +354,41 @@ const TrainerProfile = () => {
                   </div>
                 </div>
                 {
-                  trainerCreatePostDetails
-                    ?.slice(0, showAllActivities ? trainerCreatePostDetails?.length : 3)
-                    ?.map((post, index) => {
-                      return <>
-                        <div key={index}>
-                          <div className="mt-[20px] text-[#9F9F9F] text-[14px] font-[400] font-['Poppins']">
-                            {/* Posted this 2days ago */}
-                            Posted this {timesago(post?.createdAt)}
-                          </div>
-                          {/* <div className="mt-[10px] text-[#535353] text-[18px] font-[500] font-['Poppins']">
-                          UI/UX Trainer & Developer | Passionate about Crafting
-                          Seamless Experiences
-                        </div> */}
-                          <div className="mt-[10px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                            {/* I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a
-                          keen eye for design and a commitment to education, I'm on a
-                          mission to share my expertise with aspiring designers. */}
-                            {post?.postedDescrition}
-                          </div>
-                          <div>
-                            <img src={post?.postedImg?.postImg} alt="" />
-                          </div>
-                          <hr />
-                        </div>
-                      </>
-                    })
+                  trainerCreatePostDetails?.length > 0 ?
+                    <>
+                      {
+                        trainerCreatePostDetails?.slice(0, showAllActivities ? trainerCreatePostDetails?.length : 3)?.map((post, index) => {
+                          return <>
+                            <div key={index}>
+                              <div className="mt-[20px] text-[#9F9F9F] text-[14px] font-[400] font-['Poppins']">
+                                Posted this {timesago(post?.createdAt)}
+                              </div>
+
+                              <div className="mt-[10px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+
+                                {post?.postedDescrition}
+                              </div>
+                              <div>
+                                <img src={post?.postedImg?.postImg} alt="" />
+                              </div>
+                              <hr />
+                            </div>
+                          </>
+                        })
+                      }
+
+                    </>
+                    :
+                    <div className="flex justify-center items-center">
+                      <span className=" capitalize">
+                        No Activity Yet! Create  a new one.
+                      </span>
+                    </div>
                 }
-
-
-
               </div>
 
               {
-                trainerCreatePostDetails.length > 3 && (
+                trainerCreatePostDetails?.length > 3 && (
                   <div className="pl-[18px] pt-[11px]">
                     <p
                       className="text-[#2676C2] text-[18px] font-[500] font-['Poppins'] cursor-pointer"

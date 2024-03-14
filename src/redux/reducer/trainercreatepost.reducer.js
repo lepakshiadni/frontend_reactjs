@@ -4,6 +4,7 @@ const initialState = {
     trainerCreatePostDetails: {
 
     },
+    trainerPostDetails: {},
     postTrainingComments: {
 
     },
@@ -48,6 +49,20 @@ const trainerCreatePostReducer = (state = initialState, action) => {
                 success: action.payload.success
             };
         case 'GET_TRAINERCREATEPOST_FAILURE':
+            console.log("Handling failure:", action.payload);
+            return {
+                ...state,
+                message: action.payload.error
+            };
+        case 'GET_TRAINERPOST_SUCCESS':
+            console.log("Handling success:", action.payload);
+            return {
+                ...state,
+                trainerPostDetails: action.payload,
+                message: action.payload.message,
+                success: action.payload.success
+            };
+        case 'GET_TRAINERPOST_FAILURE':
             console.log("Handling failure:", action.payload);
             return {
                 ...state,
