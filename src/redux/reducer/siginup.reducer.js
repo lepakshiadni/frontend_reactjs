@@ -9,7 +9,7 @@ const initialState = {
   const generateOTPReducer = (state = initialState, action) => {
     switch (action.type) {
       case 'GENERATE_OTP_SUCCESS':
-        console.log('generateotpsuccess', action);
+        // console.log('generateotpsuccess', action);
         return {
           ...state,
           otp : action.payload,
