@@ -80,21 +80,21 @@ const OngoingTraining = ({ ongoing }) => {
                   >
                     <div className="Trainer_Infoo">
                       <div className="TTTDD">
-                        <p>Training Program Name</p>
+                        <p className='font-[600]'>Training Program Name</p>
                         <h3 className="Blue_H22">{trainingPostDetails?.trainingName}</h3>
-                        <p>Company Name</p>
+                        <p className='font-[600]'>Company Name</p>
                         <h3 className="Blue_H22">{trainingPostDetails?.postedByCompanyName}</h3>
-                        <p>Type Of Training</p>
+                        <p className='font-[600]'>Type Of Training</p>
                         <h2>{trainingPostDetails?.typeOfTraining}</h2>
-                        <p>Duration Of Training</p>
+                        <p className='font-[600]'>Duration Of Training</p>
                         <h2>{trainingPostDetails.durationCount} {trainingPostDetails?.durationType}{trainingPostDetails.durationCount > 0 ? "'s" : ""}</h2>
                         <div className="SDEDD">
                           <div className="SDD">
-                            <p>Start Date</p>
+                            <p className='font-[600]'>Start Date</p>
                             <h2>{trainingPostDetails?.startDate}</h2>
                           </div>
                           <div className="EDD">
-                            <p>End Date</p>
+                            <p className='font-[600]'>End Date</p>
                             <h2>{trainingPostDetails?.endDate}</h2>
                           </div>
                         </div>

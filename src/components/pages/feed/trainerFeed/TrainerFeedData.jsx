@@ -284,15 +284,15 @@ const TrainerFeeData = ({ bookMarkedPost }) => {
                   </div>
 
                 </div>
-                <h5 style={{ fontSize: '15px', color: '#535353', marginTop: '10px' }}>{post.postedByDesignation}</h5>
+                <h5 className='font-[600]' style={{ fontSize: '15px', color: '#535353', marginTop: '10px' }}>{post?.trainingName}</h5>
                 <p
-                  className={showMoreArray[index] ? "show-more2" : "show-less2"} style={{ fontSize: '14px', color: '#888888' }}>
+                  className={showMoreArray[index] ? "show-more2" : "show-less2"} style={{ fontSize: '14px', color: '#535353' }}>
                   {post.description}
-                  <hr style={{ margin: '10px 0px' }} />
+                  {/* <hr style={{ margin: '10px 0px' }} /> */}
                   <div className='skilldata'>
 
                     <div style={{ display: 'flex', marginTop: '10px', height: '25px' }}>
-                      <h5 style={{ color: '#888888' }}>Wanted skills</h5>
+                      <h5 className='font-[600]' style={{ color: '#535353' }}>Wanted skills</h5>
                       <button onClick={() => {
                         setApplyPopUp(true);
                         setSelectedPost(post)
@@ -317,11 +317,11 @@ const TrainerFeeData = ({ bookMarkedPost }) => {
                     </div>
                   </div>
                   <div className='skilldata2'>
-                    <h5><span className='skillchild'>Type of training -</span> <span className='skillchild2'>{post.typeOfTraining}</span></h5>
-                    <h5><span className='skillchild' >Experience - </span><span className='skillchild2'>{post.experience} years</span></h5>
-                    <h5><span className='skillchild' >Duration of training -</span> <span className='skillchild2'>{post.durationCount} {post.durationType}</span></h5>
-                    <h5><span className='skillchild' >Budget -</span> <span className='skillchild2'>₹ {post.minBudget} - ₹ {post.maxBudget}</span> </h5>
-                    <h5 style={{ display: 'flex', alignItems: 'center', marginTop: '0px' }}><span className='skillchild' >Table of content - <span style={{ color: 'rgb(180, 161, 161)' }}> For Developer.pdf</span></span>
+                    <h5><span className='skillchild font-[600]'>Type of training -</span> <span className='skillchild2'>{post.typeOfTraining}</span></h5>
+                    <h5><span className='skillchild font-[600]' >Experience - </span><span className='skillchild2'>{post.experience} years</span></h5>
+                    <h5><span className='skillchild font-[600]' >Duration of training -</span> <span className='skillchild2'>{post.durationCount} {post.durationType}</span></h5>
+                    <h5><span className='skillchild font-[600]' >Budget -</span> <span className='skillchild2'>₹ {post.minBudget} - ₹ {post.maxBudget}</span> </h5>
+                    <h5 style={{ display: 'flex', alignItems: 'center', marginTop: '0px' }}><span className='skillchild font-[600]' >Table of content - <span style={{ color: 'rgb(180, 161, 161)' }}> For Developer.pdf</span></span>
                       <span className='downlod' onClick={downloadFileHandler}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="16" viewBox="0 0 12 16" fill="none">
                           <path d="M1.33301 14.6673H10.2219M5.77745 1.33398V11.7044M5.77745 11.7044L9.48116 8.00065M5.77745 11.7044L2.07375 8.00065" stroke="#2676C2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -329,13 +329,13 @@ const TrainerFeeData = ({ bookMarkedPost }) => {
                       </span>
                     </h5>
                     <div style={{ display: 'flex' }} >
-                      <h5 style={{ marginRight: '20px', marginTop: "0px", marginBottom: '0px' }}><span className='skillchild' style={{ marginBottom: '15px' }}>Start Date</span> <br /> <span className='skillchild2'>{post.startDate}</span> </h5>
+                      <h5 style={{ marginRight: '20px', marginTop: "0px", marginBottom: '0px' }}><span className='skillchild font-[600]' style={{ marginBottom: '15px' }}>Start Date</span> <br /> <span className='skillchild2'>{post.startDate}</span> </h5>
 
-                      <h5 style={{ margin: '0px' }}><span className='skillchild' >End Date</span> <br /> <span className='skillchild2'>{post.endDate}</span> </h5>
+                      <h5 style={{ margin: '0px' }}><span className='skillchild font-[600]' >End Date</span> <br /> <span className='skillchild2'>{post.endDate}</span> </h5>
 
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                      <h5><span className='skillchild' >Mode of Training -</span><span className='skillchild2'>{post.modOfTraining}</span></h5>
+                      <h5><span className='skillchild font-[600]' >Mode of Training -</span><span className='skillchild2'>{post.modOfTraining}</span></h5>
                       <div className='skillfooter2'>
                         <div onClick={() => handleIconClick2(post._id, currentUserId)} >
                           {likedPosts.includes(currentUserId) && post.likes.some(like => like._id === currentUserId) ?
