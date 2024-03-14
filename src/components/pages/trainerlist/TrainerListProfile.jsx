@@ -22,7 +22,7 @@ const TrainerListProfile = () => {
   const [seletedUser, setSeletedUser] = useState(null)
   const [showPopup, setShowPopup] = useState(false)
   useEffect(() => {
-    Axios.get(`http://192.168.1.103:4000/employer/getTrainerDetailsById/${id}`)
+    Axios.get(`http://44.211.80.23:4000/employer/getTrainerDetailsById/${id}`)
       .then((resp) => {
         setSeletedUser(resp.data?.trainerDetails)
       })
