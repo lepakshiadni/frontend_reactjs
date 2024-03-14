@@ -20,7 +20,7 @@ const Trainers = ({ trainerIndex }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [trainerDetails, setTrainerDetails] = useState([])
   useEffect(() => {
-    Axios.get('http://192.168.1.103:4000/trainer/getAllTrainerDetails')
+    Axios.get('http://44.211.80.23:4000/trainer/getAllTrainerDetails')
       .then((resp) => {
         setTrainerDetails(resp.data?.trainerDetails)
       })
