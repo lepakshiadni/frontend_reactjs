@@ -269,14 +269,7 @@ const TrainerListProfile = () => {
               </h3>
               <div className="mt-2">
                 {seletedUser?.skills.map((val,index) => {
-                  console.log(val.image)
                   return  <div className="flex mb-5" key={index}>
-                  {/* <img
-                    height="48px"
-                    width="48px"
-                    src={image}
-                    alt='d'
-                  /> */}
                   <img src={val.image} className="w-[48px] h-[48px]" alt="" />
                   <div className="w-full text-end">
                     <h6

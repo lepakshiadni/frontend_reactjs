@@ -16,6 +16,10 @@ export const option = [
     ),
   },
   {
+    name: "Feed",
+    icon: <BsCardChecklist style={{ fontSize: "25px", marginRight: "10px" }} />,
+  },
+  {
     name: "TrainerList",
     icon: <IoList style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
@@ -27,10 +31,6 @@ export const option = [
   },
   {
     name: "Training Management",
-    icon: <BsCardChecklist style={{ fontSize: "25px", marginRight: "10px" }} />,
-  },
-  {
-    name: "Feed",
     icon: <BsCardChecklist style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
   {
@@ -49,10 +49,10 @@ export const option = [
     name: "Settings",
     icon: <SlSettings style={{ fontSize: "25px", marginRight: "10px" }} />,
   },
-  {
-    name: "Billing & Payments",
-    icon: <SlSettings style={{ fontSize: "25px", marginRight: "10px" }} />,
-  },
+  // {
+  //   name: "Billing & Payments",
+  //   icon: <SlSettings style={{ fontSize: "25px", marginRight: "10px" }} />,
+  // },
   {
     name: "Training Resource",
     icon: <GridViewIcon style={{ fontSize: "25px", marginRight: "10px" }} />,
