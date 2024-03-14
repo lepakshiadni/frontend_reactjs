@@ -13,12 +13,13 @@ import Stack from "@mui/material/Stack";
 import Axios from 'axios'
 const Trainers = ({ trainerIndex }) => {
   const baseUrl =localStorage.getItem('baseUrl')
+  console.log("baseUrl",baseUrl)
   const navigate = useNavigate();
   const location = useLocation();
-  const { id } = useParams()
   const [selecteduser, setSelecteduser] = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [trainerDetails, setTrainerDetails] = useState([])
+  
   useEffect(() => {
     Axios.get('http://44.211.80.23:4000/trainer/getAllTrainerDetails')
       .then((resp) => {
@@ -28,8 +29,7 @@ const Trainers = ({ trainerIndex }) => {
         console.log(error)
       })
   }, [])
-  // console.log('trainerDetails',trainerDetails)
-  //   console.log(selecteduser)
+
   const trainerData = [
     {
       id: 1,
