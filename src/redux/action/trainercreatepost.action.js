@@ -56,6 +56,36 @@ export const getTrainerCreatePost = () => {
 
 }
 
+//for trainer by id
+
+export const getTrainerCreatePostById = () => {
+    const token = Cookies.get('token')
+    console.log('get trainerpost Action')
+    return async (dispatch) => {
+        try {
+            Axios.get(`${baseUrl}/trainerpost/getTrainerPostBy `, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    // console.log(resp)
+                    dispatch({
+                        type: 'GET_TRAINERPOST_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "GET_TRAINERPOST_FAILURE",
+                payload: err
+            })
+        }
+    }
+
+}
+
 export const addPostTrainerComments = (postId, comment) => {
     console.log('add post traiingcomments',comment,postId)
     return async (dispatch) => {

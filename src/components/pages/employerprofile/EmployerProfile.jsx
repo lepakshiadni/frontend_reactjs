@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import '../../styles/TrainerProfile.css';
-import Banner from "../../assets/Profile Banner.png";
-import TrainerProfileImage from "../../assets/profileTrainer.png";
+import UserAvatar from '../../assets/UserAvatar.png'
 import Edit from "../../assets/edit.svg";
 import { Link } from "react-router-dom";
 import timeago from 'timesago'
@@ -309,7 +308,6 @@ const EmployerProfile = () => {
     setShowAll((prevShowAll) => !prevShowAll);
   };
 
-
   const handleEditProfile = async () => {
     // const profileEditPath = routingProfileEdit();
     await navigate("/employerprofile/profileupdate"); // Navigate to TrainerProfileEdit route
@@ -363,9 +361,8 @@ const EmployerProfile = () => {
 
                     <img className="h-[235.41px] w-full" src={user?.basicInfo?.profileBanner} alt="img" />
                     :
-                    <div className="flex justify-center items-center bg-slate-300 w-full">
-                      <span className="capitalize text-black">{user?.fullName[0]}</span>
-                    </div>
+                    <div className="flex justify-center items-center bg-slate-300 w-full h-[235.41px]" />
+
                 }
               </div>
               <div className="">
@@ -378,8 +375,8 @@ const EmployerProfile = () => {
                         alt=""
                       />
                       :
-                      <div className="relative top-[-5px] w-[100px] h-[100px] rounded-full bg-slate-300">
-                        <span className="text-3xl capitalize">{user?.fullName[0]}</span>
+                      <div className="relative top-[-5px] w-[100px] h-[100px] flex justify-center items-center rounded-full bg-slate-300">
+                        <img alt="" src={UserAvatar} />
                       </div>
                   }
                   <img
@@ -390,24 +387,24 @@ const EmployerProfile = () => {
                   />
                   <div className="relative flex justify-center items-center flex-col">
                     <div className="text-[#263238] text-[20px] font-[500] font-['Poppins'] capitalize">
-                      {/* {user?.fullName?.charAt(0)?.toUpperCase() +
-                        user?.fullName?.slice(1)} */}
-                      {`${user?.basicInfo?.firstName} ${user?.basicInfo?.lastName} ` || `${user?.fullName}`}
+                      {user?.basicInfo?.firstName && user?.basicInfo?.lastName
+                        ? `${user.basicInfo.firstName} ${user.basicInfo.lastName}`
+                        : user?.fullName
+                      }
                     </div>
                     <div className="text-[#232323] text-base font-normal font-['Poppins'] capitalize">
-                      {/* {user?.designation?.charAt(0)?.toUpperCase() +
-                        user?.designation?.slice(1) || ""} */}
+
                       {user?.designation}
                     </div>
-                    <h4
+                    {/* <h4
                       className="font-[500] text-[#2676C2] text-[16px] font-[Poppins] cursor-pointer"
                       onClick={goToConnections}
                     >
                       500+ connections
-                    </h4>
+                    </h4> */}
                   </div>
                   <div className="relative text-center text-[#6A6A6A] text-[14px] font-[400] font-['Poppins'] capitalize">
-                    {user?.skills?.slice(0, 7).map(({name}) => {
+                    {user?.skills?.slice(0, 7).map(({ name }) => {
                       return (
                         <>
                           <span>
@@ -417,7 +414,7 @@ const EmployerProfile = () => {
                       );
                     })}
                     <br />
-                    {user?.skills?.slice(7, 10).map(({name}) => {
+                    {user?.skills?.slice(7, 10).map(({ name }) => {
                       return (
                         <>
                           <span>
@@ -446,11 +443,6 @@ const EmployerProfile = () => {
                   {user?.basicInfo?.objective}
                 </div>
                 <div className="text-[#535353] text-[16px] mt-[10px] font-[400px] font-['Poppins']">
-                  {/* I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a
-                  keen eye for design and a <br />
-                  commitment to education, I'm on a mission to share my
-                  expertise with aspiring <br />
-                  designers. */}
                   {user?.basicInfo?.aboutYou}
                 </div>
               </div>
@@ -463,8 +455,8 @@ const EmployerProfile = () => {
                 </h3>
                 {user?.experience
 
-                  .slice(0, showAllExp ? experiences.length : 3)
-                  .map((experience, index) => (
+                  ?.slice(0, showAllExp ? experiences.length : 3)
+                  ?.map((experience, index) => (
                     <div key={index}>
                       <h3 className="mt-[10px]">
                         <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">

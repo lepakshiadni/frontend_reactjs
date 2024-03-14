@@ -129,6 +129,7 @@ const trainerReducer = (state = initialState, action) => {
         message: action.payload.error,
       };
     case 'GET_SKILLDATA_SUCCESS':
+     
       return {
         ...state,
         skillData: action.payload,
