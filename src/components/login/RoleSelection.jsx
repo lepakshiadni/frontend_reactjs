@@ -164,7 +164,7 @@ const RoleSelection = () => {
             </Badge>
 
             <div className="Inspire" >
-              <h3>Unlock Team Excellence</h3>
+              <h3>Employer Access Request/h3>
               <p>
                 Lead team growth effortlessly as an <br />
                 Employer with sissoo Training
@@ -221,7 +221,7 @@ const RoleSelection = () => {
             </Badge>
 
             <div className="Inspire">
-              <h3>Inspire Learning Journey</h3>
+              <h3>Trainer Access Request</h3>
               <p>
                 Shape learning as a Trainer with <br />
                 sissoo crafting engaging courses.
