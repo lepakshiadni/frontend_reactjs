@@ -268,7 +268,7 @@ const TrainerListProfile = () => {
                 Skills
               </h3>
               <div className="mt-2">
-                {trainerData?.skills.map((val,index) => {
+                {seletedUser?.skills.map((val,index) => {
                   console.log(val.image)
                   return  <div className="flex mb-5" key={index}>
                   {/* <img
