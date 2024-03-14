@@ -12,7 +12,7 @@ function App() {
       // console.log("Connected to server")
       console.log(resp.data)
       // localStorage.setItem('baseUrl',`http://${resp?.data?.localIp}:4000`)
-      localStorage.setItem('baseUrl',`http://44.211.80.23/:4000`)
+      localStorage.setItem('baseUrl',`http://44.211.80.23:4000`)
 
     })
     .catch((error)=>{
