@@ -57,12 +57,12 @@ const EmployerProfile = () => {
     return postRequirement?.postTrainingDetails?.postTrainingDetails
   })
 
-  const appliedTraining = useSelector(({ employerSignUp }) => {
-    return employerSignUp?.getAllAppliedTraining?.appliedTrainingDetails
-  })
+  // const appliedTraining = useSelector(({ employerSignUp }) => {
+  //   return employerSignUp?.getAllAppliedTraining?.appliedTrainingDetails
+  // })
 
   console.log(postDetails, "postDetails")
-  console.log('appliedTraining', appliedTraining)
+
 
   useEffect(() => {
     if (employer?.success) {
@@ -123,7 +123,7 @@ const EmployerProfile = () => {
         "I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a keen eye for design and a commitment to education, I'm on a mission to share my expertise with aspiring designers.",
       availability: "Avail at December 12 2023",
       MinRate: 1000,
-      MaxRate: 5000,
+      MaxRate: 6000,
       trainingMode: "Offline",
     },
     {
@@ -144,7 +144,7 @@ const EmployerProfile = () => {
       description:
         "I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a keen eye for design and a commitment to education, I'm on a mission to share my expertise with aspiring designers.",
       availability: "Avail at December 14 2023",
-      MinRate: 1500,
+      MinRate: 1600,
       MaxRate: 7000,
       trainingMode: "Hybrid",
     },
@@ -156,7 +156,7 @@ const EmployerProfile = () => {
         "I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a keen eye for design and a commitment to education, I'm on a mission to share my expertise with aspiring designers.",
       availability: "Avail at December 12 2023",
       MinRate: 1000,
-      MaxRate: 5000,
+      MaxRate: 6000,
       trainingMode: "Offline",
     },
     {
@@ -177,7 +177,7 @@ const EmployerProfile = () => {
       description:
         "I'm Kowshik, a dedicated UI/UX Developer and Trainer. With a keen eye for design and a commitment to education, I'm on a mission to share my expertise with aspiring designers.",
       availability: "Avail at December 14 2023",
-      MinRate: 1500,
+      MinRate: 1600,
       MaxRate: 7000,
       trainingMode: "Hybrid",
     },
@@ -385,7 +385,7 @@ const EmployerProfile = () => {
                     alt=""
                   />
                   <div className="relative flex justify-center items-center flex-col">
-                    <div className="text-[#263238] text-[20px] font-[500] font-['Poppins'] capitalize">
+                    <div className="text-[#263238] text-[20px] font-[600] font-['Poppins'] capitalize">
                       {user?.basicInfo?.firstName && user?.basicInfo?.lastName
                         ? `${user.basicInfo.firstName} ${user.basicInfo.lastName}`
                         : user?.fullName
@@ -396,10 +396,10 @@ const EmployerProfile = () => {
                       {user?.designation}
                     </div>
                     {/* <h4
-                      className="font-[500] text-[#2676C2] text-[16px] font-[Poppins] cursor-pointer"
+                      className="font-[600] text-[#2676C2] text-[16px] font-[Poppins] cursor-pointer"
                       onClick={goToConnections}
                     >
-                      500+ connections
+                      600+ connections
                     </h4> */}
                   </div>
                   <div className="relative text-center text-[#6A6A6A] text-[14px] font-[400] font-['Poppins'] capitalize">
@@ -438,7 +438,7 @@ const EmployerProfile = () => {
               {
                 user?.basicInfo?.status === true ?
                   <div className="pl-[30px] pr-[30px]">
-                    <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins'] capitalize">
+                    <div className="text-[#232323] text-[18px] font-[600px] font-['Poppins'] capitalize">
 
                       {user?.basicInfo?.objective}
                     </div>
@@ -473,7 +473,7 @@ const EmployerProfile = () => {
                               <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
                                 Company Name:{" "}
                               </span>
-                              <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
+                              <span className="text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
                                 {experience.companyName}
                               </span>
                             </h3>
@@ -482,7 +482,7 @@ const EmployerProfile = () => {
                               <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
                                 Designation:{" "}
                               </span>
-                              <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
+                              <span className="text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
                                 {experience.designation2}
                               </span>
                             </h3>
@@ -490,7 +490,7 @@ const EmployerProfile = () => {
                               <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
                                 Start Date:{" "}
                               </span>
-                              <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
+                              <span className="text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
                                 {experience.startDate}
                               </span>
                             </h3>
@@ -525,83 +525,95 @@ const EmployerProfile = () => {
                   <div className="text-[#535353] text-[18px] font-[500] font-['Poppins']">
                     Recent Activities
                   </div>
-                  <div className="text-[#2676C2] text-[16px] font-[500] font-['Poppins'] rounded-[8px] border border-[#2676C2] pl-[15px] pr-[15px] pt-[3px] pb-[3px] hover:bg-[#2676C2] hover:text-[#fff]">
+                  <div className="text-[#2676C2] text-[16px] font-[600] font-['Poppins'] rounded-[8px] border border-[#2676C2] pl-[15px] pr-[15px] pt-[3px] pb-[3px] hover:bg-[#2676C2] hover:text-[#fff]">
                     <Link to='/employerDashboard/postarequirements/post-training'>Create post</Link>
                   </div>
                 </div>
                 <div>
-                  {postDetails
-                    ?.slice(0, showAllActivities ? activities.length : 3)
-                    ?.map((activity, index) => (
-                      <div key={index}>
-                        <div className="mt-[20px] text-[#9F9F9F] text-[14px] font-[400] font-['Poppins']">
-                          {/* {activity.posted} ago */}
-                          {timeago(activity.createdAt)}
-                        </div>
-                        <div className="mt-[10px] text-[#535353] text-[18px] font-[500] font-['Poppins']">
-                          {activity?.trainingName}
+                  {
+                    postDetails?.length > 0 ?
+                      <>
 
-                        </div>
-                        <div className="mt-[10px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                          {activity.description}
-                        </div>
-                        <div className="mt-[10px] text-[#2676C2] text-[18px] font-[500] font-['Poppins']">
-                          {activity.availability}
-                        </div>
-                        <div className="mt-[10px] flex items-center">
-                          <div>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="11"
-                              height="16"
-                              viewBox="0 0 11 16"
-                              fill="none"
-                            >
-                              <path
-                                d="M11 2V0H0V2H3.5C4.802 2 5.901 2.838 6.315 4H0V6H6.315C6.1097 6.5832 5.7289 7.0886 5.2249 7.4467C4.7208 7.8048 4.1183 7.9981 3.5 8H0V10.414L5.586 16H8.414L2.414 10H3.5C4.652 9.9985 5.7682 9.5998 6.6604 8.8711C7.5526 8.1424 8.1663 7.1284 8.398 6H11V4H8.398C8.2447 3.2722 7.9288 2.58848 7.474 2H11Z"
-                                fill="#2676C2"
-                              />
-                            </svg>
-                          </div>
-                          <div className="pl-[6px] pr-[7px] text-[#2676C2] text-[18px] font-[500] font-['Poppins']">
-                            {activity?.minBudget}
-                          </div>
-                          <span className="pr-[7px] text-[#2676C2]">-</span>
-                          <div>
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="11"
-                              height="16"
-                              viewBox="0 0 11 16"
-                              fill="none"
-                            >
-                              <path
-                                d="M11 2V0H0V2H3.5C4.802 2 5.901 2.838 6.315 4H0V6H6.315C6.1097 6.5832 5.7289 7.0886 5.2249 7.4467C4.7208 7.8048 4.1183 7.9981 3.5 8H0V10.414L5.586 16H8.414L2.414 10H3.5C4.652 9.9985 5.7682 9.5998 6.6604 8.8711C7.5526 8.1424 8.1663 7.1284 8.398 6H11V4H8.398C8.2447 3.2722 7.9288 2.58848 7.474 2H11Z"
-                                fill="#2676C2"
-                              />
-                            </svg>
-                          </div>
-                          <div className="pl-[6px] text-[#2676C2] text-[18px] font-[500] font-['Poppins']">
-                            {activity?.maxBudget}
-                          </div>
-                        </div>
-                        <div className="mt-[10px] mb-[20px] flex">
-                          <div className="mr-[13px] text-[#888] text-[18px] font-[400] font-['Poppins'] capitalize">
-                            Mode of Training -
-                          </div>
-                          <div className="text-[#2676C2] text-[18px] font-[400] font-['Poppins'] capitalize">
-                            {activity?.modeOfTraining}
-                          </div>
-                        </div>
-                        <hr />
+                        {postDetails
+                          ?.slice(0, showAllActivities ? postDetails?.length : 3)
+                          ?.map((activity, index) => (
+                            <div key={index}>
+                              <div className="mt-[20px] text-[#9F9F9F] text-[14px] font-[400] font-['Poppins']">
+                                {/* {activity.posted} ago */}
+                                {timeago(activity.createdAt)}
+                              </div>
+                              <div className="mt-[10px] text-[#535353] text-[18px] font-[600] font-['Poppins']">
+                                {activity?.trainingName}
+
+                              </div>
+                              <div className="mt-[10px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                                {activity.description}
+                              </div>
+                              {/* <div className="mt-[10px] text-[#2676C2] text-[18px] font-[600] font-['Poppins']">
+                                {activity.availability}
+                              </div> */}
+                              <div className="mt-[10px] flex items-center">
+                                <div>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="11"
+                                    height="16"
+                                    viewBox="0 0 11 16"
+                                    fill="none"
+                                  >
+                                    <path
+                                      d="M11 2V0H0V2H3.5C4.802 2 5.901 2.838 6.315 4H0V6H6.315C6.1097 6.5832 5.7289 7.0886 5.2249 7.4467C4.7208 7.8048 4.1183 7.9981 3.5 8H0V10.414L5.586 16H8.414L2.414 10H3.5C4.652 9.9985 5.7682 9.5998 6.6604 8.8711C7.5526 8.1424 8.1663 7.1284 8.398 6H11V4H8.398C8.2447 3.2722 7.9288 2.58848 7.474 2H11Z"
+                                      fill="#2676C2"
+                                    />
+                                  </svg>
+                                </div>
+                                <div className="pl-[6px] pr-[7px] text-[#2676C2] text-[18px] font-[400] font-['Poppins']">
+                                  {activity?.minBudget}
+                                </div>
+                                <span className="pr-[7px] text-[#2676C2]">-</span>
+                                <div>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="11"
+                                    height="16"
+                                    viewBox="0 0 11 16"
+                                    fill="none"
+                                  >
+                                    <path
+                                      d="M11 2V0H0V2H3.5C4.802 2 5.901 2.838 6.315 4H0V6H6.315C6.1097 6.5832 5.7289 7.0886 5.2249 7.4467C4.7208 7.8048 4.1183 7.9981 3.5 8H0V10.414L5.586 16H8.414L2.414 10H3.5C4.652 9.9985 5.7682 9.5998 6.6604 8.8711C7.5526 8.1424 8.1663 7.1284 8.398 6H11V4H8.398C8.2447 3.2722 7.9288 2.58848 7.474 2H11Z"
+                                      fill="#2676C2"
+                                    />
+                                  </svg>
+                                </div>
+                                <div className="pl-[6px] text-[#2676C2] text-[18px] font-[400] font-['Poppins']">
+                                  {activity?.maxBudget}
+                                </div>
+                              </div>
+                              <div className="mt-[10px] mb-[20px] flex">
+                                <div className="mr-[13px] text-[#888] text-[18px] font-[400] font-['Poppins'] capitalize">
+                                  Mode of Training -
+                                </div>
+                                <div className="text-[#2676C2] text-[18px] font-[400] font-['Poppins'] capitalize">
+                                  {activity?.modeOfTraining}
+                                </div>
+                              </div>
+                              <hr />
+                            </div>
+                          ))}
+                      </>
+                      :
+                      <div className="flex justify-center items-center animate-pulse">
+                        <span className=" hover:underline cursor-pointer text-[#2676c2]">
+                          Please Complete the Basic Details Profile !
+                        </span>
                       </div>
-                    ))}
+                  }
                 </div>
               </div>
-              {activities.length > 3 && (
+              {postDetails?.length > 3 && (
                 <div className="pl-[18px] pt-[11px]">
                   <p
-                    className="text-[#2676C2] text-[18px] font-[500] font-['Poppins'] cursor-pointer"
+                    className="text-[#2676C2] text-[18px] font-[600] font-['Poppins'] cursor-pointer"
                     onClick={toggleShowAllActivities}
                   >
                     {showAllActivities
@@ -613,79 +625,98 @@ const EmployerProfile = () => {
             </div>
           </div>
           <div className="rightsideTrainerProfile w-4/12 ">
-            <div className="w-full min-h-[571px] h-[auto] bg-[#FFFFFF] border border-[#EEEEEE]">
+            <div className="w-full  h-[auto] bg-[#FFFFFF] border border-[#EEEEEE]">
               <div className="pl-[23px] pt-[20px]">
                 <h3 className="text-[#535353] text-[18px] font-[500] font-['Poppins']">
                   Recent Application
                 </h3>
-                {recentApplications
-                  .slice(
-                    0,
-                    showApplication
-                      ? recentApplications.length
-                      : visibleApplications
-                  )
-                  .map((application, index) => (
-                    <div key={index}>
-                      <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                        Training Program Name
-                      </div>
-                      <div className=" mt-[4px] text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
-                        {application.trainingProgramName}
-                      </div>
-                      <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                        Company Name
-                      </div>
-                      <div className="mt-[4px] text-[#2676C2] text-[16px] font-[400]  font-['Poppins']">
-                        {application.companyName}
-                      </div>
-                      <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                        Training Topics & Subjects
-                      </div>
-                      <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                        {application.trainingTopics}
-                      </div>
-                      <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                        Type Of Training
-                      </div>
-                      <div className="mt-[5px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                        {application.trainingType}
-                      </div>
-                      <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                        Duration Of Training
-                      </div>
-                      <div className="mt-[5px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                        {application.trainingDuration}
-                      </div>
-                      <div className="mt-[10px] flex">
-                        <div>
-                          <div className="text-[#434343] text-[18px] font-[500] font-['Poppins']">
-                            Start Date
+                {
+                  postDetails?.length > 0 ?
+                    <>
+
+                      {postDetails
+                        ?.slice(
+                          0,
+                          showApplication
+                            ? postDetails.length
+                            : visibleApplications
+                        )
+                        ?.map((application, index) => (
+                          <div key={index}>
+                            <div className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                              Training Program Name
+                            </div>
+                            <div className=" mt-[4px] text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
+                              {application?.trainingName}
+                            </div>
+                            <div className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                              Company Name
+                            </div>
+                            <div className="mt-[4px] text-[#2676C2] text-[16px] font-[400]  font-['Poppins']">
+                              {application?.postedByCompanyName}
+                            </div>
+                            <div className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                              Training Topics & Subjects
+                            </div>
+                            <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                              <div className="flex space-x-5 capitalize">
+                                <div>{application?.topics?.slice(0, 5)?.map((items) => <h2>{items}</h2>)}</div>
+                                <div className="bg-[#8888] w-[1px]"></div>
+                                <div>{application?.topics?.slice(5, 10)?.map((items) => <h2>{items}</h2>)}</div>
+                              </div>
+                            </div>
+                            <div className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                              Type Of Training
+                            </div>
+                            <div className="mt-[5px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                              {application.typeOfTraining}
+                            </div>
+                            <div className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                              Duration Of Training
+                            </div>
+                            <div className="mt-[5px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                              {/* {application.trainingDuration} */}
+                              {`${application?.durationCount} ${application?.durationType} ${application?.durationCount > 0 ? "'s" : ""}`}
+
+                            </div>
+                            <div className="mt-[10px] flex">
+                              <div>
+                                <div className="text-[#434343] text-[18px] font-[600] font-['Poppins']">
+                                  Start Date
+                                </div>
+                                <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                                  {application.startDate}
+                                </div>
+                              </div>
+                              <div className="ml-[30px]">
+                                <div className="text-[#434343] text-[18px] font-[600] font-['Poppins']">
+                                  End date
+                                </div>
+                                <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                                  {application.endDate}
+                                </div>
+                              </div>
+                            </div>
+                            {/* <div className="mt-[10px]  text-[#434343] text-[18px] font-[600] font-['Poppins']">
+        Status Of Application
+      </div>
+      <div className="mt-[11px] mb-[20px] w-[130px] h-[23px] bg-[#2676C2] bg-opacity-20 rounded border  border-sky-600">
+        <div className="pl-[36px] pr-[36px] pt-[1px] pb-[1px] text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
+          {application.applicationStatus}
+        </div>
+      </div> */}
+
+                            <hr />
                           </div>
-                          <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                            {application.startDate}
-                          </div>
-                        </div>
-                        <div className="ml-[30px]">
-                          <div className="text-[#434343] text-[18px] font-[500] font-['Poppins']">
-                            End date
-                          </div>
-                          <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                            {application.endDate}
-                          </div>
-                        </div>
+                        ))}
+                    </>
+                    :
+                    <div className="flex justify-start items-center animate-pulse">
+                        <span className=" hover:underline cursor-pointer text-[#2676c2]">
+                          No Applications Yet!
+                        </span>
                       </div>
-                      <div className="mt-[10px]  text-[#434343] text-[18px] font-[500] font-['Poppins']">
-                        Status Of Application
-                      </div>
-                      <div className="mt-[11px] mb-[20px] w-[130px] h-[23px] bg-[#2676C2] bg-opacity-20 rounded border  border-sky-600">
-                        <div className="pl-[36px] pr-[36px] pt-[1px] pb-[1px] text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
-                          {application.applicationStatus}
-                        </div>
-                      </div>
-                      <hr />
-                    </div>
-                  ))}
+                }
               </div>
               {recentApplications.length > visibleApplications && (
                 <div className="ml-[23px] mt-[9px] mb-[8px] text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
@@ -702,7 +733,9 @@ const EmployerProfile = () => {
                 <div className="text-neutral-600 text-base font-medium font-['Poppins']">
                   Notifications
                 </div>
+
                 <div className="mt-[20px] ">
+                  
                   {visibleNotifications.map((notification, index) => (
                     <div key={index}>
                       <div className="flex mt-[10px]">
@@ -724,10 +757,10 @@ const EmployerProfile = () => {
                           </div>
                           {notification.accept && notification.denied && (
                             <div className="mt-[10px] flex item-center justify-center">
-                              <button className="w-[125px] h-[30px] mr-[20px] text-[#2676C2] text-[16px] font-[500] font-['Poppins'] border border-[#2676C2] rounded-[8px]">
+                              <button className="w-[125px] h-[30px] mr-[20px] text-[#2676C2] text-[16px] font-[600] font-['Poppins'] border border-[#2676C2] rounded-[8px]">
                                 {notification.accept}
                               </button>
-                              <button className="w-[125px] h-[30px] text-[#fff] text-[16px] font-[500] font-['Poppins'] bg-[#2676C2] rounded-[8px]">
+                              <button className="w-[125px] h-[30px] text-[#fff] text-[16px] font-[600] font-['Poppins'] bg-[#2676C2] rounded-[8px]">
                                 {" "}
                                 {notification.denied}
                               </button>

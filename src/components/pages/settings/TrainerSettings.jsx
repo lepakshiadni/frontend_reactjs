@@ -706,7 +706,7 @@ function TrainerSettings() {
             <h4 style={{ color: "#535353", marginBottom: "10px" }}>
               Show your profile
             </h4>
-            <Stack direction={""} spacing={""} sx={{ marginBottom: "20px" }}>
+            <Stack direction={"column"}  spacing={""} sx={{ marginBottom: "20px" }}>
               <form>
                 {/* <label htmlFor="profileVisiility"> */}
                 <label

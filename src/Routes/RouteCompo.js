@@ -21,10 +21,10 @@ const TrainerProfile = lazy(() =>
   import("./../components/pages/trainerprofile/TrainerProfile")
 );
 const UpdateProfile = lazy(() =>
-  import ('../components/pages/trainerprofile/TrainerProfileEdit.jsx')
+  import('../components/pages/trainerprofile/TrainerProfileEdit.jsx')
 );
 const ProfileList = lazy(() =>
-  import ('../components/pages/trainerprofile/TrainerProfile.jsx')
+  import('../components/pages/trainerprofile/TrainerProfile.jsx')
 );
 function RouteCompo() {
   return (
@@ -37,26 +37,28 @@ function RouteCompo() {
         }
       >
         <Routes>
-          <Route element={<PrivateRoute />}></Route>
+          <Route element={<PrivateRoute />}>
+
+            <Route path="/employerDashboard/*" element={<Dashboard />} />
+            <Route path="/trainersignup" element={<TrainerSiginUp />} />
+            <Route path="/selectrole" element={<RoleSelection />} />
+            <Route path="/employersignup" element={<Employee />} />
+            <Route path="/trainerDashboard/*" element={<TrainerDashboard />} />
+            <Route path="/trainerprofile" element={<TrainerProfile />} />
+            <Route
+              path="/trainerprofile/trainerProfileEdit"
+              element={<UpdateProfile />}
+            />
+            <Route path="/connections" element={<ProfileList />} />
+            <Route path="/employerprofile" element={<EmployerProfile />} />
+            <Route
+              path="/employerprofile/profileupdate"
+              element={<EmployerProfileEdit />}
+            />
+          </Route>
           {/* <Route path='/chat' element={<Chat />} /> */}
-          <Route path="/employerDashboard/*" element={<Dashboard />} />
-          <Route path="/trainersignup" element={<TrainerSiginUp />} />
-          <Route path="/selectrole" element={<RoleSelection />} />
           <Route path="/" element={<Signup />} />
           <Route path="/otpverify" element={<Login />} />
-          <Route path="/employersignup" element={<Employee />} />
-          <Route path="/trainerDashboard/*" element={<TrainerDashboard />} />
-          <Route path="/trainerprofile" element={<TrainerProfile />} />
-          <Route
-            path="/trainerprofile/trainerProfileEdit"
-            element={<UpdateProfile />}
-          />
-          <Route path="/connections" element={<ProfileList />} />
-          <Route path="/employerprofile" element={<EmployerProfile />} />
-          <Route
-            path="/employerprofile/profileupdate"
-            element={<EmployerProfileEdit />}
-          />
         </Routes>
       </Suspense>
     </BrowserRouter>

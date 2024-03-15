@@ -137,7 +137,7 @@ function Signup() {
                   maxLength={10}
                   minLength={10}
                   required
-                  className="w-[400px]"
+                  className="w-[400px] phoneNumberInput"
                   pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                 />
               </label>

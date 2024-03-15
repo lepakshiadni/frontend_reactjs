@@ -367,6 +367,7 @@ const UpdateProfile = () => {
   const [address, setAddress] = useState(trainer?.contactInfo?.address || "");
   const [email, setEmail] = useState(trainer?.contactInfo?.email || "");
   const [website, setWebsite] = useState(trainer?.contactInfo?.website || "");
+  const [availableDate,setAvailableDate] = useState(trainer?.contactInfo?.availableDate|| "");
   const [expertIn, setExpertIn] = useState(trainer?.experience?.expertIn || "");
   const [experience, setExperience] = useState(trainer?.experience?.experience || "");
   const [sinceInTheFiled, setSinceInTheFiled] = useState(trainer?.experience?.sinceInTheFiled || "");
@@ -429,6 +430,7 @@ const UpdateProfile = () => {
       setAddress(trainer?.contactInfo?.address);
       setEmail(trainer?.contactInfo?.email);
       setWebsite(trainer?.contactInfo?.website);
+      setAvailableDate(trainer?.contactInfo?.availableDate)
       setExpertIn(trainer?.experience?.expertIn);
       setExperience(trainer?.experience?.experience);
       setSinceInTheFiled(trainer?.experience?.sinceInTheFiled);
@@ -508,6 +510,7 @@ const UpdateProfile = () => {
       address: address,
       email: email,
       website: website,
+      availableDate: availableDate,
       status: true,
     };
 
@@ -1461,6 +1464,17 @@ const UpdateProfile = () => {
                   name="website"
                   onKeyDown={handleKeyDown}
                   placeholder="Type website link here"
+                />
+              </div>
+              <div className="mt-2">
+                <label htmlFor="">Availabel On </label>
+                <br />
+                <input
+                  style={{ width: "250px", cursor: "pointer" }}
+                  type="date"
+                  value={availableDate}
+                  onChange={(e) => setAvailableDate(e.target.value)}
+                  name="availableDate"
                 />
               </div>
               <button

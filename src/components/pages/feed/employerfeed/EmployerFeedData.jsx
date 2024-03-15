@@ -311,7 +311,7 @@ const EmployerFeedData = ({ bookMarkedPost, setPopUpButton2 }) => {
                             fontSize: "12px",
                           }}
                         >
-                          Not Connect
+                       Remove
                         </div>
                       </div>
                     )}
