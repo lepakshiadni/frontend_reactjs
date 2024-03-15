@@ -266,7 +266,7 @@ const TrainerProfile = () => {
                     </div>
                   </div>
                   :
-                  <div onClick={handleEditProfile} className="flex justify-center items-center animate-bounce">
+                  <div onClick={handleEditProfile} className="flex justify-center items-center animate-pulse">
                     <span className=" hover:underline cursor-pointer text-[#2676c2]">
                       Please Complete the Basic Details Profile !
                     </span>

@@ -30,7 +30,6 @@ export const postTrainingRequirementAction = (postTrainingDetails) => {
 
 export const getPostTrainingRequirementAction = () => {
     const token = Cookies.get("token")
-    console.log('token', token)
     return async (dispatch) => {
         await Axios.get(`${baseUrl}/employerpost/getpostTrainingRequirement`, {
             headers: {

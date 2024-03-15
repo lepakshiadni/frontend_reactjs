@@ -250,13 +250,14 @@ const EmployerHeader = () => {
               </div>
               <div className="text-start min-w-[120px] w-[auto] text-[600]">
                 <div className="text-start min-w-[120px] w-[auto]   ">
+
                   <span className="font-[600] flex justify-center">
                     {user?.basicInfo?.firstName && user?.basicInfo?.lastName
                       ? `${user.basicInfo.firstName} ${user.basicInfo.lastName}`
                       : user?.fullName
                     }
                   </span>
-                  <p className="flex justify-center" style={{ letterSpacing: "100%" }}>{user?.basicInfo?.designation || ''}</p>
+                  <p className="flex justify-center" style={{ letterSpacing: "100%" }}>{user?.designation || ''}</p>
                 </div>
               </div>
             </div>

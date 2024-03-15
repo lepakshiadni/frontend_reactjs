@@ -57,7 +57,7 @@ function Chat() {
   console.log("currentChat", currentChat);
 
   useEffect(() => {
-    socket.current = io(`http://192.168.1.103:4040`, {
+    socket.current = io(`http://3.85.92.38:4040`, {
       transports: ["websocket"],
       withCredentials: true,
       extraHeaders: {
