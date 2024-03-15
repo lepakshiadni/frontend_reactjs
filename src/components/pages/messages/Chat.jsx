@@ -50,7 +50,7 @@ function Chat() {
       setUser(trainer?.trainerDetails);
     }
   }, [employer, trainer]);
-  // console.log('user', user)
+
 
   const lastMessageRef = useRef(null);
   const socket = useRef();
