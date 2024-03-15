@@ -74,6 +74,18 @@ const trainerReducer = (state = initialState, action) => {
         ...state,
         message: action.payload.error,
       };
+    case 'UPDATE_ALLRATING_SUCCESS':
+      return {
+        ...state,
+        trainerDetails: action.payload,
+        message: action.payload.message,
+        success: action.payload.success,
+      };
+    case 'UPDATE_ALLRATING_FAILURE':
+      return {
+        ...state,
+        message: action.payload.error,
+      };
     case "TRAINERCERTIFICATEINFO_UPDATED_SUCCESS":
       console.log("handling get trainer");
       return {
@@ -129,7 +141,7 @@ const trainerReducer = (state = initialState, action) => {
         message: action.payload.error,
       };
     case 'GET_SKILLDATA_SUCCESS':
-     
+
       return {
         ...state,
         skillData: action.payload,

@@ -47,7 +47,6 @@ const EmployerProfile = () => {
     dispatch(employerDetails())
     dispatch(getPostTrainingRequirementAction())
     dispatch(getAllAppliedTraining())
-
   }, [dispatch])
 
   const employer = useSelector(({ employerSignUp }) => {
@@ -354,7 +353,7 @@ const EmployerProfile = () => {
       <div className="w-full relative">
         <div className="w-100% relative ml-[80px] mr-[80px] h-auto flex">
           <div className="leftsideTrainerProfile w-8/12 mr-[23.67px]">
-            <div className="min-h-[900px] h-[auto] flex flex-col border">
+            <div className=" h-[auto] flex flex-col border">
               <div className="h-[195px] ">
                 {
                   user?.basicInfo?.profileBanner ?
@@ -436,16 +435,24 @@ const EmployerProfile = () => {
               <div className="flex justify-center items-center flex-col">
                 <div className="mt-[17px] mb-[17px] w-9/12 h-[0px] border border-neutral-200"></div>
               </div>
-              <div className="pl-[30px] pr-[30px]">
-                <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins'] capitalize">
-                  {/* UI/UX Trainer & Developer | Passionate about Crafting Seamless
-                  Experiences */}
-                  {user?.basicInfo?.objective}
-                </div>
-                <div className="text-[#535353] text-[16px] mt-[10px] font-[400px] font-['Poppins']">
-                  {user?.basicInfo?.aboutYou}
-                </div>
-              </div>
+              {
+                user?.basicInfo?.status === true ?
+                  <div className="pl-[30px] pr-[30px]">
+                    <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins'] capitalize">
+
+                      {user?.basicInfo?.objective}
+                    </div>
+                    <div className="text-[#535353] text-[16px] mt-[10px] font-[400px] font-['Poppins']">
+                      {user?.basicInfo?.aboutYou}
+                    </div>
+                  </div>
+                  :
+                  <div onClick={handleEditProfile} className="flex justify-center items-center animate-pulse">
+                    <span className=" hover:underline cursor-pointer text-[#2676c2] text-sm">
+                      Please Complete the Basic Details Profile !
+                    </span>
+                  </div>
+              }
               <div className="flex justify-center items-center flex-col mt-[30px] mr-[10px] ml-[10px]">
                 <div className="w-full h-[0px] border border-neutral-200"></div>
               </div>
@@ -453,41 +460,53 @@ const EmployerProfile = () => {
                 <h3 className="text-[#232323] text-[18px] font-[500] font-['Poppins']">
                   Experience
                 </h3>
-                {user?.experience
+                {
+                  user?.experience?.length > 0 ?
+                    <>
 
-                  ?.slice(0, showAllExp ? experiences.length : 3)
-                  ?.map((experience, index) => (
-                    <div key={index}>
-                      <h3 className="mt-[10px]">
-                        <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
-                          Company Name:{" "}
-                        </span>
-                        <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
-                          {experience.companyName}
-                        </span>
-                      </h3>
+                      {user?.experience
 
-                      <h3 className="mt-[10px]">
-                        <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
-                          Designation:{" "}
-                        </span>
-                        <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
-                          {experience.designation2}
-                        </span>
-                      </h3>
-                      <h3 className="mt-[10px]">
-                        <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
-                          Start Date:{" "}
-                        </span>
-                        <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
-                          {experience.startDate}
-                        </span>
-                      </h3>
-                      <p className="mt-[20px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                        {experience.roleDescription}
-                      </p>
+                        ?.slice(0, showAllExp ? experiences.length : 3)
+                        ?.map((experience, index) => (
+                          <div key={index}>
+                            <h3 className="mt-[10px]">
+                              <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
+                                Company Name:{" "}
+                              </span>
+                              <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
+                                {experience.companyName}
+                              </span>
+                            </h3>
+
+                            <h3 className="mt-[10px]">
+                              <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
+                                Designation:{" "}
+                              </span>
+                              <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
+                                {experience.designation2}
+                              </span>
+                            </h3>
+                            <h3 className="mt-[10px]">
+                              <span className="text-[#232323] text-[16px] font-[500] font-['Poppins']">
+                                Start Date:{" "}
+                              </span>
+                              <span className="text-[#2676C2] text-[16px] font-[500] font-['Poppins']">
+                                {experience.startDate}
+                              </span>
+                            </h3>
+                            <p className="mt-[20px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                              {experience.roleDescription}
+                            </p>
+                          </div>
+                        ))}
+                    </>
+                    :
+                    <div onClick={handleEditProfile} className="flex justify-center items-center animate-pulse">
+                      <span className=" hover:underline cursor-pointer text-[#2676c2]">
+                        Please Complete the Experience Details Profile !
+                      </span>
                     </div>
-                  ))}
+                }
               </div>
               {user?.experience.length > 3 && (
                 <div className="mt-[10px] ml-[28px] mb-[13px]">

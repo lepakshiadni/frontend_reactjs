@@ -5,31 +5,51 @@ import Favi from "../../assets/favi.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import TrainerHeader from "../../header&footer/TrainerHeader";
-import { trainerDetails } from '../../../redux/action/trainer.action'
+import { trainerDetails, updateSkillRating } from '../../../redux/action/trainer.action'
 import { getTrainerCreatePostById } from '../../../redux/action/trainercreatepost.action'
+import CreatePostPopup from '../../utils/CreatePostPopUp'
 import UserAvatar from '../../assets/UserAvatar.png'
+import { FaInfoCircle } from "react-icons/fa";
+import { toast } from 'react-toastify'
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import { gettrainerAppliedTraining } from '../../../redux/action/trainer.action'
+
 import timesago from "timesago";
 const TrainerProfile = () => {
   const dispatch = useDispatch()
   const [showAll, setShowAll] = useState(false);
+  const [model, setModel] = useState(false);
   const [showAllCert, setShowAllCert] = useState(false);
   const [showAllActivities, setShowAllActivities] = useState(false);
-
+  const [user, setUser] = useState(null)
   const navigate = useNavigate();
   // const location = useLocation();
   useEffect(() => {
     dispatch(trainerDetails())
     dispatch(getTrainerCreatePostById())
+    dispatch(gettrainerAppliedTraining())
+
   }, [dispatch]);
 
-  const user = useSelector(({ trainerSignUp }) => {
-    return trainerSignUp?.trainerDetails?.trainerDetails;
+
+  const trainer = useSelector(({ trainerSignUp }) => {
+    return trainerSignUp?.trainerDetails;
   });
 
   const trainerCreatePostDetails = useSelector(({ trainerCreatePost }) => {
     return trainerCreatePost?.trainerPostDetails?.trainercreatePost
   })
+  const appliedTraining = useSelector(({ trainerSignUp }) => {
+    return trainerSignUp?.gettrainerAppliedTraining?.trainingPostData;
+  })
 
+  console.log(appliedTraining, "applied training")
+  useEffect(() => {
+    if (trainer?.success) {
+      setUser(trainer?.trainerDetails)
+    }
+  }, [trainer])
   console.log('trainercreatePostDetails', trainerCreatePostDetails)
 
 
@@ -92,15 +112,27 @@ const TrainerProfile = () => {
   };
 
   const handleEditProfile = async () => {
-    // const profileEditPath = routingProfileEdit();
     await navigate("/trainerprofile/trainerProfileEdit"); // Navigate to TrainerProfileEdit route
   };
-  const goToConnections = () => {
-    navigate("/trainerprofile/connections");
+  const handleRangeChange = (index, newValue) => {
+    setUser(prevUser => {
+      const updatedSkills = [...prevUser.skills];
+      updatedSkills[index].range = newValue;
+      return { ...prevUser, skills: updatedSkills };
+    });
   };
+
+  const handleUpdateSkillRange = (skillId, newRange) => {
+    dispatch(updateSkillRating(skillId, newRange));
+    toast.success('skill updated')
+  };
+  // const goToConnections = () => {
+  //   navigate("/trainerprofile/connections");
+  // };
   return (
     <>
       <TrainerHeader />
+      <CreatePostPopup trigger={model} setTrigger={setModel} />
       <div className="w-full sticky z-50 top-[0px] left-[60px]  p-[20px]  h-[60px] flex justify-start items-center bg-white ">
         <div
           onClick={() => {
@@ -224,7 +256,7 @@ const TrainerProfile = () => {
                 user?.basicInfo?.status === true ?
                   <div className="pl-[30px] pr-[30px]">
                     <h3 className="text-[#232323] text-[18px] font-[500] font-['Poppins']">
-                      Profile 
+                      Profile
                     </h3>
                     <div className="text-[#232323] text-[18px] font-[500px] font-['Poppins'] capitalize">
                       {user?.basicInfo?.objective}
@@ -234,7 +266,7 @@ const TrainerProfile = () => {
                     </div>
                   </div>
                   :
-                  <div onClick={handleEditProfile} className="flex justify-center items-center animate-bounce">
+                  <div onClick={handleEditProfile} className="flex justify-center items-center animate-pulse">
                     <span className=" hover:underline cursor-pointer text-[#2676c2]">
                       Please Complete the Basic Details Profile !
                     </span>
@@ -308,7 +340,7 @@ const TrainerProfile = () => {
                 )
               }
             </div>
-            <div className="Reactangle237 w-full border h-[378px] mt-[20px] ">
+            {/* <div className="Reactangle237 w-full border h-[378px] mt-[20px] ">
               <div className="w-full pl-[28px] mt-[24px]">
                 <h4 className="min-w-[45px] h-[27px] text-[#535353] text-[18px] font-[500] font-['Poppins']">
                   Skills
@@ -342,6 +374,52 @@ const TrainerProfile = () => {
                   })}
                 </div>
               </div>
+            </div> */}
+            <div className="Reactangle237 w-full border mt-[20px] ">
+
+              <div className="w-full pl-[28px] mt-[10px] ">
+                <div className="min-w-[45px] h-[27px] flex  items-center space-x-[710px] ">
+                  <h4 className="text-[#535353] text-[18px] font-[500] font-['Poppins']">
+                    Skills
+                  </h4>
+                  <div className=" items-end">
+                    <Tooltip title="Drag to Add value" placement="top">
+                      <IconButton>
+                        <FaInfoCircle style={{ color: '#2676c2' }} />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                </div>
+                <div className="w-full mt-[6px]">
+                  {user?.skills?.map((val, index) => {
+                    return (
+                      <div key={index} className="w-full flex justify-between items-center flex-col">
+                        <div className="TrainerProfile-slider-read w-full flex gap-2 items-center h-[50px]">
+                          {!val.image ? (
+                            <h3 style={{ padding: '6px 12px', fontWeight: 600, backgroundColor: 'gray', color: '#FFF' }}>
+                              {val.name[0]}
+                            </h3>
+                          ) : (
+                            <img height='30px' width='30px' src={val.image} alt={val.name[0]} />
+                          )}
+                          <input
+                            type="range"
+                            min="0"
+                            max="100"
+                            value={val.range}
+                            className="w-full h-[7px] cursor-pointer"
+                            onChange={(e) => handleRangeChange(index, e.target.value)}
+                          />
+                          <div className="pr-[31.92px]">{val.range}%</div>
+                          <div style={{ display: 'flex', justifyContent: 'end' }}>
+                            <button style={{ padding: '2px 10px', backgroundColor: '#2676C2', color: 'white', borderRadius: '10px', margin: '10px' }} onClick={() => handleUpdateSkillRange(val._id, val.range)}>Update</button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
             <div className="Reactangle238 w-full h-[auto] mt-[20px] border">
               <div className="pl-[28px] pr-[30px] mt-[21px]">
@@ -349,8 +427,10 @@ const TrainerProfile = () => {
                   <div className="text-[#535353] text-[18px] font-[500] font-['Poppins']">
                     Recent Activities
                   </div>
-                  <div className="text-[#2676C2] text-[16px] font-[500] font-['Poppins'] rounded-[8px] border border-[#2676C2] pl-[15px] pr-[15px] pt-[3px] pb-[3px] hover:bg-[#2676C2] hover:text-[#fff]">
-                    Create post
+                  <div onClick={() => setModel(true)} className="text-[#2676C2] text-[16px] font-[500] font-['Poppins'] rounded-[8px] border border-[#2676C2] pl-[15px] pr-[15px] pt-[3px] pb-[3px] hover:bg-[#2676C2] hover:text-[#fff]">
+                    <button onClick={() => setModel(true)} >
+                      Create post
+                    </button>
                   </div>
                 </div>
                 {
@@ -404,68 +484,89 @@ const TrainerProfile = () => {
             </div>
           </div>
           <div className="rightsideTrainerProfile w-4/12 ">
-            <div className="w-full h-[571px] bg-[#FFFFFF] border border-[#EEEEEE]">
+            <div className="w-full h-auto bg-[#FFFFFF] border border-[#EEEEEE]">
               <div className="pl-[23px] pt-[20px]">
                 <h3 className="text-[#535353] text-[18px] font-[500] font-['Poppins']">
                   Recent Application
                 </h3>
-                <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                  Training Program Name
-                </div>
-                <div className=" mt-[4px] text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
-                  Full Stack Developer
-                </div>
-                <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                  Company Name
-                </div>
-                <div className="mt-[4px] text-[#2676C2] text-[16px] font-[400]  font-['Poppins']">
-                  Mindstay Technologies
-                </div>
-                <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                  Training Topics & Subjects
-                </div>
-                <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                  Java, Js, Python, React Native
-                </div>
-                <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                  Type Of Training
-                </div>
-                <div className="mt-[5px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                  Corporate
-                </div>
-                <div className="mt-[10px] text-[#333] text-[18px] font-[500] font-['Poppins']">
-                  Duration Of Training
-                </div>
-                <div className="mt-[5px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                  10 Days
-                </div>
-                <div className="mt-[10px] flex">
-                  <div>
-                    <div className="text-[#434343] text-[18px] font-[500] font-['Poppins']">
-                      Start Date
+                {
+                  appliedTraining?.length > 0 ?
+                    <>
+                      {
+                        appliedTraining?.map(({ applicationstatus, trainingPostDetails }) => {
+                          return <>
+                            <div>
+                              <h4 className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                                Training Program Name
+                              </h4>
+                              <div className=" mt-[4px] text-[#2676C2] text-[16px] font-[300] font-['Poppins']">
+                                {trainingPostDetails?.trainingName}
+                              </div>
+                              <div className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                                Company Name
+                              </div>
+                              <div className="mt-[4px] text-[#2676C2] text-[16px] font-[400]  font-['Poppins']">
+                                {trainingPostDetails?.postedByCompanyName}
+                              </div>
+                              <div className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                                Training Topics & Subjects
+                              </div>
+                              <div className="flex space-x-5 capitalize mt-[10px]">
+                                <div>{trainingPostDetails?.topics?.slice(0, 5)?.map((items) => <h2 className="text-[#333]">{items}</h2>)}</div>
+                                <div className="bg-[#8888] w-[1px]"></div>
+                                <div>{trainingPostDetails?.topics?.slice(5, 10)?.map((items) => <h2 className="text-[#333]">{items}</h2>)}</div>
+                              </div>
+                              <div className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                                Type Of Training
+                              </div>
+                              <div className="mt-[5px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                                {trainingPostDetails?.typeOfTraining}
+                              </div>
+                              <div className="mt-[10px] text-[#333] text-[18px] font-[600] font-['Poppins']">
+                                Duration Of Training
+                              </div>
+                              <div className="mt-[5px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                                {`${trainingPostDetails?.durationCount} ${trainingPostDetails?.durationType} ${trainingPostDetails?.durationCount > 0 ? "'s":""}`}
+                              </div>
+                              <div className="mt-[10px] flex">
+                                <div>
+                                  <div className="text-[#434343] text-[18px] font-[600] font-['Poppins']">
+                                    Start Date
+                                  </div>
+                                  <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                                    {trainingPostDetails?.startDate}
+                                  </div>
+                                </div>
+                                <div className="ml-[30px]">
+                                  <div className="text-[#434343] text-[18px] font-[600] font-['Poppins']">
+                                    End date
+                                  </div>
+                                  <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
+                                    {trainingPostDetails?.endDate}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="mt-[10px]  text-[#434343] text-[18px] font-[600] font-['Poppins']">
+                                Status Of Application
+                              </div>
+                              <div className="mt-[11px] mb-[20px] w-[130px] h-[23px] bg-[#2676C2] bg-opacity-20 rounded border  border-sky-600">
+                                <div className="pl-[25px] pr-[36px] pt-[1px] pb-[1px] text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
+                                  {applicationstatus}
+                                </div>
+                              </div>
+                            </div>
+                            <hr />
+                          </>
+                        })
+                      }
+                    </>
+                    :
+                    <div>
+
                     </div>
-                    <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                      01-12-2023
-                    </div>
-                  </div>
-                  <div className="ml-[30px]">
-                    <div className="text-[#434343] text-[18px] font-[500] font-['Poppins']">
-                      End date
-                    </div>
-                    <div className="mt-[4px] text-[#535353] text-[16px] font-[400] font-['Poppins']">
-                      10-01-2024
-                    </div>
-                  </div>
-                </div>
-                <div className="mt-[10px]  text-[#434343] text-[18px] font-[500] font-['Poppins']">
-                  Status Of Application
-                </div>
-                <div className="mt-[11px] mb-[20px] w-[130px] h-[23px] bg-[#2676C2] bg-opacity-20 rounded border  border-sky-600">
-                  <div className="pl-[36px] pr-[36px] pt-[1px] pb-[1px] text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
-                    Pending
-                  </div>
-                </div>
-                <hr />
+                }
+
+
               </div>
               <div className="ml-[23px] mt-[9px] mb-[8px] text-[#2676C2] text-[16px] font-[400] font-['Poppins']">
                 Load More{" "}

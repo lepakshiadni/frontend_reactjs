@@ -105,6 +105,32 @@ export const trainerSkillsUpdate = (details) => {
     }
 }
 
+
+export const updateSkillRating = (skillId, newRange) => {
+    const token = Cookies.get('token')
+    return async (dispatch) => {
+        try {
+            Axios.put(`${baseUrl}/trainer/updateAllSkills/${skillId}`, { newRange }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((resp) => {
+                    dispatch({
+                        type: 'UPDATE_ALLRATING_SUCCESS',
+                        payload: resp.data
+                    })
+                })
+        }
+        catch (err) {
+            dispatch({
+                type: "UPDATE_ALLRATING_FAILURE",
+                payload: err
+            })
+        }
+    }
+}
+
 export const trainerCertificateUpdate = (details) => {
     const token = Cookies.get('token')
     // console.log(token)
@@ -459,30 +485,30 @@ export const getAllRequestTrainer = () => {
     }
 }
 
-export const updateApplicationStatus = (trainingDetailsId, employerId,trainingDetails, status) => {
+export const updateApplicationStatus = (trainingDetailsId, employerId, trainingDetails, status) => {
     const token = Cookies.get("token");
     // console.log(token);
     return async (dispatch) => {
-      try {
-        Axios.put(`${baseUrl}/trainer/updateRequestStatus`, { trainingDetailsId, employerId,trainingDetails, status }, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }).then((resp) => { 
-          // console.log(resp)
-          dispatch({
-            type: "UPDATEDAPPLIEDSTATUS_SUCCESSS",
-            payload: resp.data,
-          });
-        });
-      } catch (error) {
-        dispatch({
-          type: "UPDATEDAPPLIEDSTATUS_FAILURE",
-          payload: error,
-        });
-      }
+        try {
+            Axios.put(`${baseUrl}/trainer/updateRequestStatus`, { trainingDetailsId, employerId, trainingDetails, status }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }).then((resp) => {
+                // console.log(resp)
+                dispatch({
+                    type: "UPDATEDAPPLIEDSTATUS_SUCCESSS",
+                    payload: resp.data,
+                });
+            });
+        } catch (error) {
+            dispatch({
+                type: "UPDATEDAPPLIEDSTATUS_FAILURE",
+                payload: error,
+            });
+        }
     };
-  }
+}
 
 
 

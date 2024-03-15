@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import profilegirl from '../../../assets/image 15.png';
 import download from '../../../assets/download 1.svg';
 
 
@@ -8,34 +7,7 @@ const Upcoming = ({ upcomming }) => {
     const [activeSteps, setActiveSteps] = useState([1]);
     const [isVisible, setIsVisible] = useState(false);
 
-    // const UpcomingData = [
-    //     {
-    //         training: 'Full Stack Developer',
-    //         companyName: 'Wipro Technology',
-    //         trainingType: 'Corporate',
-    //         duration: '10 Days',
-    //         startDate: '01-12-2023',
-    //         endDate: '01-01-2024',
-    //         appliedDate: '20/12/2024',
-    //         totalApplications: 20,
-    //         mode: 'Offline',
-    //         location: 'Bangalore',
-    //     },
-    //     {
-    //         training: 'Full Stack Developer',
-    //         companyName: 'Wipro Technology',
-    //         trainingType: 'Corporate',
-    //         duration: '10 Days',
-    //         startDate: '01-12-2023',
-    //         endDate: '01-01-2024',
-    //         appliedDate: '20/12/2024',
-    //         totalApplications: 20,
-    //         mode: 'Offline',
-    //         location: 'Bangalore',
-    //     },
-    //     // Add more objects with data as needed
-    // ];
-
+   
     const togglePopup = () => {
         setIsVisible(!isVisible);
     };
@@ -56,21 +28,21 @@ const Upcoming = ({ upcomming }) => {
                             <div key={index} className="Training_Programm">
                                 <div className="Trainer_Infoo">
                                     <div className="TTTDD">
-                                        <p>Training Program Name</p>
+                                        <p className='font-[600]'>Training Program Name</p>
                                         <h3 className="Blue_H22">{trainingPostDetails?.trainingName}</h3>
-                                        <p>Company Name</p>
+                                        <p className='font-[600]'>Company Name</p>
                                         <h3 className="Blue_H22">{trainingPostDetails?.postedByCompanyName}</h3>
-                                        <p>Type Of Training</p>
+                                        <p className='font-[600]'>Type Of Training</p>
                                         <h2>{trainingPostDetails?.typeOfTraining}</h2>
-                                        <p>Duration Of Training</p>
+                                        <p className='font-[600]'>Duration Of Training</p>
                                         <h2 className=' capitalize'>{trainingPostDetails?.durationCount} <span>{trainingPostDetails?.durationType}{trainingPostDetails?.durationCount > 0 ? "'s": ""} </span> </h2>
                                         <div className="SDEDD">
                                             <div className="SDD">
-                                                <p>Start Date</p>
+                                                <p className='font-[600]'>Start Date</p>
                                                 <h2>{trainingPostDetails?.startDate}</h2>
                                             </div>
                                             <div className="EDD">
-                                                <p>End Date</p>
+                                                <p className='font-[600]'>End Date</p>
                                                 <h2>{trainingPostDetails?.endDate}</h2>
                                             </div>
                                         </div>
