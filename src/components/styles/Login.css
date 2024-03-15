@@ -250,3 +250,11 @@
     left: -2000px;
     animation: slideIn 0.5s ease-out 0.2s forwards; */
 }
+.phoneNumberInput{
+  letter-spacing: 0.1rem;
+  font-weight: 600;
+}
+.phoneNumberInput::placeholder{
+  letter-spacing: 0rem;
+  font-weight: 400;
+}

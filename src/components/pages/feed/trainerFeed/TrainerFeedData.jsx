@@ -277,7 +277,7 @@ const TrainerFeeData = ({ bookMarkedPost }) => {
                           }}
                         >
                           <div onClick={connectionHandler} className='option' style={{ padding: '5px', cursor: 'pointer', fontSize: '12px' }}>Connect</div>
-                          <div className='option' style={{ padding: '5px', cursor: 'pointer', fontSize: '12px' }}>Not Connect</div>
+                          <div className='option' style={{ padding: '5px', cursor: 'pointer', fontSize: '12px' }}>Remove</div>
                         </div>
                       )}
                     </div>

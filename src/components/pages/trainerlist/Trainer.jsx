@@ -12,14 +12,14 @@ import Rating from "@mui/material/Rating";
 import Stack from "@mui/material/Stack";
 import Axios from 'axios'
 const Trainers = ({ trainerIndex }) => {
-  const baseUrl =localStorage.getItem('baseUrl')
-  console.log("baseUrl",baseUrl)
+  const baseUrl = localStorage.getItem('baseUrl')
+  console.log("baseUrl", baseUrl)
   const navigate = useNavigate();
   const location = useLocation();
   const [selecteduser, setSelecteduser] = useState(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [trainerDetails, setTrainerDetails] = useState([])
-  
+
   useEffect(() => {
     Axios.get('http://44.211.80.23:4000/trainer/getAllTrainerDetails')
       .then((resp) => {
@@ -618,7 +618,7 @@ const Trainers = ({ trainerIndex }) => {
                           </Stack>
                         </div>
                         <div className="image-row">
-                          {trainer?.skills?.slice(0,4)?.map(({name,image}) => {
+                          {trainer?.skills?.slice(0, 4)?.map(({ name, image }) => {
                             // console.log(items[0])
                             return (
                               <>
@@ -629,13 +629,13 @@ const Trainers = ({ trainerIndex }) => {
                                 /> */}
                                 <div className="  ">
                                   {
-                                    image?
-                                    <img className="w-[30px] h-[30px] rounded-full " src={image} alt="" />
-                                    
-                                    :
-                                    null
+                                    image ?
+                                      <img className="w-[30px] h-[30px] rounded-full " src={image} alt="" />
+
+                                      :
+                                      null
                                     // <span className="flex justify-center items-center w-[30px] h-[30px] text-black bg-slate-500 rounded-full">{name[0]}</span>
-                                    
+
                                   }
 
                                 </div>
@@ -653,17 +653,17 @@ const Trainers = ({ trainerIndex }) => {
                               className="profile-img-back"
                             /> */}
                             {
-                            trainer?.basicInfo?.profileImg ?
-                              <img
-                                src={trainer?.basicInfo?.profileImg}
-                                alt={`Profile of ${trainer?.fullName}`}
-                                className="profile-img-back"
-                              />
-                              :
-                              <div className="flex justify-center items-center bg-[#2676c2] h-[80px] w-[91px]  rounded-[20%]">
-                                <span className="capitalize text-4xl">{trainer?.fullName[0]}</span>
-                              </div>
-                          }
+                              trainer?.basicInfo?.profileImg ?
+                                <img
+                                  src={trainer?.basicInfo?.profileImg}
+                                  alt={`Profile of ${trainer?.fullName}`}
+                                  className="profile-img-back"
+                                />
+                                :
+                                <div className="flex justify-center items-center bg-[#2676c2] h-[80px] w-[91px]  rounded-[20%]">
+                                  <span className="capitalize text-4xl">{trainer?.fullName[0]}</span>
+                                </div>
+                            }
                             <div
                               style={{
                                 display: "flex",
@@ -723,50 +723,34 @@ const Trainers = ({ trainerIndex }) => {
                                 }}
                               />
                             </Stack>
-                            <h4 className="session-list">
+                            <h4 className="session-list ">
                               <span className="session-list-span">
                                 +{trainer.trainingSession} Training Session
                               </span>
                             </h4>
                           </div>
                         </div>
-                        <div className="slider-container-parent">
-                          {trainer.skills?.slice(0,4)?.map(({name,image},index) => {
+                        <div className="slider-container-parent h-[124px]">
+                          {trainer?.skills?.slice(0, 4)?.map((val, index) => {
                             return (
-                              <>
-                                <div className="slider-container-child">
-                                 {/* <span className="text-black text-sm">{image}</span> */}
-                                 <img src={image} alt="" className="w-5 h-5 rounded-full"/>
-                                  <div
-                                    className="w-8/12"
-                                    style={{
-                                      background: "#ddd",
-                                      borderRadius: "5px",
-                                      height: "3px",
-                                    }}
-                                  >
-                                    <input
-                                      className="relative top-[-13px] rounded-[5px]"
-                                      style={{
-                                        width: rendered
-                                          ? `${index+10 }%`
-                                          : "0%",
-                                        background: "#2676C2",
-                                        height: "100%",
-                                        transition: "width 1s ease-in-out",
-                                      }}
-                                    />
-                                  </div>
-                                  <span className="slider-span">
-                                    {index+10}%
-                                  </span>
-                                </div>
-                              </>
+                              <div key={index} className="slider-container-child">
+                                <img src={val.image} alt="" className="w-5 h-5" />
+                                <input
+                                  className="relative rounded-[5px]"
+                                  type="range"
+                                  min="0"
+                                  max="100"
+                                  value={val.range}
+                                />
+                                <span className="slider-span">
+                                  {val.range}%
+                                </span>
+                              </div>
                             );
                           })}
                         </div>
                         <p className="trainer-available flex justify-center items-center">
-                          <span>Avail On {trainer.available}</span>
+                          <span>Avail On {trainer?.contactInfo?.availableDate.slice(0,10)}</span>
                         </p>
                       </div>
                     </div>
