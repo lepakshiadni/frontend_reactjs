@@ -19,7 +19,7 @@ RUN npm run build
 # Use a lightweight Nginx server as the base image
 FROM nginx:1.23-alpine
 
-WORKDIR /usr/share/nginx/html
+WORKDIR  /etc/nginx/sites-enabled
  
 RUN rm -rf *
 
