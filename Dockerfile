@@ -1,6 +1,11 @@
 # Use an official Node.js runtime as the base image
-FROM node:alpine3.18 AS build
+FROM node:alpine3.18 AS build 
 
+ARG REACT-APP-BASEURL
+ARG BACKEND_URL 
+
+ARG REACT-APP-BASEURL=REACT-APP-BASEURL
+ARG BACKEND_URL=BACKEND_URL  
 # Set the working directory in the container
 WORKDIR /app
 
