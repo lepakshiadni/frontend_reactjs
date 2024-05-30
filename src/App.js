@@ -6,7 +6,7 @@ import store from './redux/store'
 
 function App() {
   const getlocalip=async()=>{
-    localStorage.setItem('baseUrl',`http://13.201.191.5:4000`)
+    localStorage.setItem('baseUrl',`http://3.90.5.121:4000`)
   }
   React.useEffect(()=>{
     getlocalip()
