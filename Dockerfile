@@ -27,8 +27,8 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf * 
 COPY --from=build /app/build .
 # Install OpenSSL and generate SSL certificates inside the container
-RUN apk add --no-cache openssl && \
-    openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx.crt -subj "/CN=localhost"
+# RUN apk add --no-cache openssl && \
+#     openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx.key -out /etc/ssl/certs/nginx.crt -subj "/CN=localhost"
 COPY default.conf /etc/nginx/conf.d/default.conf 
 EXPOSE 80 
 EXPOSE 443
