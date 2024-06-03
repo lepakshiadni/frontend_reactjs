@@ -39,8 +39,8 @@ jobs:
 
       - name: Obtain SSL Certificate if not exists
         run: |
-          if [ ! -f /etc/letsencrypt/live/central.sissoo.in/fullchain.pem ]; then
-            sudo certbot certonly --nginx -d central.sissoo.in --non-interactive --agree-tos --email your-email@example.com
+          if [ ! -f /etc/letsencrypt/live/admin.sissoo.in/fullchain.pem ]; then
+            sudo certbot certonly --nginx -d admin.sissoo.in --non-interactive --agree-tos --email lepakshi.a@mindstaytechnology.in
           fi
 
       - name: Reload Nginx
