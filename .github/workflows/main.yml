@@ -27,7 +27,7 @@ jobs:
       - name: Delete old container
         run: sudo docker rm -f reactjs-frontend-container  
       - name: Run Docker Container
-        run: sudo docker run -d -p 80:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt --name reactjs-frontend-container lepakshia/frontend_reactjs
+        run: sudo docker run -d -p 3000:80 -p 443:443 -v /etc/letsencrypt:/etc/letsencrypt --name reactjs-frontend-container lepakshia/frontend_reactjs
 
 
 
